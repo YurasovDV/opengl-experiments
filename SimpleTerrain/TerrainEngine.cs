@@ -20,11 +20,7 @@ namespace SimpleTerrain
             Player = new Player();
             KeyHandler.KeyPress += HandleKeyPress;
             MainRender = new RenderEngine(Width, Height, Player);
-
-            
-           
         }
-
 
 
         public override void Click(Vector2 point)
@@ -38,11 +34,9 @@ namespace SimpleTerrain
 
             Player.Tick(timeSlice, dxdy);
 
-            GL.ClearColor(0, 0, 0.1f, 1);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            var model = GetSimpleModel();
 
-
-            GL.Flush();
+            MainRender.Draw(model, Player.FlashlightPosition);
 
         }
 
@@ -50,5 +44,48 @@ namespace SimpleTerrain
         {
             Player.OnSignal(signal);
         }
+
+
+
+       private SimpleModel GetSimpleModel()
+        {
+            var result = new SimpleModel()
+            {
+                TextureId = -1
+            };
+
+            result.Vertices = VERTICES;
+            if (Colors == null)
+            {
+                var red = new Vector3(0.5f, 0, 0);
+                Colors = Enumerable.Repeat(red, result.Vertices.Length).ToArray();
+            }
+            result.Colors = Colors;
+
+            GetNormals(result);
+
+            return result;
+        }
+
+        private void GetNormals(SimpleModel result)
+        {
+            var res = Enumerable.Repeat(Vector3.UnitY, result.Vertices.Length).ToArray();
+            result.Normals = res;
+        }
+
+        private const float SIZE = 100f;
+
+        private static Vector3[] Colors = null;
+
+        public static Vector3[] VERTICES = {
+
+        new Vector3(-SIZE,  -1, -SIZE),
+        new Vector3( SIZE,  -1, -SIZE),
+        new Vector3( SIZE,  -1,  SIZE),
+        new Vector3( SIZE,  -1,  SIZE),
+        new Vector3(-SIZE,  -1,  SIZE),
+        new Vector3(-SIZE,  -1, -SIZE),
+    };
+
     }
 }

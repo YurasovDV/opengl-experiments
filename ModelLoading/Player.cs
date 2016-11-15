@@ -20,11 +20,11 @@ namespace ModelLoading
 
         public Player(Predicate<Vector3> intersectionTest = null)
         {
-            DEFAULT_TARGET = new Vector3(0, -1f, 50);
+            DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(0, -1f, 50);
             DEFAULT_POSITION = new Vector3(2f, 5f, -2f);
             //this.intersectionTest = intersectionTest;
             Position = new Vector3(DEFAULT_POSITION);
-            Target = new Vector3(DEFAULT_POSITION + DEFAULT_TARGET);
+            Target = new Vector3(DEFAULT_POSITION + DELTA_BETWEEN_POSITION_AND_TARGET);
             MIN_CAMERA_MOVE = 1;
         }
 

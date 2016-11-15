@@ -12,11 +12,11 @@ namespace OcTreeRevisited
         public Player()
             : base(intersectionTest: null)
         {
-            DEFAULT_TARGET = new Vector3(-3, -1f, 10f);
+            DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(-3, -1f, 10f);
             DEFAULT_POSITION = new Vector3(100.0f, 40f, -200);
 
             Position = new Vector3(DEFAULT_POSITION);
-            Target = new Vector3(DEFAULT_TARGET);
+            Target = new Vector3(DELTA_BETWEEN_POSITION_AND_TARGET);
 
             twenty_five = 15;
 

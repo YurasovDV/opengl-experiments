@@ -28,7 +28,7 @@ namespace Common
 
         protected int DEFAULT_ROTATION = 3;
 
-        public virtual Vector3 DEFAULT_TARGET { get; set; }
+        public virtual Vector3 DELTA_BETWEEN_POSITION_AND_TARGET { get; set; }
         public virtual Vector3 DEFAULT_POSITION { get; set; }
 
         public virtual Vector3 FlashlightPosition { get; set; }
@@ -77,7 +77,7 @@ namespace Common
         {
 
             Matrix4 rotation;
-            Vector3 transformed = DEFAULT_TARGET;
+            Vector3 transformed = DELTA_BETWEEN_POSITION_AND_TARGET;
 
             rotation = Matrix4.CreateRotationX(AngleVerticalRad);
             transformed = Vector3.TransformPosition(transformed, rotation);

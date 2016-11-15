@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
+﻿using Common;
 using Common.Utils;
 using OpenTK;
 
@@ -16,11 +11,11 @@ namespace SimpleTerrain
         public Player()
             : base(intersectionTest: null)
         {
-            DEFAULT_TARGET = new Vector3(-3, -1f, 10f);
-            DEFAULT_POSITION = new Vector3(100.0f, 40f, -200);
+            DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(0, 0, 10f);
+            DEFAULT_POSITION = new Vector3(0.0f, 40f, -20);
 
             Position = new Vector3(DEFAULT_POSITION);
-            Target = new Vector3(DEFAULT_TARGET);
+            Target = new Vector3(DELTA_BETWEEN_POSITION_AND_TARGET);
 
             twenty_five = 15;
 

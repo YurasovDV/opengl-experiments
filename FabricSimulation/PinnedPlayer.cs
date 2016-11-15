@@ -16,7 +16,7 @@ namespace FabricSimulation
         {
             //DEFAULT_TARGET = new Vector3(0, 0, 10f);
             //DEFAULT_POSITION = new Vector3(0.0f, 0f, -40);
-            DEFAULT_TARGET = new Vector3(0, 0, -30f);
+            DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(0, 0, -30f);
             DEFAULT_POSITION = new Vector3(0.0f, 0f, 30);
 
             Position = new Vector3(DEFAULT_POSITION);

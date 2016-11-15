@@ -18,11 +18,11 @@ namespace OcTreeExample
         public Player()
             : base(intersectionTest: null)
         {
-            DEFAULT_TARGET = new Vector3(0, 0f, -30);
+            DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(0, 0f, -30);
             DEFAULT_POSITION = new Vector3(0.0f, 300f, 0);
 
             Position = new Vector3(DEFAULT_POSITION);
-            Target = new Vector3(DEFAULT_TARGET);
+            Target = new Vector3(DELTA_BETWEEN_POSITION_AND_TARGET);
 
             MIN_CAMERA_MOVE = 1;
             AngleVertical = 90;
