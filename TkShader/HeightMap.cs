@@ -56,7 +56,7 @@ namespace ShaderOnForm
                     result.Add(v);
                     vrt.Add(v);
 
-                    CalcNormal(normalsTemp, vrt);
+                   MathHelperMINE.CalcNormal(normalsTemp, vrt);
 
                     vrt.Clear();
 
@@ -77,19 +77,12 @@ namespace ShaderOnForm
 
                     result.Add(v);
                     vrt.Add(v);
+                    MathHelperMINE.CalcNormal(normalsTemp, vrt);
                 }
             }
             result.TrimExcess();
             normals = normalsTemp.ToArray();
             return result.ToArray();
-        }
-
-        private void CalcNormal(List<Vector3> normalsTemp, List<Vector3> vrt)
-        {
-            var n = Vector3.Cross(vrt[0] - vrt[1], vrt[0] - vrt[2]);
-            normalsTemp.Add(n);
-            normalsTemp.Add(n);
-            normalsTemp.Add(n);
         }
     }
 }

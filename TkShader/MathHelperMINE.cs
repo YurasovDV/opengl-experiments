@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK;
 
 namespace ShaderOnForm
 {
@@ -94,6 +95,14 @@ namespace ShaderOnForm
                 }
             }
             return angle;
+        }
+
+        public static void CalcNormal(List<Vector3> normalsTemp, List<Vector3> triangle)
+        {
+            var n = Vector3.Cross(triangle[0] - triangle[1], triangle[0] - triangle[2]);
+            normalsTemp.Add(n);
+            normalsTemp.Add(n);
+            normalsTemp.Add(n);
         }
     }
 }

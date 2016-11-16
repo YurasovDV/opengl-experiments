@@ -13,7 +13,7 @@ namespace SimpleTerrain
     {
         public ShaderManager Shaders { get; set; }
 
-        public RenderEngine(int width, int height, AbstractPlayer player, float zFar = 200)
+        public RenderEngine(int width, int height, AbstractPlayer player, float zFar = 300)
             : base(width, height, player, zFar)
         {
             Shaders = new ShaderManager(this);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK;
 
 namespace Common.Utils
 {
@@ -95,5 +96,15 @@ namespace Common.Utils
             }
             return angle;
         }
+
+        public static void CalcNormal(Vector3[] vrt, Vector3[] normals)
+        {
+            var n = Vector3.Cross(vrt[0] - vrt[1], vrt[0] - vrt[2]);
+            n.Normalize();
+            normals[0] = n;
+            normals[1] = n;
+            normals[2] = n;
+        }
+
     }
 }

@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HeightMap.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />

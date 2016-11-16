@@ -11,13 +11,13 @@ out vec4 outputColor;
 void 
 main()
 {
-   /* vec3 toLight = lightPosition - position;
+    vec3 toLight = lightPosition - position;
     float distance = length(toLight);
     vec3 lightVector = normalize(toLight);
     float diffuse = dot(lightVector, normalize(normal));
     diffuse = max(diffuse, 0.1f);
-    diffuse = 15 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
-    diffuse = max(diffuse, 100);*/
+    diffuse = 1300 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
+    diffuse = min(diffuse, 10);
 
-	outputColor = color;// * diffuse;
+	outputColor = color * diffuse;
 }
