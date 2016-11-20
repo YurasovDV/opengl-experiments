@@ -9,6 +9,9 @@ attribute vec3 vPosition;
 attribute vec3 vNormal;
 attribute vec3 vColor;
 
+attribute vec2 vTexCoordinate; 
+varying vec2 texCoordinate;  
+
 out vec4 color;
 out vec3 normal;
 out vec3 position;
@@ -23,4 +26,5 @@ main()
     position = vec3(uMV * vec4(vPosition, 0.0)); 
     lightPosition = vec3(uMV * vec4(uLightPos, 0.0)); 
     normal = vec3(uMV * vec4(vNormal, 0.0));
+	texCoordinate = vTexCoordinate;
 }

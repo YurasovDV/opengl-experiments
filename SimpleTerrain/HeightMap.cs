@@ -11,28 +11,7 @@ namespace SimpleTerrain
     {
         public int MapSize { get { return Colors.GetLength(0); } }
 
-        public bool TryGetValue(int x, int z, out float result)
-        {
-            result = -110;
-            bool inside = 
-                x >= 0 && x < MapSize
-                && z >= 0 && z < MapSize;
-
-            if (inside)
-            {
-                result = this[x, z];
-            }
-
-            return inside;
-        }
-
-        public float this[int x, int z]
-        {
-            get
-            {
-                return map[x, z];
-            }
-        }
+        public int TextureId { get; set; }
 
         private float[,] map;
         private Vector3[,] Colors { get; set; }
@@ -41,6 +20,7 @@ namespace SimpleTerrain
         private Vector3[] points;
         private Vector3[] normals;
         private Vector3[] colors;
+        private Vector2[] textureCoords;
 
         public HeightMap(float[,] map)
         {
@@ -60,7 +40,31 @@ namespace SimpleTerrain
             }
         }
 
-        internal void RebuildVerticesAccordingly(PrimitiveType renderMode)
+
+        public bool TryGetValue(int x, int z, out float result)
+        {
+            result = -110;
+            bool inside =
+                x >= 0 && x < MapSize
+                && z >= 0 && z < MapSize;
+
+            if (inside)
+            {
+                result = this[x, z];
+            }
+
+            return inside;
+        }
+
+        public float this[int x, int z]
+        {
+            get
+            {
+                return map[x, z];
+            }
+        }
+
+        public void RebuildVerticesAccordingly(PrimitiveType renderMode)
         {
             points = GetPoints(renderMode);
         }
@@ -69,11 +73,11 @@ namespace SimpleTerrain
         {
             if (renderMode == PrimitiveType.Triangles)
             {
-                return FillVerticesAndNormalsAsTriangles();
+                return FillModelAsTriangles();
             }
             if (renderMode == PrimitiveType.Lines)
             {
-                return FillVerticesAndNormalsAsLines();
+                return FillModelAsLines();
             }
 
             throw new ArgumentException("incorrect renderMode", "renderMode");
@@ -92,7 +96,7 @@ namespace SimpleTerrain
             return result;
         }
 
-        public Vector3[] FillVerticesAndNormalsAsTriangles()
+        public Vector3[] FillModelAsTriangles()
         {
             int MapSize = map.GetLength(0);
             float cellSize = 1f;
@@ -108,51 +112,49 @@ namespace SimpleTerrain
                 for (int j = 0; j < MapSize; j++)
                 {
                     Vector3 v = new Vector3(i * cellSize, map[i, j], j * cellSize);
-                    result.Add(v);
-                    currentTriangle[0] = v;
-                    if (i < MapSize - 1)
+
+                    if (i < MapSize - 1 && j < MapSize - 1)
                     {
+                        result.Add(v);
+                        currentTriangle[0] = v;
+
                         v = new Vector3((i + 1) * cellSize, map[i + 1, j], j * cellSize);
-                    }
-                    result.Add(v);
-                    currentTriangle[1] = v;
+                        currentTriangle[1] = v;
+                        result.Add(v);
 
-
-                    if (j < MapSize - 1)
-                    {
                         v = new Vector3(i * cellSize, map[i, j + 1], (j + 1) * cellSize);
+                        currentTriangle[2] = v;
+                        result.Add(v);
+
+
+                        MathHelperMINE.CalcNormal(normalsForTriangle, currentTriangle);
+                        for (int k = 0; k < normalsForTriangle.Length; k++)
+                        {
+                            normalsTemp.Add(normalsForTriangle[k]);
+                        }
+
                     }
-                    result.Add(v);
-                    currentTriangle[2] = v;
 
-                    MathHelperMINE.CalcNormal(normalsForTriangle, currentTriangle);
-                    for (int k = 0; k < normalsForTriangle.Length; k++)
+
+                    if (j < MapSize - 1 && i > 0 && j < MapSize - 1)
                     {
-                        normalsTemp.Add(normalsForTriangle[k]);
-                    }
-                    v = new Vector3(i * cellSize, map[i, j], j * cellSize);
-                    result.Add(v);
-                    currentTriangle[0] = v;
+                        v = new Vector3(i * cellSize, map[i, j], j * cellSize);
+                        result.Add(v);
+                        currentTriangle[0] = v;
 
-
-                    if (j < MapSize - 1)
-                    {
                         v = new Vector3(i * cellSize, map[i, j + 1], (j + 1) * cellSize);
-                    }
-                    result.Add(v);
-                    currentTriangle[1] = v;
+                        result.Add(v);
+                        currentTriangle[1] = v;
 
-
-                    if (i > 0 && j < MapSize - 1)
-                    {
                         v = new Vector3((i - 1) * cellSize, map[i - 1, j + 1], (j + 1) * cellSize);
-                    }
-                    result.Add(v);
-                    currentTriangle[2] = v;
-                    MathHelperMINE.CalcNormal(normalsForTriangle, currentTriangle);
-                    for (int k = 0; k < normalsForTriangle.Length; k++)
-                    {
-                        normalsTemp.Add(normalsForTriangle[k]);
+                        result.Add(v);
+                        currentTriangle[2] = v;
+                        MathHelperMINE.CalcNormal(normalsForTriangle, currentTriangle);
+                        for (int k = 0; k < normalsForTriangle.Length; k++)
+                        {
+                            normalsTemp.Add(normalsForTriangle[k]);
+                        }
+
                     }
                 }
             }
@@ -164,11 +166,11 @@ namespace SimpleTerrain
             return result.ToArray();
         }
 
-        private Vector3[] FillVerticesAndNormalsAsLines()
+        private Vector3[] FillModelAsLines()
         {
             int MapSize = map.GetLength(0);
             float cellSize = 1f;
-
+            textureCoords = null;
             var result = new List<Vector3>(4 * MapSize * MapSize);
 
             for (int i = 0; i < MapSize; i++)
@@ -183,7 +185,7 @@ namespace SimpleTerrain
                         result.Add(v);
                         result.Add(vNextX);
                     }
-                    
+
 
                     if (j < MapSize - 1)
                     {
@@ -194,7 +196,7 @@ namespace SimpleTerrain
                 }
             }
             result.TrimExcess();
-            normals = new Vector3[] { new Vector3(0, 0 ,0) };
+            normals = new Vector3[] { new Vector3(0, 0, 0) };
 
             colors = GetColors(PrimitiveType.Lines);
 
@@ -218,6 +220,7 @@ namespace SimpleTerrain
                         result[k] = v;
                         k++;
                         result[k] = v;
+
                         k++;
                         result[k] = v;
                         k++;
@@ -255,21 +258,48 @@ namespace SimpleTerrain
             return null;
         }
 
+        private Vector3[] InitModelAsPolygons()
+        {
+            var triangles = FillModelAsTriangles();
+
+            var textureMgr = new TextureManager();
+            TextureId = textureMgr.LoadTexture("Textures\\grass.jpg");
+
+            textureCoords = textureMgr.GetTextureCoordinates(triangles);
+
+
+            return triangles;
+        }
+
         public SimpleModel GetAsModel()
         {
             if (points == null)
             {
-                points = FillVerticesAndNormalsAsTriangles();
+                points = InitModelAsPolygons();
             }
 
             var model = new SimpleModel()
             {
                 Vertices = points,
                 Normals = normals,
-                Colors = colors
+                Colors = colors,
             };
 
+
+            //System.Diagnostics.Debug.Assert(colors.Length == points.Length);
+
+            if (textureCoords != null)
+            {
+                model.TextureCoordinates = textureCoords;
+                model.TextureId = TextureId;
+            }
+            else
+            {
+                model.TextureId = -1;
+            }
             return model;
         }
+
+       
     }
 }

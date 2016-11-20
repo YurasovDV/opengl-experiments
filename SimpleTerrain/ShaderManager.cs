@@ -17,6 +17,7 @@ namespace SimpleTerrain
 
         public int AttrNormalLocation { get; set; }
 
+        public int AttTexcoordLocation { get; set; }
 
         public int vertexBufferAddress;
 
@@ -24,6 +25,10 @@ namespace SimpleTerrain
 
         public int normalBufferAddress;
 
+        public int texCoordBufferAddress;
+
+
+        public int uniformTexture;
 
         public int uniformMVP;
         public int uniformMV;
@@ -42,6 +47,7 @@ namespace SimpleTerrain
             GL.GenBuffers(1, out vertexBufferAddress);
             GL.GenBuffers(1, out colorBufferAddress);
             GL.GenBuffers(1, out normalBufferAddress);
+            GL.GenBuffers(1, out texCoordBufferAddress);
         }
 
         private void CreateMainProgram()
@@ -97,6 +103,9 @@ namespace SimpleTerrain
             uniformMV = GL.GetUniformLocation(MainProgramId, "uMV");
             uniformProjection = GL.GetUniformLocation(MainProgramId, "uProjection");
 
+            AttTexcoordLocation = GL.GetAttribLocation(MainProgramId, "vTexCoordinate");
+            uniformTexture = GL.GetUniformLocation(MainProgramId, "uTexture");
+
         }
 
 
@@ -123,12 +132,21 @@ namespace SimpleTerrain
             GL.VertexAttribPointer(AttrNormalLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
 
 
-          /*  if (model.TextureId != -1)
+            if (model.TextureId != -1)
             {
-                 GL.BindBuffer(BufferTarget.ArrayBuffer, );
-                 GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes), model.Vertices, BufferUsageHint.DynamicDraw);
-                 GL.VertexAttribPointer(AttrVertexLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            }*/
+                GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordBufferAddress);
+                GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(model.TextureCoordinates.Length * Vector2.SizeInBytes),
+                  model.TextureCoordinates, BufferUsageHint.DynamicDraw);
+                GL.VertexAttribPointer(AttTexcoordLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+
+                GL.EnableVertexAttribArray(AttTexcoordLocation);
+
+
+                // активная текстура - т0
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.Uniform1(uniformTexture, 0);
+                GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
+            }
 
             GL.EnableVertexAttribArray(AttrVertexLocation);
             GL.EnableVertexAttribArray(AttrColorLocation);
