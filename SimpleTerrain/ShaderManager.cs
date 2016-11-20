@@ -17,7 +17,7 @@ namespace SimpleTerrain
 
         public int AttrNormalLocation { get; set; }
 
-        public int AttTexcoordLocation { get; set; }
+        public int AttrTexcoordLocation { get; set; }
 
         public int vertexBufferAddress;
 
@@ -28,7 +28,7 @@ namespace SimpleTerrain
         public int texCoordBufferAddress;
 
 
-        public int uniformTexture;
+        public int uniformTextureFirst;
 
         public int uniformMVP;
         public int uniformMV;
@@ -103,8 +103,8 @@ namespace SimpleTerrain
             uniformMV = GL.GetUniformLocation(MainProgramId, "uMV");
             uniformProjection = GL.GetUniformLocation(MainProgramId, "uProjection");
 
-            AttTexcoordLocation = GL.GetAttribLocation(MainProgramId, "vTexCoordinate");
-            uniformTexture = GL.GetUniformLocation(MainProgramId, "uTexture");
+            AttrTexcoordLocation = GL.GetAttribLocation(MainProgramId, "vTexCoordinate");
+            uniformTextureFirst = GL.GetUniformLocation(MainProgramId, "uTexture");
 
         }
 
@@ -131,21 +131,26 @@ namespace SimpleTerrain
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Normals.Length * Vector3.SizeInBytes), model.Normals, BufferUsageHint.DynamicDraw);
             GL.VertexAttribPointer(AttrNormalLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-
             if (model.TextureId != -1)
             {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordBufferAddress);
                 GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(model.TextureCoordinates.Length * Vector2.SizeInBytes),
                   model.TextureCoordinates, BufferUsageHint.DynamicDraw);
-                GL.VertexAttribPointer(AttTexcoordLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+                GL.VertexAttribPointer(AttrTexcoordLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
 
-                GL.EnableVertexAttribArray(AttTexcoordLocation);
-
+                GL.EnableVertexAttribArray(AttrTexcoordLocation);
 
                 // активная текстура - т0
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.Uniform1(uniformTexture, 0);
+                GL.Uniform1(uniformTextureFirst, 0);
                 GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
+            }
+            else
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordBufferAddress);
+                GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(0 * Vector2.SizeInBytes),
+                  model.TextureCoordinates, BufferUsageHint.DynamicDraw);
+                GL.VertexAttribPointer(AttrTexcoordLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
             }
 
             GL.EnableVertexAttribArray(AttrVertexLocation);
@@ -154,19 +159,12 @@ namespace SimpleTerrain
 
         }
 
-        public void BindBuffers(SimpleModel[] model, Vector3 lightPosition)
-        {
-            for (int i = 0; i < model.Length; i++)
-            {
-                BindBuffers(model[i], lightPosition);
-            }
-        }
-
         public void Release()
         {
             GL.DisableVertexAttribArray(AttrVertexLocation);
             GL.DisableVertexAttribArray(AttrColorLocation);
             GL.DisableVertexAttribArray(AttrNormalLocation);
+            GL.DisableVertexAttribArray(AttrTexcoordLocation);
         }
     }
 }

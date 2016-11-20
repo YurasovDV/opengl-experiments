@@ -12,6 +12,7 @@ namespace SimpleTerrain
         public int MapSize { get { return Colors.GetLength(0); } }
 
         public int TextureId { get; set; }
+        public PrimitiveType ModelType { get; set; }
 
         private float[,] map;
         private Vector3[,] Colors { get; set; }
@@ -38,7 +39,23 @@ namespace SimpleTerrain
                     Colors[i, j] = v;
                 }
             }
+
+            ModelType = PrimitiveType.Triangles;
         }
+
+        public static HeightMap Create(int size)
+        {
+            float[,] map = new float[size + 1, size + 1];
+
+            Generator.GenerateRecursive(map, n: size + 1, top: size, bottom: 0, left: 0, right: size);
+
+            Generator.Smooth(map);
+
+            var result = new HeightMap(map);
+
+            return result;
+        }
+
 
 
         public bool TryGetValue(int x, int z, out float result)
@@ -67,6 +84,7 @@ namespace SimpleTerrain
         public void RebuildVerticesAccordingly(PrimitiveType renderMode)
         {
             points = GetPoints(renderMode);
+            ModelType = renderMode;
         }
 
         private Vector3[] GetPoints(PrimitiveType renderMode)
@@ -81,19 +99,6 @@ namespace SimpleTerrain
             }
 
             throw new ArgumentException("incorrect renderMode", "renderMode");
-        }
-
-        public static HeightMap Create(int size)
-        {
-            float[,] map = new float[size + 1, size + 1];
-
-            Generator.GenerateRecursive(map, n: size + 1, top: size, bottom: 0, left: 0, right: size);
-
-            Generator.Smooth(map);
-
-            var result = new HeightMap(map);
-
-            return result;
         }
 
         public Vector3[] FillModelAsTriangles()
@@ -170,7 +175,6 @@ namespace SimpleTerrain
         {
             int MapSize = map.GetLength(0);
             float cellSize = 1f;
-            textureCoords = null;
             var result = new List<Vector3>(4 * MapSize * MapSize);
 
             for (int i = 0; i < MapSize; i++)
@@ -267,7 +271,6 @@ namespace SimpleTerrain
 
             textureCoords = textureMgr.GetTextureCoordinates(triangles);
 
-
             return triangles;
         }
 
@@ -285,10 +288,9 @@ namespace SimpleTerrain
                 Colors = colors,
             };
 
+            // System.Diagnostics.Debug.Assert(colors.Length == points.Length);
 
-            //System.Diagnostics.Debug.Assert(colors.Length == points.Length);
-
-            if (textureCoords != null)
+            if (ModelType == PrimitiveType.Triangles)
             {
                 model.TextureCoordinates = textureCoords;
                 model.TextureId = TextureId;
@@ -299,7 +301,5 @@ namespace SimpleTerrain
             }
             return model;
         }
-
-       
     }
 }
