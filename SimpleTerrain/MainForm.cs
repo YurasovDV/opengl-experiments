@@ -26,7 +26,7 @@ namespace SimpleTerrain
                 Y = 0
             };
             Watch = new Stopwatch();
-            Engine = new TerrainEngine(Width, Height);
+            Engine = new TerrainEngine(Width, Height, Watch);
             ResetMouse();
             Watch.Start();
         }

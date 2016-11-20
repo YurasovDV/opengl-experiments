@@ -57,6 +57,7 @@
     <Compile Include="AbstractShaderManager.cs" />
     <Compile Include="Input\InputSignal.cs" />
     <Compile Include="Input\KeyHandler.cs" />
+    <Compile Include="IPlayer.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefreshKind.cs" />

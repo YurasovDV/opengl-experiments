@@ -24,6 +24,7 @@ namespace Common.Input
         NONE,
         DOWN_PARALLEL,
         UP_PARALLEL,
-        MOUSE_CLICK
+        MOUSE_CLICK,
+        RENDER_MODE
     }
 }

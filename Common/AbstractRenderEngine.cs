@@ -10,7 +10,7 @@ namespace Common
 {
     public class AbstractRenderEngine 
     {
-        public AbstractPlayer Player { get; set; }
+        public IPlayer Player { get; set; }
 
         public Matrix4 ModelView = Matrix4.Identity;
 
@@ -22,7 +22,7 @@ namespace Common
 
         public int Width { get; set; }
 
-        public AbstractRenderEngine(int width, int height, AbstractPlayer player, float zFar = 200)
+        public AbstractRenderEngine(int width, int height, IPlayer player, float zFar = 200)
         {
             this.Width = width;
             this.Height = height;

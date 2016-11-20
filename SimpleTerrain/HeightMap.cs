@@ -3,12 +3,36 @@ using System.Collections.Generic;
 using Common;
 using Common.Utils;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace SimpleTerrain
 {
     class HeightMap
     {
         public int MapSize { get { return Colors.GetLength(0); } }
+
+        public bool TryGetValue(int x, int z, out float result)
+        {
+            result = -110;
+            bool inside = 
+                x >= 0 && x < MapSize
+                && z >= 0 && z < MapSize;
+
+            if (inside)
+            {
+                result = this[x, z];
+            }
+
+            return inside;
+        }
+
+        public float this[int x, int z]
+        {
+            get
+            {
+                return map[x, z];
+            }
+        }
 
         private float[,] map;
         private Vector3[,] Colors { get; set; }
@@ -17,10 +41,6 @@ namespace SimpleTerrain
         private Vector3[] points;
         private Vector3[] normals;
         private Vector3[] colors;
-
-        private static Random random = new Random();
-
-        private const float VARIATION = 0.05f;
 
         public HeightMap(float[,] map)
         {
@@ -38,87 +58,44 @@ namespace SimpleTerrain
                     Colors[i, j] = v;
                 }
             }
+        }
 
-            colors = GetColors();
+        internal void RebuildVerticesAccordingly(PrimitiveType renderMode)
+        {
+            points = GetPoints(renderMode);
+        }
+
+        private Vector3[] GetPoints(PrimitiveType renderMode)
+        {
+            if (renderMode == PrimitiveType.Triangles)
+            {
+                return FillVerticesAndNormalsAsTriangles();
+            }
+            if (renderMode == PrimitiveType.Lines)
+            {
+                return FillVerticesAndNormalsAsLines();
+            }
+
+            throw new ArgumentException("incorrect renderMode", "renderMode");
         }
 
         public static HeightMap Create(int size)
         {
-
             float[,] map = new float[size + 1, size + 1];
 
-            GenerateRecursive(map, n: size + 1, top: size, bottom: 0, left: 0, right: size);
+            Generator.GenerateRecursive(map, n: size + 1, top: size, bottom: 0, left: 0, right: size);
+
+            Generator.Smooth(map);
 
             var result = new HeightMap(map);
-
-
 
             return result;
         }
 
-        /// <summary>
-        /// |-------- bottom
-        /// |                 
-        /// |left                 right
-        /// |                
-        /// |----------top
-        /// </summary>
-        /// <param name="heightMap"></param>
-        /// <param name="n"></param>
-        /// <param name="bottom"></param>
-        /// <param name="top"></param>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        private static void GenerateRecursive(float[,] heightMap, int n, int bottom, int top, int left, int right)
-        {
-            var halfSize = n / 2; //n >> 1;
-
-            if (halfSize < 1)
-                return;
-            bool addOrSubstract = random.NextDouble() <= 0.5;
-
-            heightMap[bottom + halfSize, left + halfSize] =
-                (heightMap[bottom, left] +
-                heightMap[bottom, right] +
-                heightMap[top, left] +
-                heightMap[top, right]) * 0.25f + VARIATION * halfSize * (addOrSubstract ? 1 : -1);
-
-            addOrSubstract = random.NextDouble() <= 0.5;
-
-            heightMap[bottom + halfSize, left] =
-                (heightMap[bottom, left] + heightMap[top, left]) * 0.5f
-                + VARIATION * halfSize * (addOrSubstract ? 1 : -1);
-
-            addOrSubstract = random.NextDouble() <= 0.5;
-
-            heightMap[bottom + halfSize, right] = (heightMap[bottom, right] + heightMap[top, right]) * 0.5f
-                + VARIATION * halfSize * (addOrSubstract ? 1 : -1);
-
-            addOrSubstract = random.NextDouble() <= 0.5;
-
-            heightMap[bottom, left + halfSize] = (heightMap[bottom, left] + heightMap[bottom, right]) * 0.5f
-                + VARIATION * halfSize * (addOrSubstract ? 1 : -1);
-
-            addOrSubstract = random.NextDouble() <= 0.5;
-
-            heightMap[top, left + halfSize] = (heightMap[top, left] + heightMap[top, right]) * 0.5f
-                + VARIATION * halfSize * (addOrSubstract ? 1 : -1);
-
-            // 1
-            GenerateRecursive(heightMap, halfSize, bottom: bottom, top: bottom + halfSize, left: left, right: left + halfSize);
-            // 2
-            GenerateRecursive(heightMap, halfSize, bottom: bottom, top: bottom + halfSize, left: left + halfSize, right: right);
-            // 3
-            GenerateRecursive(heightMap, halfSize, bottom: bottom + halfSize, top: top, left: left, right: left + halfSize);
-            // 4
-            GenerateRecursive(heightMap, halfSize, bottom: bottom + halfSize, top: top, left: left + halfSize, right: right);
-
-        }
-
-        public Vector3[] GetPoints(out Vector3[] normals)
+        public Vector3[] FillVerticesAndNormalsAsTriangles()
         {
             int MapSize = map.GetLength(0);
-            float CellSize = 0.7f;
+            float cellSize = 1f;
 
             var normalsTemp = new List<Vector3>(6 * MapSize * MapSize);
             List<Vector3> result = new List<Vector3>(6 * MapSize * MapSize);
@@ -130,20 +107,20 @@ namespace SimpleTerrain
             {
                 for (int j = 0; j < MapSize; j++)
                 {
-                    Vector3 v = new Vector3(i * CellSize, map[i, j], j * CellSize);
+                    Vector3 v = new Vector3(i * cellSize, map[i, j], j * cellSize);
                     result.Add(v);
                     currentTriangle[0] = v;
                     if (i < MapSize - 1)
                     {
-                        v = new Vector3((i + 1) * CellSize, map[i + 1, j], j * CellSize);
+                        v = new Vector3((i + 1) * cellSize, map[i + 1, j], j * cellSize);
                     }
-
                     result.Add(v);
                     currentTriangle[1] = v;
 
+
                     if (j < MapSize - 1)
                     {
-                        v = new Vector3(i * CellSize, map[i, j + 1], (j + 1) * CellSize);
+                        v = new Vector3(i * cellSize, map[i, j + 1], (j + 1) * cellSize);
                     }
                     result.Add(v);
                     currentTriangle[2] = v;
@@ -153,22 +130,23 @@ namespace SimpleTerrain
                     {
                         normalsTemp.Add(normalsForTriangle[k]);
                     }
-
-
-                    v = new Vector3(i * CellSize, map[i, j], j * CellSize);
+                    v = new Vector3(i * cellSize, map[i, j], j * cellSize);
                     result.Add(v);
                     currentTriangle[0] = v;
+
+
                     if (j < MapSize - 1)
                     {
-                        v = new Vector3(i * CellSize, map[i, j + 1], (j + 1) * CellSize);
+                        v = new Vector3(i * cellSize, map[i, j + 1], (j + 1) * cellSize);
                     }
                     result.Add(v);
                     currentTriangle[1] = v;
+
+
                     if (i > 0 && j < MapSize - 1)
                     {
-                        v = new Vector3((i - 1) * CellSize, map[i - 1, j + 1], (j + 1) * CellSize);
+                        v = new Vector3((i - 1) * cellSize, map[i - 1, j + 1], (j + 1) * cellSize);
                     }
-
                     result.Add(v);
                     currentTriangle[2] = v;
                     MathHelperMINE.CalcNormal(normalsForTriangle, currentTriangle);
@@ -180,42 +158,108 @@ namespace SimpleTerrain
             }
             result.TrimExcess();
             normals = normalsTemp.ToArray();
+
+            colors = GetColors(PrimitiveType.Triangles);
+
             return result.ToArray();
         }
 
-        public Vector3[] GetColors()
+        private Vector3[] FillVerticesAndNormalsAsLines()
         {
-            var result = new Vector3[6 * MapSize * MapSize];
+            int MapSize = map.GetLength(0);
+            float cellSize = 1f;
 
-            int k = 0;
+            var result = new List<Vector3>(4 * MapSize * MapSize);
+
             for (int i = 0; i < MapSize; i++)
             {
                 for (int j = 0; j < MapSize; j++)
                 {
-                    Vector3 v = Colors[i, j];
+                    Vector3 v = new Vector3(i * cellSize, map[i, j], j * cellSize);
 
-                    result[k] = (v);
-                    k++;
-                    result[k] = v;
-                    k++;
-                    result[k] = v;
-                    k++;
-                    result[k] = v;
-                    k++;
-                    result[k] = v;
-                    k++;
-                    result[k] = v;
+                    if (i < MapSize - 1)
+                    {
+                        var vNextX = new Vector3((i + 1) * cellSize, map[i + 1, j], j * cellSize);
+                        result.Add(v);
+                        result.Add(vNextX);
+                    }
+                    
+
+                    if (j < MapSize - 1)
+                    {
+                        var vNextZ = new Vector3(i * cellSize, map[i, j + 1], (j + 1) * cellSize);
+                        result.Add(v);
+                        result.Add(vNextZ);
+                    }
                 }
             }
+            result.TrimExcess();
+            normals = new Vector3[] { new Vector3(0, 0 ,0) };
 
-            return result;
+            colors = GetColors(PrimitiveType.Lines);
+
+            return result.ToArray();
+        }
+
+        public Vector3[] GetColors(PrimitiveType mode)
+        {
+            if (mode == PrimitiveType.Triangles)
+            {
+                var result = new Vector3[6 * MapSize * MapSize];
+                int k = 0;
+                for (int i = 0; i < MapSize; i++)
+                {
+                    for (int j = 0; j < MapSize; j++)
+                    {
+                        Vector3 v = Colors[i, j];
+
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                    }
+                }
+
+                return result;
+            }
+            if (mode == PrimitiveType.Lines)
+            {
+                var result = new Vector3[4 * MapSize * MapSize];
+                int k = 0;
+                for (int i = 0; i < MapSize; i++)
+                {
+                    for (int j = 0; j < MapSize; j++)
+                    {
+                        Vector3 v = Colors[i, j];
+
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                        k++;
+                        result[k] = v;
+                    }
+                }
+
+                return result;
+            }
+
+            return null;
         }
 
         public SimpleModel GetAsModel()
         {
             if (points == null)
             {
-                points = GetPoints(out normals);
+                points = FillVerticesAndNormalsAsTriangles();
             }
 
             var model = new SimpleModel()

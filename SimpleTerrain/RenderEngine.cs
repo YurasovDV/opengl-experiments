@@ -11,9 +11,11 @@ namespace SimpleTerrain
 {
     public class RenderEngine : AbstractRenderEngine
     {
+        public PrimitiveType RenderMode = PrimitiveType.Triangles;
+
         public ShaderManager Shaders { get; set; }
 
-        public RenderEngine(int width, int height, AbstractPlayer player, float zFar = 300)
+        public RenderEngine(int width, int height, IPlayer player, float zFar = 300)
             : base(width, height, player, zFar)
         {
             Shaders = new ShaderManager(this);
@@ -28,10 +30,22 @@ namespace SimpleTerrain
 
             Shaders.BindBuffers(model, light);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
+            GL.DrawArrays(RenderMode, 0, model.Vertices.Length);
            
             GL.Flush();
             Shaders.Release();
+        }
+
+        internal void ChangeRenderMode()
+        {
+            if (RenderMode == PrimitiveType.Triangles)
+            {
+                RenderMode = PrimitiveType.Lines;
+            }
+            else
+            {
+                RenderMode = PrimitiveType.Triangles;
+            }
         }
     }
 }

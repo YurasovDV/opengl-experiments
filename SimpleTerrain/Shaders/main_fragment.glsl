@@ -17,7 +17,7 @@ main()
     float diffuse = dot(lightVector, normalize(normal));
     diffuse = max(diffuse, 0.1f);
     diffuse = 1300 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
-    diffuse = min(diffuse, 10);
+    diffuse = min(diffuse, 0.8);
 
 	outputColor = color * diffuse;
 }

@@ -22,7 +22,25 @@ namespace Common.Input
         private Dictionary<Keys, InputSignal> keysToSignal;
         public KeyHandler()
         {
-            keysToSignal = new Dictionary<Keys, InputSignal>();
+            keysToSignal = new Dictionary<Keys, InputSignal>()
+            {
+                {Keys.A, InputSignal.LEFT},
+                    {Keys.W, InputSignal.FORWARD},
+                    {Keys.S, InputSignal.BACK},
+                    {Keys.D, InputSignal.RIGHT},
+                    {Keys.Up, InputSignal.UP},
+                    {Keys.Down,InputSignal.DOWN },
+                    {Keys.Q, InputSignal.ROTATE_CLOCKWISE},
+                    {Keys.E, InputSignal.ROTATE_COUNTERCLOCKWISE},
+                    {Keys.Space,InputSignal.SHOT },
+                    {Keys.Left, InputSignal.FLY_BY_CLOCKWISE},
+                    {Keys.Right, InputSignal.FLY_BY_COUNTERCLOCKWISE},
+                    {Keys.H, InputSignal.UP_PARALLEL},
+                    {Keys.G, InputSignal.DOWN_PARALLEL},
+                    {Keys.R, InputSignal.RENDER_MODE}
+            };
+
+
             KeysToWatch = new Keys[]
             {
             Keys.A,
@@ -31,27 +49,14 @@ namespace Common.Input
             Keys.D,
             Keys.Up,//move up
             Keys.Down,
-            Keys.Q, 
+            Keys.Q,
             Keys.E,//rotate  counterclockwise
             Keys.Left,
             Keys.Right,
             Keys.H,
             Keys.G,
+            Keys.R,//render mode change
             };
-
-            keysToSignal[Keys.A] = InputSignal.LEFT;
-            keysToSignal[Keys.W] = InputSignal.FORWARD;
-            keysToSignal[Keys.S] = InputSignal.BACK;
-            keysToSignal[Keys.D] = InputSignal.RIGHT;
-            keysToSignal[Keys.Up] = InputSignal.UP;
-            keysToSignal[Keys.Down] = InputSignal.DOWN;
-            keysToSignal[Keys.Q] = InputSignal.ROTATE_CLOCKWISE;
-            keysToSignal[Keys.E] = InputSignal.ROTATE_COUNTERCLOCKWISE;
-            keysToSignal[Keys.Space] = InputSignal.SHOT;
-            keysToSignal[Keys.Left] = InputSignal.FLY_BY_CLOCKWISE;
-            keysToSignal[Keys.Right] = InputSignal.FLY_BY_COUNTERCLOCKWISE;
-            keysToSignal[Keys.H] = InputSignal.UP_PARALLEL;
-            keysToSignal[Keys.G] = InputSignal.DOWN_PARALLEL;
         }
 
         public void CheckKeys()

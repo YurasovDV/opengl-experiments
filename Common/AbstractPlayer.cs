@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-    public abstract class AbstractPlayer
+    public abstract class AbstractPlayer : IPlayer
     {
         /// <summary>
         /// тест пересечения
