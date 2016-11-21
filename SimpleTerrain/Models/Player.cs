@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace SimpleTerrain
 {
-    class Player : IPlayer
+    public class Player : IPlayer
     {
         private int twenty_five = 15;
 

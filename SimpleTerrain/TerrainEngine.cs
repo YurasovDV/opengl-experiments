@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace SimpleTerrain
 {
-    class TerrainEngine : AbstractEngine
+    public partial class TerrainEngine : AbstractEngine
     {
         private long modeChange;
         private long previousChange;
@@ -63,45 +63,12 @@ namespace SimpleTerrain
                 }
             }
         }
-        
+
 
         private SimpleModel GetSimpleModel()
         {
             var model = Map.GetAsModel();
             return model;
-        }
-
-
-        protected Vector3 TryMove(Vector3 desiredPosition)
-        {
-            var oldPosition = Player.Position;
-
-            var updated = new Vector3(desiredPosition);
-
-            var closestX = (int)Math.Round(desiredPosition.X);
-            var closestZ = (int)Math.Round(desiredPosition.Z);
-
-            var previousClosestX = (int)Math.Round(oldPosition.X);
-            var previousClosestZ = (int)Math.Round(oldPosition.X);
-
-            float height;
-            bool inside = Map.TryGetValue(closestX, closestZ, out height);
-
-            float previousHeight;
-            bool prevInside = Map.TryGetValue(previousClosestX, previousClosestZ, out previousHeight);
-
-            if (inside && prevInside)
-            {
-                var y = 3.0f;
-                y += height * 0.75f + previousHeight * 0.25f;
-                updated.Y = y;
-            }
-            else
-            {
-                updated = oldPosition;
-            }
-
-            return updated;
         }
     }
 }
