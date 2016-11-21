@@ -55,7 +55,7 @@ namespace SimpleTerrain
             MainProgramId = GL.CreateProgram();
 
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
-            using (var rd = new StreamReader("Shaders\\main_vertex.glsl"))
+            using (var rd = new StreamReader(@"Assets\Shaders\main_vertex.glsl"))
             {
                 GL.ShaderSource(vertexShader, rd.ReadToEnd());
             }
@@ -73,7 +73,7 @@ namespace SimpleTerrain
             }
 
             var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            using (var rd = new StreamReader("Shaders\\main_fragment.glsl"))
+            using (var rd = new StreamReader(@"Assets\Shaders\main_fragment.glsl"))
             {
                 string text = rd.ReadToEnd();
                 GL.ShaderSource(fragmentShader, text);

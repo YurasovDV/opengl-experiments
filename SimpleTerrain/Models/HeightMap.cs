@@ -267,7 +267,7 @@ namespace SimpleTerrain
             var triangles = FillModelAsTriangles();
 
             var textureMgr = new TextureManager();
-            TextureId = textureMgr.LoadTexture("Textures\\grass.jpg");
+            TextureId = textureMgr.LoadTexture(@"Assets\Textures\grass.jpg");
 
             textureCoords = textureMgr.GetTextureCoordinates(triangles);
 
