@@ -43,8 +43,9 @@ namespace ShadowMap
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
 
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+             GL.BindTexture(TextureTarget.Texture2D, 0);
 
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferObject);
 
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, depthMapTextureId, 0);
 

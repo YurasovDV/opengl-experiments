@@ -10,14 +10,17 @@ namespace ShadowMap
     {
         private RenderEngine renderEngine;
 
-
         public int AttrVertexLocation { get; set; }
+
+        public int AttrVertexFrameLocation { get; set; }
 
         public int AttrColorLocation { get; set; }
 
         public int AttrNormalLocation { get; set; }
 
         public int AttrTexcoordLocation { get; set; }
+
+        public int AttrTexcoordFrameLocation { get; set; }
 
         public int vertexBufferAddress;
 
@@ -27,9 +30,15 @@ namespace ShadowMap
 
         public int texCoordBufferAddress;
 
+        public int vertexBufferForFrameAddress;
+
+        public int texcoordsForFrameAddress;
+
         public int uniformNoTextureFlag;
 
         public int uniformTextureFirst;
+
+        public int uniformTextureFrame;
 
         public int uniformMVP;
         public int uniformMV;
@@ -39,16 +48,23 @@ namespace ShadowMap
 
         public int MainProgramId { get; set; }
 
+        public int FrameBufferProgramId { get; set; }
+
         public ShaderManager(RenderEngine renderEngine)
         {
             this.renderEngine = renderEngine;
 
             CreateMainProgram();
 
+            CreateFrameBufferProgram();
+
             GL.GenBuffers(1, out vertexBufferAddress);
             GL.GenBuffers(1, out colorBufferAddress);
             GL.GenBuffers(1, out normalBufferAddress);
             GL.GenBuffers(1, out texCoordBufferAddress);
+
+            GL.GenBuffers(1, out texcoordsForFrameAddress);
+            GL.GenBuffers(1, out vertexBufferForFrameAddress);
         }
 
         private void CreateMainProgram()
@@ -108,7 +124,55 @@ namespace ShadowMap
 
             AttrTexcoordLocation = GL.GetAttribLocation(MainProgramId, "vTexCoordinate");
             uniformTextureFirst = GL.GetUniformLocation(MainProgramId, "uTexture");
+        }
 
+        private void CreateFrameBufferProgram()
+        {
+            FrameBufferProgramId = GL.CreateProgram();
+
+            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
+            using (var rd = new StreamReader(@"Assets\Shaders\frameBufferVertex.glsl"))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(vertexShader, text);
+            }
+            GL.CompileShader(vertexShader);
+            GL.AttachShader(FrameBufferProgramId, vertexShader);
+
+            int statusCode;
+
+            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(vertexShader, out info);
+                throw new Exception("vertex shader" + info);
+            }
+
+            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+            using (var rd = new StreamReader(@"Assets\Shaders\farameBufferFragment.glsl"))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(fragmentShader, text);
+            }
+            GL.CompileShader(fragmentShader);
+            GL.AttachShader(FrameBufferProgramId, fragmentShader);
+
+            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(fragmentShader, out info);
+                throw new Exception("fragment shader: " + info);
+            }
+
+            GL.LinkProgram(FrameBufferProgramId);
+            GL.UseProgram(FrameBufferProgramId);
+
+            AttrVertexFrameLocation = GL.GetAttribLocation(FrameBufferProgramId, "vPosition");
+            AttrTexcoordFrameLocation = GL.GetAttribLocation(FrameBufferProgramId, "vTexCoordinate");
+
+            uniformTextureFrame = GL.GetUniformLocation(FrameBufferProgramId, "uTexture");
         }
 
 
