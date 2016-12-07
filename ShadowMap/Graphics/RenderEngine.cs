@@ -40,7 +40,7 @@ namespace ShadowMap
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             GL.Disable(EnableCap.DepthTest);
-            GL.ClearColor(0, 0f, 0f, 100);
+            GL.ClearColor(1, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.UseProgram(Shaders.FrameBufferProgramId);
@@ -49,11 +49,15 @@ namespace ShadowMap
             var points = GetFrameBufferVertices();
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), points, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(Shaders.AttrVertexFrameLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(Shaders.AttrVertexFrameLocation);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, Shaders.texcoordsForFrameAddress);
             var texCoords = GetFrameBufferTextureCoords();
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), texCoords, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(Shaders.AttrTexcoordFrameLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+
+            GL.EnableVertexAttribArray(Shaders.AttrTexcoordFrameLocation);
+
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(Shaders.uniformTextureFrame, 0);
