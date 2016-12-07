@@ -31,7 +31,46 @@ namespace ShadowMap
             return TextureId;
         }
 
+        public FrameBufferDesc GetFrameBuffer(int width, int height)
+        {
+            int frameBufferObject = GL.GenFramebuffer();
+            int depthMapTextureId = GL.GenTexture();
 
+            GL.BindTexture(TextureTarget.Texture2D, depthMapTextureId);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 
+                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, depthMapTextureId, 0);
+
+
+            int renderBufferObject = GL.GenRenderbuffer();
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderBufferObject);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, width, height);
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
+
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer,
+                FramebufferAttachment.DepthStencilAttachment, 
+                RenderbufferTarget.Renderbuffer, renderBufferObject);
+           
+
+            if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) == FramebufferErrorCode.FramebufferComplete)
+            {
+                return new FrameBufferDesc()
+                {
+                    FramBufferObject = frameBufferObject,
+                    RenderBufferObject = renderBufferObject,
+                    TextureId= depthMapTextureId, 
+                };
+            }
+
+            throw new Exception("frameBuffer fail");           
+        }
 
         private BitmapData GetBitmapData(string path, TextureTarget kind, ref int width, ref int height, out Bitmap png)
         {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -13,13 +11,35 @@ namespace ShadowMap
     {
         public PrimitiveType RenderMode = PrimitiveType.Triangles;
 
+        public int depthMapBuffer; 
+
+        public int depthMapBufferTextureId;
+
+        public int renderBuffer;
+
         public ShaderManager Shaders { get; set; }
 
         public RenderEngine(int width, int height, IPlayer player, float zFar = 300)
             : base(width, height, player, zFar)
         {
             Shaders = new ShaderManager(this);
+
+            var frameBuf = new TextureManager().GetFrameBuffer(width, height);
+            depthMapBuffer = frameBuf.FramBufferObject;
+            depthMapBufferTextureId = frameBuf.TextureId;
+            renderBuffer = frameBuf.RenderBufferObject;
         }
+
+        public void EnableFrameBuffer()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapBuffer);
+        }
+
+        public void FlushFrameBuffer()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
+
 
         public new void PreRender()
         {

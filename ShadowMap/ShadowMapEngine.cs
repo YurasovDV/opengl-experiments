@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using Common.Input;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 
 namespace ShadowMap
 {
@@ -18,6 +13,7 @@ namespace ShadowMap
 
         public Player Player { get; private set; }
         public RenderEngine MainRender { get; private set; }
+
         public Stopwatch Watch { get; set; }
 
         private HeightMap Map { get; set; }
@@ -56,16 +52,23 @@ namespace ShadowMap
             KeyHandler.CheckKeys();
             Player.Tick(timeSlice, dxdy);
 
+            RenderToDefaulTarget();
+        }
+
+        private void RenderToDefaulTarget()
+        {
+            MainRender.EnableFrameBuffer();
+
             MainRender.PreRender();
-
-            var model = GetSimpleModel();
+            var model = GetMapAsModel();
             MainRender.Draw(model, Player.FlashlightPosition);
-
             foreach (var someobj in AllObjects)
             {
                 MainRender.Draw(someobj, Player.FlashlightPosition);
             }
             MainRender.PostRender();
+
+            MainRender.FlushFrameBuffer();
         }
 
         private void HandleKeyPress(InputSignal signal)
@@ -84,7 +87,7 @@ namespace ShadowMap
         }
 
 
-        private SimpleModel GetSimpleModel()
+        private SimpleModel GetMapAsModel()
         {
             var model = Map.GetAsModel();
             return model;

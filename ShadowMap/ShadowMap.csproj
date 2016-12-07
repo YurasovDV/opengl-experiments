@@ -7,8 +7,8 @@
     <ProjectGuid>{CD1231AA-BD48-4EEF-9E23-9245F8509F70}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleTerrain</RootNamespace>
-    <AssemblyName>SimpleTerrain</AssemblyName>
+    <RootNamespace>ShadowMap</RootNamespace>
+    <AssemblyName>ShadowMap</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="Graphics\FrameBufferDesc.cs" />
     <Compile Include="Models\Cube.cs" />
     <Compile Include="Models\Generator.cs" />
     <Compile Include="Models\HeightMap.cs" />
@@ -71,7 +72,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\Shaders\farameBufferFragment.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\Shaders\main_fragment.glsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Shaders\frameBufferVertex.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Shaders\main_vertex.glsl">
