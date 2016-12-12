@@ -19,14 +19,16 @@ void main()
     vec3 toLight = lightPosition - position;
     float distance = length(toLight);
     vec3 lightVector = normalize(toLight);
+
     float diffuse = dot(lightVector, normalize(normal));
-    diffuse = max(diffuse, 0.1f);
-    diffuse = 1300 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
-    diffuse = min(diffuse, 0.8);
+    //diffuse = max(diffuse, 0.1f);
+    diffuse = 100 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
+    // diffuse = min(diffuse, 0.8);
+
 	if(noTextureFlag != 1)
 	{
-			vec4 tex = texture2D(uTexture,  texCoordinate);
-			outputColor = tex * diffuse;
+		vec4 tex = texture2D(uTexture,  texCoordinate);
+		outputColor = tex * diffuse;
 	}
 	else
 	{

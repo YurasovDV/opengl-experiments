@@ -125,7 +125,7 @@ namespace ShadowMap
                         result.Add(v);
 
 
-                        MathHelperMINE.CalcNormal(normalsForTriangle, currentTriangle);
+                        GameObject.CalcNormal(currentTriangle, normalsForTriangle);
                         for (int k = 0; k < normalsForTriangle.Length; k++)
                         {
                             normalsTemp.Add(normalsForTriangle[k]);
@@ -147,7 +147,7 @@ namespace ShadowMap
                         v = new Vector3((i - 1) * cellSize, map[i - 1, j + 1], (j + 1) * cellSize);
                         result.Add(v);
                         currentTriangle[2] = v;
-                        MathHelperMINE.CalcNormal(normalsForTriangle, currentTriangle);
+                        GameObject.CalcNormal(currentTriangle, normalsForTriangle);
                         for (int k = 0; k < normalsForTriangle.Length; k++)
                         {
                             normalsTemp.Add(normalsForTriangle[k]);

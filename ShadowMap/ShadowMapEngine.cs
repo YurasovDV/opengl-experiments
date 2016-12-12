@@ -36,7 +36,7 @@ namespace ShadowMap
 
             AllObjects = new List<GameObject>()
             {
-                new Cube(center, red)
+                new Cube(center, red, 2)
             };
 
             Player = new Player(TryMove);
@@ -65,7 +65,7 @@ namespace ShadowMap
 
             PushModelViewAndProjection();
 
-            var light = new Vector3(10, 10, 10);
+            var light = new Vector3(50, 30, 50);
 
             MainRender.PreRender();
             var model = GetMapAsModel();
@@ -84,10 +84,10 @@ namespace ShadowMap
             FrameBuf.EnableMainFrameBuffer();
 
             MainRender.PreRender();
-            MainRender.Draw(model, Player.FlashlightPosition);
+            MainRender.Draw(model, light);
             foreach (var someobj in AllObjects)
             {
-                MainRender.Draw(someobj, Player.FlashlightPosition);
+                MainRender.Draw(someobj, light);
             }
             MainRender.PostRender();
 

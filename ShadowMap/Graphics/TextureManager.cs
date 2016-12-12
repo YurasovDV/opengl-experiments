@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -12,7 +8,6 @@ namespace ShadowMap
 {
     public class TextureManager
     {
-
         public TextureManager()
         {
 

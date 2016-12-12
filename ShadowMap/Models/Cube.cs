@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Utils;
 using OpenTK;
 
@@ -10,12 +8,12 @@ namespace ShadowMap
 {
     public class Cube : GameObject
     {
-        public Cube(Vector3 center, Vector3 color)
+        public Cube(Vector3 center, Vector3 color, float scale = 1)
         {
-            var points = new List<Vector3>(VERTICES);
+            var points = new List<Vector3>(VerticesForCube);
             for (int i = 0; i < points.Count; i++)
             {
-                points[i] = points[i] + center;
+                points[i] = (points[i] * scale) + center;
             }
 
             var colors = Enumerable.Repeat(color, points.Count).ToArray();
@@ -101,61 +99,54 @@ namespace ShadowMap
             return normals;
         }
 
-        public static Vector3 CalcNormal(Vector3[] vrt)
-        {
-            var n = Vector3.Cross(vrt[0] - vrt[2], vrt[0] - vrt[1]);
-            n.Normalize();
-            return n;
-        }
+        private const float Size = 1f;
 
-        private const float SIZE = 3f;
+        private static Vector3[] VerticesForCube = {
 
-        private static Vector3[] VERTICES = {
+       new Vector3(-Size,  Size, -Size),
+       new Vector3(-Size, -Size, -Size),
+       new Vector3(Size, -Size, -Size),
+       new Vector3(Size, -Size, -Size),
+       new Vector3(Size,  Size, -Size),
+       new Vector3(-Size,  Size, -Size),
 
-       new Vector3(-SIZE,  SIZE, -SIZE),
-       new Vector3(-SIZE, -SIZE, -SIZE),
-       new Vector3(SIZE, -SIZE, -SIZE),
-       new Vector3(SIZE, -SIZE, -SIZE),
-       new Vector3(SIZE,  SIZE, -SIZE),
-       new Vector3(-SIZE,  SIZE, -SIZE),
+        new Vector3(-Size, -Size,  Size),
+        new Vector3(-Size, -Size, -Size),
+        new Vector3(-Size,  Size, -Size),
+        new Vector3(-Size,  Size, -Size),
+        new Vector3(-Size,  Size,  Size),
+        new Vector3(-Size, -Size,  Size),
 
-        new Vector3(-SIZE, -SIZE,  SIZE),
-        new Vector3(-SIZE, -SIZE, -SIZE),
-        new Vector3(-SIZE,  SIZE, -SIZE),
-        new Vector3(-SIZE,  SIZE, -SIZE),
-        new Vector3(-SIZE,  SIZE,  SIZE),
-        new Vector3(-SIZE, -SIZE,  SIZE),
+         new Vector3(Size, -Size, -Size),
+         new Vector3(Size, -Size,  Size),
+         new Vector3(Size,  Size,  Size),
+         new Vector3(Size,  Size,  Size),
+         new Vector3(Size,  Size, -Size),
+         new Vector3(Size, -Size, -Size),
 
-         new Vector3(SIZE, -SIZE, -SIZE),
-         new Vector3(SIZE, -SIZE,  SIZE),
-         new Vector3(SIZE,  SIZE,  SIZE),
-         new Vector3(SIZE,  SIZE,  SIZE),
-         new Vector3(SIZE,  SIZE, -SIZE),
-         new Vector3(SIZE, -SIZE, -SIZE),
-
-        new Vector3(-SIZE, -SIZE,  SIZE),
-        new Vector3(-SIZE,  SIZE,  SIZE),
-        new Vector3( SIZE,  SIZE,  SIZE),
-        new Vector3( SIZE,  SIZE,  SIZE),
-        new Vector3( SIZE, -SIZE,  SIZE),
-        new Vector3(-SIZE, -SIZE,  SIZE),
+        new Vector3(-Size, -Size,  Size),
+        new Vector3(-Size,  Size,  Size),
+        new Vector3( Size,  Size,  Size),
+        new Vector3( Size,  Size,  Size),
+        new Vector3( Size, -Size,  Size),
+        new Vector3(-Size, -Size,  Size),
 
                 //up
-        new Vector3(-SIZE,  SIZE, -SIZE),
-        new Vector3( SIZE,  SIZE, -SIZE),
-        new Vector3( SIZE,  SIZE,  SIZE),
-        new Vector3( SIZE,  SIZE,  SIZE),
-        new Vector3(-SIZE,  SIZE,  SIZE),
-        new Vector3(-SIZE,  SIZE, -SIZE),
+        new Vector3(-Size,  Size, -Size),
+        new Vector3( Size,  Size, -Size),
+        new Vector3( Size,  Size,  Size),
+        new Vector3( Size,  Size,  Size),
+        new Vector3(-Size,  Size,  Size),
+        new Vector3(-Size,  Size, -Size),
 
 
                 // down
-        new Vector3(-SIZE, -SIZE, -SIZE),
-        new Vector3(-SIZE, -SIZE,  SIZE),
-        new Vector3( SIZE, -SIZE, -SIZE),
-        new Vector3( SIZE, -SIZE, -SIZE),
-        new Vector3(-SIZE, -SIZE,  SIZE),
-        new Vector3( SIZE, -SIZE,  SIZE)
+        new Vector3(-Size, -Size, -Size),
+        new Vector3(-Size, -Size,  Size),
+        new Vector3( Size, -Size, -Size),
+        new Vector3( Size, -Size, -Size),
+        new Vector3(-Size, -Size,  Size),
+        new Vector3( Size, -Size,  Size)
     };
     }
 }
