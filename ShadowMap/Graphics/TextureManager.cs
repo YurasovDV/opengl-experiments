@@ -31,7 +31,7 @@ namespace ShadowMap
             return TextureId;
         }
 
-        public FrameBufferDesc GetFrameBuffer(int width, int height)
+        public FrameBufferDesc GetMainFrameBuffer(int width, int height)
         {
             int frameBufferObject = GL.GenFramebuffer();
             int depthMapTextureId = GL.GenTexture();
@@ -71,6 +71,45 @@ namespace ShadowMap
             }
 
             throw new Exception("frameBuffer fail");           
+        }
+
+        public FrameBufferDesc GetFrameBuffer(int width, int height)
+        {
+            int frameBufferObject = GL.GenFramebuffer();
+            int depthMapTextureId = GL.GenTexture();
+
+            GL.BindTexture(TextureTarget.Texture2D, depthMapTextureId);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent,
+                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)All.Repeat);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferObject);
+
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, depthMapTextureId, 0);
+
+            // no need for color attachment
+            GL.DrawBuffer(DrawBufferMode.None);
+            GL.ReadBuffer(ReadBufferMode.None);
+
+            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            if (status == FramebufferErrorCode.FramebufferComplete)
+            {
+                return new FrameBufferDesc()
+                {
+                    FramBufferObject = frameBufferObject,
+                    RenderBufferObject = 0,
+                    TextureId = depthMapTextureId,
+                };
+            }
+
+            throw new Exception("frameBuffer second fail" + status.ToString());
         }
 
         private BitmapData GetBitmapData(string path, TextureTarget kind, ref int width, ref int height, out Bitmap png)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Common;
 using Common.Input;
@@ -15,6 +16,10 @@ namespace ShadowMap
         public RenderEngine MainRender { get; private set; }
         public FrameBufferManager FrameBuf { get; set; }
         public Stopwatch Watch { get; set; }
+
+
+        public Matrix4 ModelViewStored { get; set; }
+        public Matrix4 ModelViewProjectionStored { get; set; }
 
         private HeightMap Map { get; set; }
 
@@ -56,10 +61,29 @@ namespace ShadowMap
 
         private void RenderToDefaulTarget()
         {
-            FrameBuf.EnableFrameBuffer();
+            FrameBuf.EnableAuxillaryFrameBuffer();
+
+            PushModelViewAndProjection();
+
+            var light = new Vector3(10, 10, 10);
 
             MainRender.PreRender();
             var model = GetMapAsModel();
+            MainRender.Draw(model, light);
+            foreach (var someobj in AllObjects)
+            {
+                MainRender.Draw(someobj, light);
+            }
+            MainRender.PostRender();
+
+            FrameBuf.FlushAuxillaryFrameBuffer();
+
+            PopModelViewAndProjection();
+
+
+            FrameBuf.EnableMainFrameBuffer();
+
+            MainRender.PreRender();
             MainRender.Draw(model, Player.FlashlightPosition);
             foreach (var someobj in AllObjects)
             {
@@ -67,7 +91,19 @@ namespace ShadowMap
             }
             MainRender.PostRender();
 
-            FrameBuf.FlushFrameBuffer();
+            FrameBuf.FlushMainFrameBuffer();
+        }
+
+        private void PopModelViewAndProjection()
+        {
+            MainRender.ModelView = ModelViewStored;
+            MainRender.ModelViewProjection = ModelViewProjectionStored;
+        }
+
+        private void PushModelViewAndProjection()
+        {
+            ModelViewStored = MainRender.ModelView;
+            ModelViewProjectionStored = MainRender.ModelViewProjection;
         }
 
         private void HandleKeyPress(InputSignal signal)

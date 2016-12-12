@@ -39,12 +39,8 @@ namespace Common
         public virtual void SetupVieport()
         {
             GL.Enable(EnableCap.DepthTest);
-            //GL.Enable(EnableCap.ProgramPointSize);
             ModelView = Matrix4.LookAt(Player.Position, Player.Target, Vector3.UnitY);
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
-
-            /*GL.ClearColor(0, 0f, 0.1f, 100);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);*/
         }
 
         protected virtual void PreRender()

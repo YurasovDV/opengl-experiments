@@ -46,7 +46,7 @@ namespace ShadowMap
 
             CreateMainProgram();
 
-            CreateFrameBufferProgram();
+            FrameBufferProgramId = CreateFrameBufferProgram();
 
             GL.GenBuffers(1, out vertexBufferAddress);
             GL.GenBuffers(1, out colorBufferAddress);
@@ -113,9 +113,9 @@ namespace ShadowMap
             uniformTextureFirst = GL.GetUniformLocation(MainProgramId, "uTexture");
         }
 
-        private void CreateFrameBufferProgram()
+        public int CreateFrameBufferProgram()
         {
-            FrameBufferProgramId = GL.CreateProgram();
+            var programId = GL.CreateProgram();
 
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
             using (var rd = new StreamReader(@"Assets\Shaders\frameBufferVertex.glsl"))
@@ -124,7 +124,7 @@ namespace ShadowMap
                 GL.ShaderSource(vertexShader, text);
             }
             GL.CompileShader(vertexShader);
-            GL.AttachShader(FrameBufferProgramId, vertexShader);
+            GL.AttachShader(programId, vertexShader);
 
             int statusCode;
 
@@ -143,7 +143,7 @@ namespace ShadowMap
                 GL.ShaderSource(fragmentShader, text);
             }
             GL.CompileShader(fragmentShader);
-            GL.AttachShader(FrameBufferProgramId, fragmentShader);
+            GL.AttachShader(programId, fragmentShader);
 
             GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out statusCode);
             if (statusCode != 1)
@@ -153,8 +153,9 @@ namespace ShadowMap
                 throw new Exception("fragment shader: " + info);
             }
 
-            GL.LinkProgram(FrameBufferProgramId);
+            GL.LinkProgram(programId);
 
+            return programId;
         }
 
 
@@ -201,11 +202,6 @@ namespace ShadowMap
                 GL.BindTexture(TextureTarget.Texture2D, 0);
 
                 GL.Uniform1(uniformNoTextureFlag, 1);
-
-                //GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordBufferAddress);
-                //GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(0 * Vector2.SizeInBytes),
-                //  model.TextureCoordinates, BufferUsageHint.DynamicDraw);
-                //GL.VertexAttribPointer(AttrTexcoordLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
             }
 
             GL.EnableVertexAttribArray(AttrVertexLocation);
