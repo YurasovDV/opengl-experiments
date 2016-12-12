@@ -12,15 +12,11 @@ namespace ShadowMap
 
         public int AttrVertexLocation { get; set; }
 
-        public int AttrVertexFrameLocation { get; set; }
-
         public int AttrColorLocation { get; set; }
 
         public int AttrNormalLocation { get; set; }
 
         public int AttrTexcoordLocation { get; set; }
-
-        public int AttrTexcoordFrameLocation { get; set; }
 
         public int vertexBufferAddress;
 
@@ -30,15 +26,9 @@ namespace ShadowMap
 
         public int texCoordBufferAddress;
 
-        public int vertexBufferForFrameAddress;
-
-        public int texcoordsForFrameAddress;
-
         public int uniformNoTextureFlag;
 
         public int uniformTextureFirst;
-
-        public int uniformTextureFrame;
 
         public int uniformMVP;
         public int uniformMV;
@@ -62,9 +52,6 @@ namespace ShadowMap
             GL.GenBuffers(1, out colorBufferAddress);
             GL.GenBuffers(1, out normalBufferAddress);
             GL.GenBuffers(1, out texCoordBufferAddress);
-
-            GL.GenBuffers(1, out texcoordsForFrameAddress);
-            GL.GenBuffers(1, out vertexBufferForFrameAddress);
         }
 
         private void CreateMainProgram()
@@ -167,12 +154,7 @@ namespace ShadowMap
             }
 
             GL.LinkProgram(FrameBufferProgramId);
-            GL.UseProgram(FrameBufferProgramId);
 
-            AttrVertexFrameLocation = GL.GetAttribLocation(FrameBufferProgramId, "vPosition");
-            AttrTexcoordFrameLocation = GL.GetAttribLocation(FrameBufferProgramId, "vTexCoordinate");
-
-            uniformTextureFrame = GL.GetUniformLocation(FrameBufferProgramId, "uTexture");
         }
 
 

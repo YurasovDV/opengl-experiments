@@ -13,7 +13,7 @@ namespace ShadowMap
 
         public Player Player { get; private set; }
         public RenderEngine MainRender { get; private set; }
-
+        public FrameBufferManager FrameBuf { get; set; }
         public Stopwatch Watch { get; set; }
 
         private HeightMap Map { get; set; }
@@ -37,7 +37,7 @@ namespace ShadowMap
             Player = new Player(TryMove);
             KeyHandler.KeyPress += HandleKeyPress;
             MainRender = new RenderEngine(Width, Height, Player);
-
+            FrameBuf = new FrameBufferManager(MainRender);
             previousChange = 0;
         }
 
@@ -51,13 +51,12 @@ namespace ShadowMap
         {
             KeyHandler.CheckKeys();
             Player.Tick(timeSlice, dxdy);
-
             RenderToDefaulTarget();
         }
 
         private void RenderToDefaulTarget()
         {
-            MainRender.EnableFrameBuffer();
+            FrameBuf.EnableFrameBuffer();
 
             MainRender.PreRender();
             var model = GetMapAsModel();
@@ -68,7 +67,7 @@ namespace ShadowMap
             }
             MainRender.PostRender();
 
-            MainRender.FlushFrameBuffer();
+            FrameBuf.FlushFrameBuffer();
         }
 
         private void HandleKeyPress(InputSignal signal)

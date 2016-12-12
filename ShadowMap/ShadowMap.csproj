@@ -57,6 +57,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Graphics\FrameBufferDesc.cs" />
+    <Compile Include="Graphics\FrameBufferManager.cs" />
     <Compile Include="Models\Cube.cs" />
     <Compile Include="Models\Generator.cs" />
     <Compile Include="Models\HeightMap.cs" />
