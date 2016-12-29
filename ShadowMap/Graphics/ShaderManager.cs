@@ -29,10 +29,12 @@ namespace ShadowMap
         public int uniformNoTextureFlag;
 
         public int uniformTextureFirst;
+        public int uniformTextureDepthMap;
 
         public int uniformMVP;
         public int uniformMV;
         public int uniformProjection;
+        public int uniformLightSpaceMVP;
 
         public int uniformLightPos;
 
@@ -106,11 +108,13 @@ namespace ShadowMap
             uniformMVP = GL.GetUniformLocation(MainProgramId, "uMVP");
             uniformMV = GL.GetUniformLocation(MainProgramId, "uMV");
             uniformProjection = GL.GetUniformLocation(MainProgramId, "uProjection");
+            uniformLightSpaceMVP = GL.GetUniformLocation(MainProgramId, "uLightSpaceMVP");
 
             uniformNoTextureFlag = GL.GetUniformLocation(MainProgramId, "noTextureFlag");
 
             AttrTexcoordLocation = GL.GetAttribLocation(MainProgramId, "vTexCoordinate");
             uniformTextureFirst = GL.GetUniformLocation(MainProgramId, "uTexture");
+            uniformTextureDepthMap = GL.GetUniformLocation(MainProgramId, "uShadowMap");
         }
 
         public int CreateFrameBufferProgram()
@@ -159,13 +163,15 @@ namespace ShadowMap
         }
 
 
-        public void BindBuffers(SimpleModel model, Vector3 lightPosition)
+        public void BindBuffers(SimpleModel model, Vector3 lightPosition, Matrix4 lightSpaceMVP, int? depthMapTextureId = null)
         {
             GL.UseProgram(MainProgramId);
 
             GL.UniformMatrix4(uniformMVP, false, ref renderEngine.ModelViewProjection);
             GL.UniformMatrix4(uniformMV, false, ref renderEngine.ModelView);
             GL.UniformMatrix4(uniformProjection, false, ref renderEngine.Projection);
+
+            GL.UniformMatrix4(uniformLightSpaceMVP, false, ref lightSpaceMVP);
 
             GL.Uniform3(uniformLightPos, lightPosition);
 
@@ -200,9 +206,17 @@ namespace ShadowMap
             {
                 GL.DisableVertexAttribArray(AttrTexcoordLocation);
                 GL.BindTexture(TextureTarget.Texture2D, 0);
-
                 GL.Uniform1(uniformNoTextureFlag, 1);
             }
+
+
+            if (depthMapTextureId != null)
+            {
+                GL.ActiveTexture(TextureUnit.Texture1);
+                GL.Uniform1(uniformTextureDepthMap, 0);
+                GL.BindTexture(TextureTarget.Texture2D, depthMapTextureId.Value);
+            }
+
 
             GL.EnableVertexAttribArray(AttrVertexLocation);
             GL.EnableVertexAttribArray(AttrColorLocation);

@@ -3,6 +3,9 @@
 uniform mat4 uMV;
 uniform mat4 uMVP;
 uniform mat4 uProjection;
+
+uniform mat4 uLightSpaceMVP;
+
 uniform vec3 uLightPos;
 
 attribute vec3 vPosition;
@@ -17,8 +20,9 @@ out vec3 normal;
 out vec3 position;
 out vec3 lightPosition;
 
-void 
-main()
+out vec4 fragInLightSpace;
+
+void main()
 {
     gl_Position = uMVP * vec4(vPosition, 1.0);
 
@@ -27,4 +31,6 @@ main()
     lightPosition = vec3(uMV * vec4(uLightPos, 0.0)); 
     normal = vec3(uMV * vec4(vNormal, 0.0));
 	texCoordinate = vTexCoordinate;
+
+	fragInLightSpace = uLightSpaceMVP * vec4(position, 1.0);
 }

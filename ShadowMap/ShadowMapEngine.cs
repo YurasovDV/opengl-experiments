@@ -19,11 +19,16 @@ namespace ShadowMap
 
 
         public Matrix4 ModelViewStored { get; set; }
+        public Matrix4 ProjectionStored { get; set; }
         public Matrix4 ModelViewProjectionStored { get; set; }
+        public Vector3 PlayerFlashlightPositionStored { get; set; }
+
+        private Vector3 Light { get; set; } = new Vector3(50, 30, 50);
 
         private HeightMap Map { get; set; }
 
         private List<GameObject> AllObjects { get; set; }
+
 
         public ShadowMapEngine(int Width, int Height, Stopwatch watch)
             : base(Width, Height)
@@ -31,12 +36,9 @@ namespace ShadowMap
             Map = HeightMap.Create(256);
             Watch = watch;
 
-            var red = new Vector3(10, 0, 0);
-            var center = new Vector3(50, 0, 50);
-
             AllObjects = new List<GameObject>()
             {
-                new Cube(center, red, 2)
+                new Cube(center:new Vector3(50, 3, 50) , color: Vector3.UnitX, scale:1)
             };
 
             Player = new Player(TryMove);
@@ -56,54 +58,64 @@ namespace ShadowMap
         {
             KeyHandler.CheckKeys();
             Player.Tick(timeSlice, dxdy);
-            RenderToDefaulTarget();
+            FullRender();
         }
 
-        private void RenderToDefaulTarget()
+        private void FullRender()
         {
-            FrameBuf.EnableAuxillaryFrameBuffer();
+            var lightMVP = MainRender.ModelViewProjection;
+            var model = GetMapAsModel();
 
             PushModelViewAndProjection();
-
-            var light = new Vector3(50, 30, 50);
-
-            MainRender.PreRender();
-            var model = GetMapAsModel();
-            MainRender.Draw(model, light);
-            foreach (var someobj in AllObjects)
-            {
-                MainRender.Draw(someobj, light);
-            }
-            MainRender.PostRender();
-
+            MainRender.FormShadowMap = true;
+            FrameBuf.EnableAuxillaryFrameBuffer();
+            DrawToShadowMap(Light, model);
             FrameBuf.FlushAuxillaryFrameBuffer();
-
             PopModelViewAndProjection();
-
+            MainRender.FormShadowMap = false;
 
             FrameBuf.EnableMainFrameBuffer();
-
-            MainRender.PreRender();
-            MainRender.Draw(model, light);
-            foreach (var someobj in AllObjects)
-            {
-                MainRender.Draw(someobj, light);
-            }
-            MainRender.PostRender();
-
+            DrawUsingShadowMap(Light, lightMVP, model);
             FrameBuf.FlushMainFrameBuffer();
         }
 
-        private void PopModelViewAndProjection()
+        private void DrawToShadowMap(Vector3 light, SimpleModel model)
         {
-            MainRender.ModelView = ModelViewStored;
-            MainRender.ModelViewProjection = ModelViewProjectionStored;
+            MainRender.PreRender();
+            MainRender.Draw(model, light, null);
+            foreach (var someobj in AllObjects)
+            {
+                MainRender.Draw(someobj, light, null);
+            }
+            MainRender.PostRender();
+        }
+
+        private void DrawUsingShadowMap(Vector3 light, Matrix4 lightMVP, SimpleModel model)
+        {
+            MainRender.PreRender();
+
+            MainRender.Draw(model, light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
+            foreach (var someobj in AllObjects)
+            {
+                MainRender.Draw(someobj, light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
+            }
+            MainRender.PostRender();
         }
 
         private void PushModelViewAndProjection()
         {
             ModelViewStored = MainRender.ModelView;
+            ProjectionStored = MainRender.Projection;
             ModelViewProjectionStored = MainRender.ModelViewProjection;
+            PlayerFlashlightPositionStored = Player.FlashlightPosition;
+        }
+
+        private void PopModelViewAndProjection()
+        {
+            MainRender.ModelView = ModelViewStored;
+            MainRender.Projection = ProjectionStored;
+            MainRender.ModelViewProjection = ModelViewProjectionStored;
+            Player.FlashlightPosition = PlayerFlashlightPositionStored;
         }
 
         private void HandleKeyPress(InputSignal signal)

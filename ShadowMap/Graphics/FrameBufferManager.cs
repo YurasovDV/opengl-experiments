@@ -44,13 +44,21 @@ namespace ShadowMap
         public int Height { get; set; }
 
 
-        public FrameBufferManager(RenderEngine eng)
+        public FrameBufferManager(RenderEngine mainRender)
         {
-            Width = eng.Width;
-            Height = eng.Height;
-            MainFrameBufferProgramId = eng.Shaders.FrameBufferProgramId;
-
+            Width = mainRender.Width;
+            Height = mainRender.Height;
             var textureMgr = new TextureManager();
+
+            CreateMainFrameBuffer(mainRender, textureMgr);
+            CreateSecondFrameBuffer(mainRender, textureMgr);
+
+        }
+
+        private void CreateMainFrameBuffer(RenderEngine mainRender, TextureManager textureMgr)
+        {
+            MainFrameBufferProgramId = mainRender.Shaders.FrameBufferProgramId;
+
             var frameBufDesc = textureMgr.GetMainFrameBuffer(Width, Height);
             MainDepthMapBufferObject = frameBufDesc.FramBufferObject;
             MainDepthMapBufferTextureId = frameBufDesc.TextureId;
@@ -63,14 +71,15 @@ namespace ShadowMap
 
             GL.GenBuffers(1, out texCoordsForFrameAddress);
             GL.GenBuffers(1, out vertexBufferForFrameAddress);
+        }
 
-
-            frameBufDesc = textureMgr.GetFrameBuffer(Width, Height);
-
+        private FrameBufferDesc CreateSecondFrameBuffer(RenderEngine mainRender, TextureManager textureMgr)
+        {
+            FrameBufferDesc frameBufDesc = textureMgr.GetFrameBuffer(Width, Height);
             SecondDepthMapBufferObject = frameBufDesc.FramBufferObject;
             SecondDepthMapBufferTextureId = frameBufDesc.TextureId;
 
-            SecondFrameBufferProgramId = eng.Shaders.CreateFrameBufferProgram();
+            SecondFrameBufferProgramId = mainRender.Shaders.CreateFrameBufferProgram();
 
             GL.UseProgram(SecondFrameBufferProgramId);
             AttrVertexFrameLocation = GL.GetAttribLocation(SecondFrameBufferProgramId, "vPosition");
@@ -79,7 +88,7 @@ namespace ShadowMap
 
             GL.GenBuffers(1, out texCoordsForFrameSecondAddress);
             GL.GenBuffers(1, out vertexBufferForFrameSecondAddress);
-
+            return frameBufDesc;
         }
 
         public void EnableAuxillaryFrameBuffer()
