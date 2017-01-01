@@ -23,9 +23,16 @@ namespace ShadowMap
             Vertices = points.ToArray();
             Colors = colors;
             Normals = normals;
-
-
         }
+
+        public void InvertNormals()
+        {
+            for (int i = 0; i < Normals.Length; i++)
+            {
+                Normals[i] *= -1;
+            }
+        }
+
 
         private Vector3[] GetNormals(List<Vector3> points)
         {
@@ -148,5 +155,6 @@ namespace ShadowMap
         new Vector3(-Size, -Size,  Size),
         new Vector3( Size, -Size,  Size)
     };
+
     }
 }

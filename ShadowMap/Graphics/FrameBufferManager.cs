@@ -43,6 +43,7 @@ namespace ShadowMap
         public int Width { get; set; }
         public int Height { get; set; }
 
+        public bool DebugDepth { get; set; }
 
         public FrameBufferManager(RenderEngine mainRender)
         {
@@ -161,7 +162,16 @@ namespace ShadowMap
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(UniformTextureFrame, 0);
-            GL.BindTexture(TextureTarget.Texture2D, MainDepthMapBufferTextureId);
+
+            if (DebugDepth)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, SecondDepthMapBufferTextureId);
+            }
+            else
+            {
+                GL.BindTexture(TextureTarget.Texture2D, MainDepthMapBufferTextureId);
+            }
+            
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
             GL.BindVertexArray(0);

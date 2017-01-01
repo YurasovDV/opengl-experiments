@@ -37,7 +37,8 @@ namespace Common.Input
                     {Keys.Right, InputSignal.FLY_BY_COUNTERCLOCKWISE},
                     {Keys.H, InputSignal.UP_PARALLEL},
                     {Keys.G, InputSignal.DOWN_PARALLEL},
-                    {Keys.R, InputSignal.RENDER_MODE}
+                    {Keys.R, InputSignal.RENDER_MODE},
+                    {Keys.T, InputSignal.CHANGE_CAMERA }
             };
 
 
@@ -56,6 +57,7 @@ namespace Common.Input
             Keys.H,
             Keys.G,
             Keys.R,//render mode change
+            Keys.T, // change camera
             };
         }
 

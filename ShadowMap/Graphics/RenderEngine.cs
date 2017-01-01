@@ -12,10 +12,15 @@ namespace ShadowMap
 
         public ShaderManager Shaders { get; set; }
 
-        public RenderEngine(int width, int height, IPlayer player, float zFar = 300)
+        public Vector3 LightPos;
+        public Vector3 LightTarget;
+        private float zfar;
+
+        public RenderEngine(int width, int height, IPlayer player, float zFar = 200)
             : base(width, height, player, zFar)
         {
             Shaders = new ShaderManager(this);
+            zfar = zFar;
         }
 
         public override void SetupVieport()
@@ -23,14 +28,17 @@ namespace ShadowMap
             if (FormShadowMap)
             {
                 GL.Enable(EnableCap.DepthTest);
-                var target = new Vector3(50, 0, 50);
-                ModelView = Matrix4.LookAt(Player.FlashlightPosition, target, Vector3.UnitY);
-                Projection = Matrix4.CreateOrthographic(Width, Height, 0, 100);
+                ModelView = Matrix4.LookAt(LightPos, LightTarget, Vector3.UnitY);
 
-                ModelViewProjection = Matrix4.Mult(ModelView, Projection);
+                Projection = Matrix4.CreateOrthographic(100, 100, 0, 20f);
+
+                // ModelViewProjection = Matrix4.Mult(Projection, ModelView);
+                 ModelViewProjection = Matrix4.Mult(ModelView, Projection);
             }
             else
             {
+                float aspect = Width / Height;
+                Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, zfar);
                 base.SetupVieport();
             }
         }

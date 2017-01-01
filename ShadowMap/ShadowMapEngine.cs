@@ -12,6 +12,15 @@ namespace ShadowMap
         private long modeChange;
         private long previousChange;
 
+        private long cameraChange;
+        private long previousCameraChange;
+
+
+
+        private Matrix4 lightMVP;
+        private Matrix4 lightMV;
+        private Matrix4 lightP;
+
         public Player Player { get; private set; }
         public RenderEngine MainRender { get; private set; }
         public FrameBufferManager FrameBuf { get; set; }
@@ -21,14 +30,18 @@ namespace ShadowMap
         public Matrix4 ModelViewStored { get; set; }
         public Matrix4 ProjectionStored { get; set; }
         public Matrix4 ModelViewProjectionStored { get; set; }
-        public Vector3 PlayerFlashlightPositionStored { get; set; }
 
-        private Vector3 Light { get; set; } = new Vector3(50, 30, 50);
+        private Vector3 Light { get; set; }
+        private Vector3 LightTarget { get; set; }
 
         private HeightMap Map { get; set; }
 
         private List<GameObject> AllObjects { get; set; }
 
+        /// <summary>
+        /// switch to light camera
+        /// </summary>
+        public bool CameraChange { get; private set; }
 
         public ShadowMapEngine(int Width, int Height, Stopwatch watch)
             : base(Width, Height)
@@ -36,18 +49,19 @@ namespace ShadowMap
             Map = HeightMap.Create(256);
             Watch = watch;
 
-            AllObjects = new List<GameObject>()
-            {
-                new Cube(center:new Vector3(50, 3, 50) , color: Vector3.UnitX, scale:1)
-            };
+            InitObjects();
 
             Player = new Player(TryMove);
             KeyHandler.KeyPress += HandleKeyPress;
             MainRender = new RenderEngine(Width, Height, Player);
             FrameBuf = new FrameBufferManager(MainRender);
-            previousChange = 0;
-        }
 
+            MainRender.LightPos = Light;
+            MainRender.LightTarget = LightTarget;
+
+            previousChange = 0;
+            previousCameraChange = 0;
+        }
 
         public override void Click(Vector2 point)
         {
@@ -63,13 +77,17 @@ namespace ShadowMap
 
         private void FullRender()
         {
-            var lightMVP = MainRender.ModelViewProjection;
             var model = GetMapAsModel();
 
             PushModelViewAndProjection();
             MainRender.FormShadowMap = true;
             FrameBuf.EnableAuxillaryFrameBuffer();
             DrawToShadowMap(Light, model);
+
+            lightMVP = MainRender.ModelViewProjection;
+            lightMV = MainRender.ModelView;
+            lightP = MainRender.Projection;
+
             FrameBuf.FlushAuxillaryFrameBuffer();
             PopModelViewAndProjection();
             MainRender.FormShadowMap = false;
@@ -83,10 +101,13 @@ namespace ShadowMap
         {
             MainRender.PreRender();
             MainRender.Draw(model, light, null);
-            foreach (var someobj in AllObjects)
+
+            MainRender.Draw(AllObjects[0], light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
+
+            /*foreach (var someobj in AllObjects)
             {
                 MainRender.Draw(someobj, light, null);
-            }
+            }*/
             MainRender.PostRender();
         }
 
@@ -107,7 +128,6 @@ namespace ShadowMap
             ModelViewStored = MainRender.ModelView;
             ProjectionStored = MainRender.Projection;
             ModelViewProjectionStored = MainRender.ModelViewProjection;
-            PlayerFlashlightPositionStored = Player.FlashlightPosition;
         }
 
         private void PopModelViewAndProjection()
@@ -115,7 +135,6 @@ namespace ShadowMap
             MainRender.ModelView = ModelViewStored;
             MainRender.Projection = ProjectionStored;
             MainRender.ModelViewProjection = ModelViewProjectionStored;
-            Player.FlashlightPosition = PlayerFlashlightPositionStored;
         }
 
         private void HandleKeyPress(InputSignal signal)
@@ -131,13 +150,45 @@ namespace ShadowMap
                     previousChange = modeChange;
                 }
             }
-        }
 
+            if (signal == InputSignal.CHANGE_CAMERA)
+            {
+                cameraChange = Watch.ElapsedMilliseconds;
+                if (cameraChange - previousCameraChange > Constants.RenderChangeCooldown)
+                {
+                    CameraChange = !CameraChange;
+                    previousCameraChange = cameraChange;
+
+                    FrameBuf.DebugDepth = CameraChange;
+                }
+            }
+
+        }
 
         private SimpleModel GetMapAsModel()
         {
             var model = Map.GetAsModel();
             return model;
         }
+
+        private void InitObjects()
+        {
+            Light = new Vector3(50, 10, 50);
+            LightTarget = new Vector3(60, 3, 60);
+
+            var obj = new Cube(center: new Vector3(60, 3, 60), color: Vector3.UnitX , scale: 1);
+
+            //var Oxy = new Cube(center: new Vector3(0, 1, 0), color: Vector3.UnitZ, scale: 1);
+            //var bulb = new Cube(center: new Vector3(Light), color: new Vector3(1, 1, 1), scale: 0.1f);
+            //bulb.InvertNormals();
+            //var targ = new Cube(center: new Vector3(LightTarget), color: new Vector3(0.85f, 0.3f, 0), scale: 0.1f);
+            //var targ2 = new Cube(center: new Vector3(64.3f, 0, 64.3f), color: new Vector3(0.85f, 0.3f, 0), scale: 1f);
+
+            AllObjects = new List<GameObject>()
+            {
+                  obj,
+            };
+        }
+
     }
 }

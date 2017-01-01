@@ -25,6 +25,7 @@ namespace Common.Input
         DOWN_PARALLEL,
         UP_PARALLEL,
         MOUSE_CLICK,
-        RENDER_MODE
+        RENDER_MODE,
+        CHANGE_CAMERA
     }
 }

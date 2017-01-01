@@ -23,12 +23,12 @@ float not_in_shadow(vec4 point)
 	float notInShadow = 1;
 
 	vec3 projected = point.xyz / point.w; 
-	projected = 0.5 * projected + 0.5;
+	projected =  projected * 0.5 + 0.5;
 
 	float closestDepthToLight = texture2D(uShadowMap, projected.xy).r;
 	float currentDepth = projected.z;
 
-	float shadow = currentDepth > closestDepthToLight ? inShadow : notInShadow;
+	float shadow = currentDepth > closestDepthToLight ? inShadow : notInShadow;	
 	return shadow;
 }
 
@@ -40,8 +40,8 @@ void main()
     float diffuse = dot(lightVector, normalize(normal));
     diffuse = 400 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
 
-	float shadow = not_in_shadow(fragInLightSpace);
-	diffuse = diffuse *  max(shadow, 0.15f);
+	float notInShadow = not_in_shadow(fragInLightSpace);
+	diffuse = diffuse *  notInShadow + 0.15f;
 
 	if(noTextureFlag != 1)
 	{
@@ -52,6 +52,5 @@ void main()
 	{
 		outputColor = color * diffuse;
 	}
-
 	
 }
