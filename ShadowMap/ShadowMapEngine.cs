@@ -22,6 +22,7 @@ namespace ShadowMap
         private Matrix4 lightP;
 
         public Player Player { get; private set; }
+        private LightCube bulb;
         public RenderEngine MainRender { get; private set; }
         public FrameBufferManager FrameBuf { get; set; }
         public Stopwatch Watch { get; set; }
@@ -30,9 +31,6 @@ namespace ShadowMap
         public Matrix4 ModelViewStored { get; set; }
         public Matrix4 ProjectionStored { get; set; }
         public Matrix4 ModelViewProjectionStored { get; set; }
-
-        private Vector3 Light { get; set; }
-        private Vector3 LightTarget { get; set; }
 
         private HeightMap Map { get; set; }
 
@@ -56,9 +54,6 @@ namespace ShadowMap
             MainRender = new RenderEngine(Width, Height, Player);
             FrameBuf = new FrameBufferManager(MainRender);
 
-            MainRender.LightPos = Light;
-            MainRender.LightTarget = LightTarget;
-
             previousChange = 0;
             previousCameraChange = 0;
         }
@@ -72,6 +67,7 @@ namespace ShadowMap
         {
             KeyHandler.CheckKeys();
             Player.Tick(timeSlice, dxdy);
+            // bulb.Tick();
             FullRender();
         }
 
@@ -79,10 +75,13 @@ namespace ShadowMap
         {
             var model = GetMapAsModel();
 
+            MainRender.LightPos = bulb.Center;
+            MainRender.LightTarget = bulb.Target;
+
             PushModelViewAndProjection();
             MainRender.FormShadowMap = true;
             FrameBuf.EnableAuxillaryFrameBuffer();
-            DrawToShadowMap(Light, model);
+            DrawToShadowMap(bulb.Center, model);
 
             lightMVP = MainRender.ModelViewProjection;
             lightMV = MainRender.ModelView;
@@ -93,14 +92,13 @@ namespace ShadowMap
             MainRender.FormShadowMap = false;
 
             FrameBuf.EnableMainFrameBuffer();
-            DrawUsingShadowMap(Light, lightMVP, model);
+            DrawUsingShadowMap(bulb.Center, lightMVP, model);
             FrameBuf.FlushMainFrameBuffer();
         }
 
         private void DrawToShadowMap(Vector3 light, SimpleModel model)
         {
             MainRender.PreRender();
-            MainRender.Draw(model, light, null);
 
             MainRender.Draw(AllObjects[0], light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
 
@@ -173,16 +171,11 @@ namespace ShadowMap
 
         private void InitObjects()
         {
-            Light = new Vector3(50, 10, 50);
-            LightTarget = new Vector3(60, 3, 60);
-
             var obj = new Cube(center: new Vector3(60, 3, 60), color: Vector3.UnitX , scale: 2);
 
-            //var Oxy = new Cube(center: new Vector3(0, 1, 0), color: Vector3.UnitZ, scale: 1);
-            var bulb = new Cube(center: new Vector3(Light), color: new Vector3(1, 1, 1), scale: 0.1f);
-            //bulb.InvertNormals();
-            //var targ = new Cube(center: new Vector3(LightTarget), color: new Vector3(0.85f, 0.3f, 0), scale: 0.1f);
-            //var targ2 = new Cube(center: new Vector3(64.3f, 0, 64.3f), color: new Vector3(0.85f, 0.3f, 0), scale: 1f);
+            bulb = new LightCube(center: new Vector3(50, 10, 50), color: new Vector3(0.85f, 0.3f, 0), scale: 0.1f);
+            bulb.InvertNormals();
+            bulb.Target = new Vector3(60, 3, 60);
 
             AllObjects = new List<GameObject>()
             {

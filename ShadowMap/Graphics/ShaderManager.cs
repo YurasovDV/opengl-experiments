@@ -211,7 +211,7 @@ namespace ShadowMap
             
             if (depthMapTextureId != null)
             {
-                GL.ActiveTexture(TextureUnit.Texture1);
+                GL.ActiveTexture(TextureUnit.Texture0);
                 GL.Uniform1(uniformTextureDepthMap, 0);
                 GL.BindTexture(TextureTarget.Texture2D, depthMapTextureId.Value);
             }

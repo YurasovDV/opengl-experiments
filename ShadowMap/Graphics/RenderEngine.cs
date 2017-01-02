@@ -28,7 +28,7 @@ namespace ShadowMap
             if (FormShadowMap)
             {
                 ModelView = Matrix4.LookAt(LightPos, LightTarget, Vector3.UnitY);
-                Projection = Matrix4.CreateOrthographic(100, 100, 0, 200f);
+                Projection = Matrix4.CreateOrthographic(30, 30, 0, 60f);
                 ModelViewProjection = Matrix4.Mult(ModelView, Projection);
             }
             else

@@ -63,6 +63,7 @@
     <Compile Include="Models\HeightMap.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="Models\GameObject.cs" />
+    <Compile Include="Models\LightCube.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

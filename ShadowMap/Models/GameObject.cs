@@ -6,7 +6,7 @@ namespace ShadowMap
     {
         public static Vector3 CalcNormal(Vector3[] vrt)
         {
-            var n = Vector3.Cross(vrt[0] - vrt[1], vrt[0] - vrt[2]);
+            var n = Vector3.Cross(vrt[0] - vrt[2], vrt[0] - vrt[1]);
             n.Normalize();
             return n;
         }

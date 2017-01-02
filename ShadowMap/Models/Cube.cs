@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Common.Utils;
 using OpenTK;
 
 namespace ShadowMap
@@ -113,6 +111,7 @@ namespace ShadowMap
        new Vector3(-Size,  Size, -Size),
        new Vector3(-Size, -Size, -Size),
        new Vector3(Size, -Size, -Size),
+
        new Vector3(Size, -Size, -Size),
        new Vector3(Size,  Size, -Size),
        new Vector3(-Size,  Size, -Size),
