@@ -26,7 +26,7 @@ namespace ShadowMap
         public override void SetupVieport()
         {
             if (FormShadowMap)
-            {
+            {               
                 ModelView = Matrix4.LookAt(LightPos, LightTarget, Vector3.UnitY);
                 Projection = Matrix4.CreateOrthographic(30, 30, 0, 60f);
                 ModelViewProjection = Matrix4.Mult(ModelView, Projection);
@@ -45,6 +45,14 @@ namespace ShadowMap
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.Enable(EnableCap.DepthTest);
             SetupVieport();
+            if (FormShadowMap)
+            {
+                GL.CullFace(CullFaceMode.Front);
+            }
+            else
+            {
+                GL.CullFace(CullFaceMode.Back);
+            }
         }
 
         public void Draw(SimpleModel model, Vector3 light, Matrix4 lightSpaceMVP, int? depthMapBuf = null)

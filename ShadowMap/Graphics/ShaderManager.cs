@@ -196,7 +196,6 @@ namespace ShadowMap
 
                 GL.EnableVertexAttribArray(AttrTexcoordLocation);
 
-                // активная текстура - т0
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.Uniform1(uniformTextureFirst, 0);
                 GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
@@ -205,14 +204,13 @@ namespace ShadowMap
             else
             {
                 GL.DisableVertexAttribArray(AttrTexcoordLocation);
-                GL.BindTexture(TextureTarget.Texture2D, 0);
                 GL.Uniform1(uniformNoTextureFlag, 1);
             }
             
             if (depthMapTextureId != null)
             {
-                GL.ActiveTexture(TextureUnit.Texture0);
-                GL.Uniform1(uniformTextureDepthMap, 0);
+                GL.ActiveTexture(TextureUnit.Texture1);
+                GL.Uniform1(uniformTextureDepthMap, 1);
                 GL.BindTexture(TextureTarget.Texture2D, depthMapTextureId.Value);
             }
 

@@ -67,7 +67,8 @@ namespace ShadowMap
         {
             KeyHandler.CheckKeys();
             Player.Tick(timeSlice, dxdy);
-            // bulb.Tick();
+            bulb = bulb.Tick();
+            AllObjects[1] = bulb;
             FullRender();
         }
 
@@ -99,6 +100,8 @@ namespace ShadowMap
         private void DrawToShadowMap(Vector3 light, SimpleModel model)
         {
             MainRender.PreRender();
+
+            
 
             MainRender.Draw(AllObjects[0], light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
 
@@ -171,18 +174,49 @@ namespace ShadowMap
 
         private void InitObjects()
         {
-            var obj = new Cube(center: new Vector3(60, 3, 60), color: Vector3.UnitX , scale: 2);
+            var obj = new Cube(center: new Vector3(60, 3, 60), color: Vector3.UnitX, scale: 2);
 
-            bulb = new LightCube(center: new Vector3(50, 10, 50), color: new Vector3(0.85f, 0.3f, 0), scale: 0.1f);
+            bulb = new LightCube(center: new Vector3(50, 10, 50), color: new Vector3(1f, 1f, 1f), scale: 1f);
             bulb.InvertNormals();
             bulb.Target = new Vector3(60, 3, 60);
 
+            GameObject towObj = GetTower();
+
             AllObjects = new List<GameObject>()
             {
-                  obj,
-                  bulb
+                  //obj,
+                  towObj,
+                  bulb,
+                 
             };
         }
 
+        private static GameObject GetTower()
+        {
+            var tower = new SimpleModel(@"Assets\Tower\watchtower.obj", @"Assets\Tower\Wachturm_tex_x.png");
+
+            var verticesTransformed = tower.Vertices;
+
+            var move = Matrix4.CreateTranslation(60, -4, 60);
+
+            var scale = Matrix4.CreateScale(5);
+
+            for (int i = 0; i < verticesTransformed.Length; i++)
+            {
+                verticesTransformed[i] = Vector3.Transform(verticesTransformed[i], scale * move);
+            }
+
+
+            var towObj = new GameObject()
+            {
+                Colors = tower.Colors,
+                Normals = tower.Normals,
+                TextureId = tower.TextureId,
+                TextureCoordinates = tower.TextureCoordinates,
+                Vertices = verticesTransformed
+            };
+
+            return towObj;
+        }
     }
 }
