@@ -28,13 +28,9 @@ float not_in_shadow(vec4 point)
 	float closestDepthToLight = texture2D(uShadowMap, projected.xy).r;
 	float currentDepth = projected.z;
 
-	/*if(closestDepthToLight < 0.5 && closestDepthToLight > -0.05)
-	{
-		return inShadow;
-	}
-	return notInShadow;*/
 
 	float shadow = currentDepth > closestDepthToLight ? inShadow : notInShadow;	
+	shadow = currentDepth >= 1.0f || currentDepth <= 0f ? notInShadow : shadow;
 	return shadow;
 }
 
@@ -50,5 +46,4 @@ void main()
 	diffuse = diffuse *  notInShadow + 0.15f;
 
 	outputColor = diffuse * (noTextureFlag != 1 ? texture2D(uTexture,  texCoordinate) : color);
-
 }
