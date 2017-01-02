@@ -75,13 +75,13 @@ namespace ShadowMap
 
             GL.BindTexture(TextureTarget.Texture2D, depthMapTextureId);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent,
-                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.DepthComponent, PixelType.UnsignedByte, IntPtr.Zero);
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
 
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)All.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
 
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
@@ -155,10 +155,11 @@ namespace ShadowMap
                 new Vector2(0.0f, 0.0f),
                 new Vector2(1.0f, 0.0f),
 
+
+                new Vector2(0.0f, 1.0f),
                 new Vector2(1.0f, 0.0f),
                 new Vector2(1.0f, 1.0f),
-                new Vector2(0.0f, 1.0f),
-
+                
             };
 
             var texCoordsPointsCurrent = new Vector2[vertices.Length];

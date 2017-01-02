@@ -190,7 +190,7 @@ namespace ShadowMap
             if (model.TextureId != -1)
             {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordBufferAddress);
-                GL.BufferData<Vector2>(BufferTarget.ArrayBuffer, (IntPtr)(model.TextureCoordinates.Length * Vector2.SizeInBytes),
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.TextureCoordinates.Length * Vector2.SizeInBytes),
                   model.TextureCoordinates, BufferUsageHint.DynamicDraw);
                 GL.VertexAttribPointer(AttrTexcoordLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
 
@@ -208,15 +208,13 @@ namespace ShadowMap
                 GL.BindTexture(TextureTarget.Texture2D, 0);
                 GL.Uniform1(uniformNoTextureFlag, 1);
             }
-
-
+            
             if (depthMapTextureId != null)
             {
                 GL.ActiveTexture(TextureUnit.Texture1);
                 GL.Uniform1(uniformTextureDepthMap, 0);
                 GL.BindTexture(TextureTarget.Texture2D, depthMapTextureId.Value);
             }
-
 
             GL.EnableVertexAttribArray(AttrVertexLocation);
             GL.EnableVertexAttribArray(AttrColorLocation);

@@ -176,10 +176,10 @@ namespace ShadowMap
             Light = new Vector3(50, 10, 50);
             LightTarget = new Vector3(60, 3, 60);
 
-            var obj = new Cube(center: new Vector3(60, 3, 60), color: Vector3.UnitX , scale: 1);
+            var obj = new Cube(center: new Vector3(60, 3, 60), color: Vector3.UnitX , scale: 2);
 
             //var Oxy = new Cube(center: new Vector3(0, 1, 0), color: Vector3.UnitZ, scale: 1);
-            //var bulb = new Cube(center: new Vector3(Light), color: new Vector3(1, 1, 1), scale: 0.1f);
+            var bulb = new Cube(center: new Vector3(Light), color: new Vector3(1, 1, 1), scale: 0.1f);
             //bulb.InvertNormals();
             //var targ = new Cube(center: new Vector3(LightTarget), color: new Vector3(0.85f, 0.3f, 0), scale: 0.1f);
             //var targ2 = new Cube(center: new Vector3(64.3f, 0, 64.3f), color: new Vector3(0.85f, 0.3f, 0), scale: 1f);
@@ -187,6 +187,7 @@ namespace ShadowMap
             AllObjects = new List<GameObject>()
             {
                   obj,
+                  bulb
             };
         }
 

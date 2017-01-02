@@ -27,12 +27,9 @@ namespace ShadowMap
         {
             if (FormShadowMap)
             {
-                GL.Enable(EnableCap.DepthTest);
+                //GL.Enable(EnableCap.DepthTest);
                 ModelView = Matrix4.LookAt(LightPos, LightTarget, Vector3.UnitY);
-
-                Projection = Matrix4.CreateOrthographic(100, 100, 0, 20f);
-
-                // ModelViewProjection = Matrix4.Mult(Projection, ModelView);
+                Projection = Matrix4.CreateOrthographic(100, 100, 0, 200f);
                  ModelViewProjection = Matrix4.Mult(ModelView, Projection);
             }
             else

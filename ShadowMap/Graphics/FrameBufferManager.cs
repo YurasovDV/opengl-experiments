@@ -100,8 +100,8 @@ namespace ShadowMap
 
         public void FlushAuxillaryFrameBuffer()
         {
-            /*GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            GL.Disable(EnableCap.DepthTest);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            /*GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(1, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
