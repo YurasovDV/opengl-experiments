@@ -82,7 +82,10 @@ namespace Common
                             var normalIndex = int.Parse(data[2]) - 1;
 
                             vertResult.Add(verts[vertexIndex]);
-                            textureResult.Add(textureUV[textureIndex]);
+                            if (textureUV.Count > textureIndex)
+                            {
+                                textureResult.Add(textureUV[textureIndex]);
+                            }
                             normalsResult.Add(normals[normalIndex]);
 
                         }
@@ -99,8 +102,14 @@ namespace Common
             TextureCoordinates = textureResult.ToArray();
 
             TextureManager mgr = new TextureManager();
-            TextureId = mgr.LoadTexture(texturePath);
-
+            if (texturePath != null)
+            {
+                TextureId = mgr.LoadTexture(texturePath);
+            }
+            else
+            {
+                TextureId = -1;
+            }
         }
     }
 }

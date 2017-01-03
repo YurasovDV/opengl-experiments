@@ -46,7 +46,8 @@ namespace ShadowMap
         public static HeightMap Create(int size)
         {
             float[,] map = new float[size + 1, size + 1];
-            Generator.GenerateFlat(map, -3);
+            Generator.GenerateRecursive(map, size + 1, 0, size, 0, size);
+            Generator.Smooth(map);
             var result = new HeightMap(map);
             return result;
         }
@@ -114,16 +115,16 @@ namespace ShadowMap
                         && j < MapSize - 1 && i < MapSize - 1)
                     {
 
-                        var v = new Vector3((i - 0.5f) * cellSize, (map[i, j] + map[i - 1, j - 1]) * 0.5f, (j - 0.5f) * cellSize);
+                        var v = new Vector3((i - 1f) * cellSize, map[i - 1, j - 1], (j - 1f) * cellSize);
 
                         result.Add(v);
                         currentTriangle[0] = v;
 
-                        v = new Vector3((i - 0.5f) * cellSize, (map[i, j] + map[i - 1, j + 1]) * 0.5f, (j + 0.5f) * cellSize);
+                        v = new Vector3((i - 1f) * cellSize, map[i - 1, j + 1], (j + 1f) * cellSize);
                         currentTriangle[1] = v;
                         result.Add(v);
 
-                        v = new Vector3((i + 0.5f) * cellSize, (map[i, j] + map[i + 1, j + 1]) * 0.5f, (j + 0.5f) * cellSize);
+                        v = new Vector3((i + 1f) * cellSize, map[i + 1, j + 1], (j + 1f) * cellSize);
                         currentTriangle[2] = v;
                         result.Add(v);
 
@@ -134,15 +135,15 @@ namespace ShadowMap
                         }
 
 
-                        v = new Vector3((i - 0.5f) * cellSize, (map[i, j] + map[i - 1, j - 1]) * 0.5f, (j - 0.5f) * cellSize);
+                        v = new Vector3((i - 1f) * cellSize, map[i - 1, j - 1], (j - 1f) * cellSize);
                         result.Add(v);
                         currentTriangle[0] = v;
 
-                        v = new Vector3((i + 0.5f) * cellSize, (map[i, j] + map[i + 1, j + 1]) * 0.5f, (j + 0.5f) * cellSize);
+                        v = new Vector3((i + 1f) * cellSize, map[i + 1, j + 1], (j + 1f) * cellSize);
                         result.Add(v);
                         currentTriangle[1] = v;
 
-                        v = new Vector3((i + 0.5f) * cellSize, (map[i, j] + map[i + 1, j - 1]) * 0.5f, (j - 0.5f) * cellSize);
+                        v = new Vector3((i + 1f) * cellSize, map[i + 1, j - 1], (j - 1f) * cellSize);
                         result.Add(v);
                         currentTriangle[2] = v;
                         GameObject.CalcNormal(currentTriangle, normalsForTriangle);

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Common;
 using Common.Input;
+using Common.Utils;
 using OpenTK;
 
 namespace ShadowMap
@@ -22,7 +23,7 @@ namespace ShadowMap
         private Matrix4 lightP;
 
         public Player Player { get; private set; }
-        private LightCube bulb;
+        private LightSphere bulb;
         public RenderEngine MainRender { get; private set; }
         public FrameBufferManager FrameBuf { get; set; }
         public Stopwatch Watch { get; set; }
@@ -101,14 +102,8 @@ namespace ShadowMap
         {
             MainRender.PreRender();
 
-            
-
             MainRender.Draw(AllObjects[0], light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
 
-            /*foreach (var someobj in AllObjects)
-            {
-                MainRender.Draw(someobj, light, null);
-            }*/
             MainRender.PostRender();
         }
 
@@ -174,10 +169,7 @@ namespace ShadowMap
 
         private void InitObjects()
         {
-            var obj = new Cube(center: new Vector3(60, 3, 60), color: Vector3.UnitX, scale: 2);
-
-            bulb = new LightCube(center: new Vector3(50, 10, 50), color: new Vector3(1f, 1f, 1f), scale: 1f);
-            bulb.InvertNormals();
+            bulb = GetSphere();
             bulb.Target = new Vector3(60, 3, 60);
 
             GameObject towObj = GetTower();
@@ -187,18 +179,47 @@ namespace ShadowMap
                   //obj,
                   towObj,
                   bulb,
-                 
+
             };
         }
 
-        private static GameObject GetTower()
+        private LightSphere GetSphere()
         {
-            var tower = new SimpleModel(@"Assets\Tower\watchtower.obj", @"Assets\Tower\Wachturm_tex_x.png");
+            var sphere = new SimpleModel(@"Assets\Models\sphere.obj", null);
+
+            var verticesTransformed = sphere.Vertices;
+
+            var move = Matrix4.CreateTranslation(50, 10, 50);
+
+            var scale = Matrix4.CreateScale(1.5f);
+
+            for (int i = 0; i < verticesTransformed.Length; i++)
+            {
+                verticesTransformed[i] = Vector3.Transform(verticesTransformed[i], scale * move);
+            }
+
+
+            var result = new LightSphere(new Vector3(50, 10, 50))
+            {
+                Colors = Enumerable.Repeat(new Vector3(1, 1, 1), verticesTransformed.Length).ToArray(),
+                Normals = sphere.Normals,
+                TextureId = sphere.TextureId,
+                TextureCoordinates = sphere.TextureCoordinates,
+                Vertices = verticesTransformed
+            };
+
+            return result;
+        }
+
+        private GameObject GetTower()
+        {
+            var tower = new SimpleModel(@"Assets\Models\Tower\watchtower.obj", @"Assets\Models\Tower\Wachturm_tex_x.png");
 
             var verticesTransformed = tower.Vertices;
 
-            var move = Matrix4.CreateTranslation(60, -4, 60);
+            float h = GetMinHeightForTower();
 
+            var move = Matrix4.CreateTranslation(60, h, 60);
             var scale = Matrix4.CreateScale(5);
 
             for (int i = 0; i < verticesTransformed.Length; i++)
@@ -217,6 +238,40 @@ namespace ShadowMap
             };
 
             return towObj;
+        }
+
+        private float GetMinHeightForTower()
+        {
+            float h = 10;
+
+
+            float h1;
+            if (!Map.TryGetValue(59, 59, out h1))
+            {
+                h1 = 0;
+            }
+
+            float h2;
+            if (!Map.TryGetValue(59, 60, out h2))
+            {
+                h2 = 0;
+            }
+
+            float h3;
+            if (!Map.TryGetValue(60, 59, out h3))
+            {
+                h3 = 0;
+            }
+
+            float h4;
+            if (!Map.TryGetValue(60, 60, out h4))
+            {
+                h4 = 0;
+            }
+
+            h = (float)MathHelperMINE.Max(-h1, -h2, -h3, -h4) * -1;
+
+            return h;
         }
     }
 }

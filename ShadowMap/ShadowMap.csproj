@@ -64,6 +64,7 @@
     <Compile Include="MainForm.cs" />
     <Compile Include="Models\GameObject.cs" />
     <Compile Include="Models\LightCube.cs" />
+    <Compile Include="Models\LightSphere.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +75,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\Models\sphere.obj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Assets\Shaders\farameBufferFragment.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -86,7 +90,7 @@
     <None Include="Assets\Shaders\main_vertex.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Assets\Tower\watchtower.obj">
+    <Content Include="Assets\Models\Tower\watchtower.obj">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -96,17 +100,13 @@
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OcTreeRevisited\OcTreeRevisited.csproj">
-      <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>
-      <Name>OcTreeRevisited</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="Assets\Textures\grass.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Tower\Wachturm_tex_x.png">
+    <Content Include="Assets\Models\Tower\Wachturm_tex_x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

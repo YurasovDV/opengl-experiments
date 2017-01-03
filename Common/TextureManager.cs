@@ -25,13 +25,22 @@ namespace Common
         public int LoadTexture(string path, int width = -1, int height = -1)
         {
             var TextureId = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, TextureId);
 
-            Bitmap png;
-            var bitmap_data = GetBitmapData(path, TextureTarget.Texture2D, ref width, ref height, out png);
-            LoadToOpenGL(width, height, png, bitmap_data);
+            try
+            {
+                GL.BindTexture(TextureTarget.Texture2D, TextureId);
 
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+                Bitmap png;
+                var bitmap_data = GetBitmapData(path, TextureTarget.Texture2D, ref width, ref height, out png);
+                LoadToOpenGL(width, height, png, bitmap_data);
+
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+            }
+            catch (Exception)
+            {
+                TextureId = -1;
+            }
+
             return TextureId;
         }
 
