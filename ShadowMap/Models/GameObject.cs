@@ -17,7 +17,7 @@ namespace ShadowMap
             n.Normalize();
             normals[0] = n;
             normals[1] = n;
-            normals[0] = n;
+            normals[2] = n;
         }
     }
 }

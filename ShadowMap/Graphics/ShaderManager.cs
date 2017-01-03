@@ -37,6 +37,7 @@ namespace ShadowMap
         public int uniformLightSpaceMVP;
 
         public int uniformLightPos;
+        public int uniformLightDir;
 
         public int MainProgramId { get; set; }
 
@@ -104,6 +105,7 @@ namespace ShadowMap
             AttrNormalLocation = GL.GetAttribLocation(MainProgramId, "vNormal");
 
             uniformLightPos = GL.GetUniformLocation(MainProgramId, "uLightPos");
+            uniformLightDir = GL.GetUniformLocation(MainProgramId, "uLightDir");
 
             uniformMVP = GL.GetUniformLocation(MainProgramId, "uMVP");
             uniformMV = GL.GetUniformLocation(MainProgramId, "uMV");
@@ -163,7 +165,7 @@ namespace ShadowMap
         }
 
 
-        public void BindBuffers(SimpleModel model, Vector3 lightPosition, Matrix4 lightSpaceMVP, int? depthMapTextureId = null)
+        public void BindBuffers(SimpleModel model, Vector3 lightPosition, Vector3 lightDirection, Matrix4 lightSpaceMVP, int? depthMapTextureId = null)
         {
             GL.UseProgram(MainProgramId);
 
@@ -174,6 +176,7 @@ namespace ShadowMap
             GL.UniformMatrix4(uniformLightSpaceMVP, false, ref lightSpaceMVP);
 
             GL.Uniform3(uniformLightPos, lightPosition);
+            GL.Uniform3(uniformLightDir, lightDirection);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferAddress);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes), model.Vertices, BufferUsageHint.DynamicDraw);

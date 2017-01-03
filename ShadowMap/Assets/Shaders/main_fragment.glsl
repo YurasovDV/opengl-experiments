@@ -4,16 +4,14 @@ varying vec4 color;
 varying vec3 normal;
 varying vec3 position;
 varying vec3 lightPosition;
+varying vec3 lightDirection;
 varying vec4 fragInLightSpace;
 
 out vec4 outputColor;
 
 uniform sampler2D uTexture;
-
 uniform sampler2D uShadowMap;
-
 uniform int noTextureFlag;
-
 varying vec2 texCoordinate;
 
 
@@ -35,14 +33,17 @@ float not_in_shadow(vec4 point)
 
 void main()
 {
-    //vec3 toLight = lightPosition - position;
-    //float distance = length(toLight);
-    //vec3 lightVector = normalize(toLight);
-    float diffuse =1;// dot(lightVector, normalize(normal));
-    diffuse = 0.9f;// 400 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
+    vec3 toLight = lightPosition - position;
+    vec3 lightVector = normalize(toLight);
+	vec3 diffBetwDir = normalize(lightPosition - lightDirection);
+	float lightness = dot(lightVector, diffBetwDir) - 0.1;
+
+    float diffuse = lightness * dot(normal, diffBetwDir);
+	float distance = length(toLight);
+    diffuse = 400 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
 
 	float notInShadow = not_in_shadow(fragInLightSpace);
-	diffuse = diffuse *  notInShadow + 0.15f;
+	diffuse = diffuse *  notInShadow + 0.2f;
 
 	outputColor = diffuse * (noTextureFlag != 1 ? texture2D(uTexture,  texCoordinate) : color);
 }

@@ -52,7 +52,7 @@ namespace ShadowMap
 
             Player = new Player(TryMove);
             KeyHandler.KeyPress += HandleKeyPress;
-            MainRender = new RenderEngine(Width, Height, Player);
+            MainRender = new RenderEngine(Width, Height, Player, 300);
             FrameBuf = new FrameBufferManager(MainRender);
 
             previousChange = 0;
@@ -102,7 +102,7 @@ namespace ShadowMap
         {
             MainRender.PreRender();
 
-            MainRender.Draw(AllObjects[0], light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
+            MainRender.Draw(AllObjects[0], light, bulb.Target, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
 
             MainRender.PostRender();
         }
@@ -111,10 +111,10 @@ namespace ShadowMap
         {
             MainRender.PreRender();
 
-            MainRender.Draw(model, light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
+            MainRender.Draw(model, light, bulb.Target, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
             foreach (var someobj in AllObjects)
             {
-                MainRender.Draw(someobj, light, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
+                MainRender.Draw(someobj, light, bulb.Target, lightMVP, FrameBuf.SecondDepthMapBufferTextureId);
             }
             MainRender.PostRender();
         }
@@ -170,7 +170,7 @@ namespace ShadowMap
         private void InitObjects()
         {
             bulb = GetSphere();
-            bulb.Target = new Vector3(60, 3, 60);
+            bulb.Target = new Vector3(80, 3, 80);
 
             GameObject towObj = GetTower();
 
@@ -189,7 +189,7 @@ namespace ShadowMap
 
             var verticesTransformed = sphere.Vertices;
 
-            var move = Matrix4.CreateTranslation(50, 10, 50);
+            var move = Matrix4.CreateTranslation(65, 10, 65);
 
             var scale = Matrix4.CreateScale(1.5f);
 
@@ -199,7 +199,7 @@ namespace ShadowMap
             }
 
 
-            var result = new LightSphere(new Vector3(50, 10, 50))
+            var result = new LightSphere(new Vector3(65, 10, 65))
             {
                 Colors = Enumerable.Repeat(new Vector3(1, 1, 1), verticesTransformed.Length).ToArray(),
                 Normals = sphere.Normals,
@@ -219,7 +219,7 @@ namespace ShadowMap
 
             float h = GetMinHeightForTower();
 
-            var move = Matrix4.CreateTranslation(60, h, 60);
+            var move = Matrix4.CreateTranslation(80, h, 80);
             var scale = Matrix4.CreateScale(5);
 
             for (int i = 0; i < verticesTransformed.Length; i++)
@@ -246,25 +246,25 @@ namespace ShadowMap
 
 
             float h1;
-            if (!Map.TryGetValue(59, 59, out h1))
+            if (!Map.TryGetValue(58, 58, out h1))
             {
                 h1 = 0;
             }
 
             float h2;
-            if (!Map.TryGetValue(59, 60, out h2))
+            if (!Map.TryGetValue(58, 61, out h2))
             {
                 h2 = 0;
             }
 
             float h3;
-            if (!Map.TryGetValue(60, 59, out h3))
+            if (!Map.TryGetValue(61, 58, out h3))
             {
                 h3 = 0;
             }
 
             float h4;
-            if (!Map.TryGetValue(60, 60, out h4))
+            if (!Map.TryGetValue(61, 61, out h4))
             {
                 h4 = 0;
             }

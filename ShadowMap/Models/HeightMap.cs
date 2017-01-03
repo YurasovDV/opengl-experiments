@@ -114,17 +114,17 @@ namespace ShadowMap
                     if (i > 0 && j > 0
                         && j < MapSize - 1 && i < MapSize - 1)
                     {
+                        Vector3 v;
 
-                        var v = new Vector3((i - 1f) * cellSize, map[i - 1, j - 1], (j - 1f) * cellSize);
-
+                        v = new Vector3((i - 1f) * cellSize, map[i - 1, j - 1], (j - 1f) * cellSize);
                         result.Add(v);
                         currentTriangle[0] = v;
 
-                        v = new Vector3((i - 1f) * cellSize, map[i - 1, j + 1], (j + 1f) * cellSize);
+                        v = new Vector3((i) * cellSize, map[i, j], (j) * cellSize);
                         currentTriangle[1] = v;
                         result.Add(v);
 
-                        v = new Vector3((i + 1f) * cellSize, map[i + 1, j + 1], (j + 1f) * cellSize);
+                        v = new Vector3((i) * cellSize, map[i, j - 1], (j - 1f) * cellSize);
                         currentTriangle[2] = v;
                         result.Add(v);
 
@@ -134,18 +134,20 @@ namespace ShadowMap
                             normalsTemp.Add(normalsForTriangle[k]);
                         }
 
-
-                        v = new Vector3((i - 1f) * cellSize, map[i - 1, j - 1], (j - 1f) * cellSize);
+                        v = new Vector3((i) * cellSize, map[i, j], (j) * cellSize);
+                        
                         result.Add(v);
                         currentTriangle[0] = v;
 
-                        v = new Vector3((i + 1f) * cellSize, map[i + 1, j + 1], (j + 1f) * cellSize);
+                        v = new Vector3((i - 1f) * cellSize, map[i - 1, j - 1], (j - 1f) * cellSize);
+                        
                         result.Add(v);
                         currentTriangle[1] = v;
 
-                        v = new Vector3((i + 1f) * cellSize, map[i + 1, j - 1], (j - 1f) * cellSize);
+                        v = new Vector3((i - 1f) * cellSize, map[i - 1, j], (j) * cellSize);
                         result.Add(v);
                         currentTriangle[2] = v;
+
                         GameObject.CalcNormal(currentTriangle, normalsForTriangle);
                         for (int k = 0; k < normalsForTriangle.Length; k++)
                         {

@@ -55,17 +55,17 @@ namespace ShadowMap
             }
         }
 
-        public void Draw(SimpleModel model, Vector3 light, Matrix4 lightSpaceMVP, int? depthMapBuf = null)
+        public void Draw(SimpleModel model, Vector3 light, Vector3 lightDirection, Matrix4 lightSpaceMVP, int? depthMapBuf = null)
         {
-            Shaders.BindBuffers(model, light, lightSpaceMVP, depthMapBuf);
+            Shaders.BindBuffers(model, light, lightDirection, lightSpaceMVP, depthMapBuf);
             GL.DrawArrays(RenderMode, 0, model.Vertices.Length);
             Shaders.Release();
         }
 
-        public void Draw(SimpleModel model, Vector3 light, int? depthMapBuf = null)
+        public void Draw(SimpleModel model, Vector3 light, Vector3 lightDirection, int? depthMapBuf = null)
         {
             Matrix4 lightSpaceMVP = Matrix4.Identity;
-            Shaders.BindBuffers(model, light, lightSpaceMVP, depthMapBuf);
+            Shaders.BindBuffers(model, light, lightDirection, lightSpaceMVP, depthMapBuf);
             GL.DrawArrays(RenderMode, 0, model.Vertices.Length);
             Shaders.Release();
         }
