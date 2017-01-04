@@ -36,14 +36,16 @@ void main()
     vec3 toLight = lightPosition - position;
     vec3 lightVector = normalize(toLight);
 	vec3 diffBetwDir = normalize(lightPosition - lightDirection);
-	float lightness = dot(lightVector, diffBetwDir) - 0.1;
 
-    float diffuse = lightness * dot(normal, diffBetwDir);
+	float visibleCoef = dot(lightVector, diffBetwDir);
+	float lightnessDegree = dot(normal, diffBetwDir);
+
+    float diffuse = visibleCoef * lightnessDegree * (visibleCoef < 0 && lightnessDegree < 0 ? -1 : 1);
 	float distance = length(toLight);
     diffuse = 400 * diffuse * (1.0f / (1 +  0.25 * distance * distance));
 
 	float notInShadow = not_in_shadow(fragInLightSpace);
-	diffuse = diffuse *  notInShadow + 0.2f;
+	diffuse = diffuse *  notInShadow + 0.15f;
 
 	outputColor = diffuse * (noTextureFlag != 1 ? texture2D(uTexture,  texCoordinate) : color);
 }
