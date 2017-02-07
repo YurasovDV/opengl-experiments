@@ -19,8 +19,6 @@ namespace LSystemsPlants
         {
             InitializeComponent();
 
-            _engine = new Engine();
-
             _timer = new Timer()
             {
                 Interval = 16
@@ -38,6 +36,11 @@ namespace LSystemsPlants
         {
             portraitControl.SwapBuffers();
             portraitControl.Refresh();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            _engine = new Engine(portraitControl.Width, portraitControl.Height);
         }
     }
 }

@@ -56,7 +56,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Engine.cs" />
-    <Compile Include="Core\ModelGenerator.cs" />
+    <Compile Include="Core\Graphics\RenderEngine.cs" />
+    <Compile Include="Core\Graphics\ShaderManager.cs" />
+    <Compile Include="Core\L_Systems\GeneratorSettings.cs" />
+    <Compile Include="Core\L_Systems\Grammar.cs" />
+    <Compile Include="Core\L_Systems\IGrammar.cs" />
+    <Compile Include="Core\L_Systems\ModelGenerator.cs" />
+    <Compile Include="Core\L_Systems\Rule.cs" />
+    <Compile Include="Core\L_Systems\Symbol.cs" />
+    <Compile Include="Core\L_Systems\TurtleInterpreter.cs" />
     <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,6 +85,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Assets\main.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\main.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -90,9 +104,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
