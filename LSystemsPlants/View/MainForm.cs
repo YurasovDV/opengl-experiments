@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OpenTK.Graphics.OpenGL4;
 
 namespace LSystemsPlants
 {
@@ -19,12 +20,7 @@ namespace LSystemsPlants
         {
             InitializeComponent();
 
-            _timer = new Timer()
-            {
-                Interval = 16
-            };
-            _timer.Tick += _timer_Tick;
-            _timer.Start();
+            
         }
 
         private void _timer_Tick(object sender, EventArgs e)
@@ -41,6 +37,19 @@ namespace LSystemsPlants
         private void MainForm_Load(object sender, EventArgs e)
         {
             _engine = new Engine(portraitControl.Width, portraitControl.Height);
+
+            _timer = new Timer()
+            {
+                Interval = 60
+            };
+            _timer.Tick += _timer_Tick;
+
+            _timer.Start();
+        }
+
+        private void portraitControl_Paint(object sender, PaintEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("paint");
         }
     }
 }

@@ -39,15 +39,16 @@
             this.portraitControl.BackColor = System.Drawing.Color.Black;
             this.portraitControl.Location = new System.Drawing.Point(12, 12);
             this.portraitControl.Name = "portraitControl";
-            this.portraitControl.Size = new System.Drawing.Size(999, 595);
+            this.portraitControl.Size = new System.Drawing.Size(1235, 595);
             this.portraitControl.TabIndex = 1;
             this.portraitControl.VSync = true;
+            this.portraitControl.Paint += new System.Windows.Forms.PaintEventHandler(this.portraitControl_Paint);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1101, 600);
+            this.ClientSize = new System.Drawing.Size(1337, 600);
             this.Controls.Add(this.portraitControl);
             this.Name = "MainForm";
             this.Text = "Form1";
