@@ -1,6 +1,12 @@
-﻿
+﻿#version 330
+
+vec3 color;
+vec3 pos;
+vec3 normal;
+
+out vec4 outputColor;
 
 void main()
 {
-1
+	outputColor = vec4(color, 1.0f);
 }
