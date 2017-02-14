@@ -26,6 +26,7 @@ namespace LSystemsPlants
         private void _timer_Tick(object sender, EventArgs e)
         {
             _engine.Tick(_timer.Interval);
+            RenderFrame();
         }
 
         private void RenderFrame()

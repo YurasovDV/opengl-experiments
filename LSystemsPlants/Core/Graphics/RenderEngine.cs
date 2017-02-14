@@ -44,13 +44,13 @@ namespace LSystemsPlants.Core.Graphics
 
             var vertices = new Vector3[]
                 {
-                    new Vector3(0, 0, 0),
-                    new Vector3(1, 1, 0),
-                    new Vector3(0, 1, 0),
+                    new Vector3(0, 0, -10),
+                    new Vector3(100, 100,-10),
+                    new Vector3(0, 100, -10),
                     
-                    new Vector3(0, 0, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(1, 1, 0),
+                    new Vector3(0, 0, -10),
+                    new Vector3(100, 0, -10),
+                    new Vector3(100, 100, -10),
                     
                 };
 

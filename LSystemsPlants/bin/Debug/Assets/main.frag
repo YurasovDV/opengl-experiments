@@ -1,4 +1,5 @@
-﻿
+﻿#version 330
+
 vec3 color;
 vec3 pos;
 vec3 normal;
