@@ -17,6 +17,20 @@ namespace LSystemsPlants.Core.L_Systems
             Axiom = axiom;
         }
 
+        public SimplestGrammar()
+        {
+            var ruleSet = new List<Rule>()
+            {
+                new Rule(Symbol.FORWARD_DRAW, new[]
+                {
+                    Symbol.FORWARD_DRAW
+                })
+            };
+
+            RuleSet = ruleSet;
+            Axiom = new[] { Symbol.FORWARD_DRAW };
+        }
+
 
 
         public IEnumerable<Symbol> GenerateSequence(GeneratorSettings settings)
@@ -24,7 +38,6 @@ namespace LSystemsPlants.Core.L_Systems
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
-
             }
 
             int maxIteration = settings.MaxIteration;
@@ -33,10 +46,8 @@ namespace LSystemsPlants.Core.L_Systems
                 throw new InvalidOperationException(string.Format("{0} == 0", nameof(maxIteration)));
             }
 
-
-
-            List<Symbol> current = new List<Symbol>();
-            List<Symbol> previous = new List<Symbol>(Axiom);
+            var current = new List<Symbol>();
+            var previous = new List<Symbol>(Axiom);
 
             for (int iter = 0; iter < maxIteration; iter++)
             {
@@ -51,7 +62,7 @@ namespace LSystemsPlants.Core.L_Systems
                     }
                 }
 
-                previous = current;
+                previous = new List<Symbol>(current);
             }
 
             IEnumerable<Symbol> result = current;

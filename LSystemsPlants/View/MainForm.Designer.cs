@@ -42,7 +42,6 @@
             this.portraitControl.Size = new System.Drawing.Size(1235, 595);
             this.portraitControl.TabIndex = 1;
             this.portraitControl.VSync = true;
-            this.portraitControl.Paint += new System.Windows.Forms.PaintEventHandler(this.portraitControl_Paint);
             // 
             // MainForm
             // 

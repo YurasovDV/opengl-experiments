@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LSystemsPlants.Core.L_Systems
+﻿namespace LSystemsPlants.Core.L_Systems
 {
-    enum Symbol
+    public enum Symbol
     {
         /// <summary>
         /// F
@@ -26,6 +20,16 @@ namespace LSystemsPlants.Core.L_Systems
         /// <summary>
         /// f
         /// </summary>
-        FORWARD_NO_DRAW = 4
+        FORWARD_NO_DRAW = 4,
+
+        /// <summary>
+        /// [
+        /// </summary>
+        PUSH_STATE,
+
+        /// <summary>
+        /// ]
+        /// </summary>
+        POP_STATE
     }
 }

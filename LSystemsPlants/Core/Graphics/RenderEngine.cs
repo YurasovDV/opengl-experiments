@@ -24,7 +24,6 @@ namespace LSystemsPlants.Core.Graphics
 
         public int Width { get; set; }
 
-        public SimpleModel Model { get; set; }
 
         public RenderEngine(int width, int height, float zFar = 200)
         {
@@ -42,46 +41,29 @@ namespace LSystemsPlants.Core.Graphics
 
             _shaders = new ShaderManager();
 
-            var vertices = new Vector3[]
-                {
-                    new Vector3(0, 0, -10),
-                    new Vector3(100, 100,-10),
-                    new Vector3(0, 100, -10),
-                    
-                    new Vector3(0, 0, -10),
-                    new Vector3(100, 0, -10),
-                    new Vector3(100, 100, -10),
-                    
-                };
-
-
-            var colors = Enumerable.Repeat(new Vector3(1, 0, 0), vertices.Length);
-            var normals = Enumerable.Repeat(new Vector3(0, 1, 0), vertices.Length);
-
-            Model = new SimpleModel()
-            {
-                Colors = colors.ToArray(),
-                Normals = normals.ToArray(),
-                Vertices = vertices.ToArray()
-            };
 
         }
 
-        public void Render(double delta)
+        public void Begin()
         {
             GL.ClearColor(System.Drawing.Color.Green);
-
             GL.Clear(ClearBufferMask.ColorBufferBit);
+        }
 
-            this._shaders.BindBuffers(Model, new[] {ModelViewProjection });
+        public void End()
+        {
+            GL.Flush();
+        }
+
+        public void Render(SimpleModel tree, double delta)
+        {
+            _shaders.BindBuffers(tree, new[] { ModelViewProjection });
 
             GL.EnableVertexAttribArray(_shaders.AttrVertexLocation);
             GL.EnableVertexAttribArray(_shaders.AttrColorLocation);
             GL.EnableVertexAttribArray(_shaders.AttrNormalLocation);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, Model.Vertices.Length);
-
-            GL.Flush();
+            GL.DrawArrays(PrimitiveType.Lines, 0, tree.Vertices.Length);
         }
     }
 }

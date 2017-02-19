@@ -47,10 +47,5 @@ namespace LSystemsPlants
 
             _timer.Start();
         }
-
-        private void portraitControl_Paint(object sender, PaintEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("paint");
-        }
     }
 }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Common;
-using LSystemsPlants.Core;
 using LSystemsPlants.Core.Graphics;
 using LSystemsPlants.Core.L_Systems;
 
@@ -20,17 +15,29 @@ namespace LSystemsPlants
         {
             _renderEngine = new RenderEngine(width, height);
 
-            var treeDefault = new ModelGenerator().Generate();
+            InitModel();
+        }
 
+        private SimpleModel InitModel()
+        {
+            var generator = new ModelGenerator();
+            SimpleModel treeDefault = generator.Generate();
             _trees = new List<SimpleModel>()
             {
                 treeDefault
             };
+
+            return treeDefault;
         }
 
         public void Tick(double delta)
         {
-            _renderEngine.Render(delta);
+            _renderEngine.Begin();
+            foreach (var tree in _trees)
+            {
+                _renderEngine.Render(tree, delta);
+            }
+            _renderEngine.End();
         }
     }
 }
