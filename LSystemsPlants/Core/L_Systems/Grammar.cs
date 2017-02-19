@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LSystemsPlants.Core.L_Systems
 {
@@ -21,9 +19,29 @@ namespace LSystemsPlants.Core.L_Systems
         {
             var ruleSet = new List<Rule>()
             {
+                // F=FF-[-F+F+F]+[+F-F-F]
                 new Rule(Symbol.FORWARD_DRAW, new[]
                 {
-                    Symbol.FORWARD_DRAW
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.TURN_RIGHT, // -
+                    Symbol.PUSH_STATE, // [
+                    Symbol.TURN_RIGHT,// -
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.TURN_LEFT, // +
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.TURN_LEFT, // +
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.POP_STATE, // ]
+                    Symbol.TURN_LEFT, // +
+                    Symbol.PUSH_STATE, // [
+                    Symbol.TURN_LEFT, // +
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.TURN_RIGHT,// -
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.TURN_RIGHT,// -
+                    Symbol.FORWARD_DRAW,// F
+                    Symbol.POP_STATE, // ]
                 })
             };
 
