@@ -79,10 +79,9 @@ namespace LSystemsPlants.Core.L_Systems
         {
             Vector3 before = new Vector3(state.Coordinates[0], state.Coordinates[1], state.Coordinates[2]);
 
-            var rotMat = Matrix4.CreateRotationZ(state.Angle);
             var scaleMat = Matrix4.CreateScale(StepSize);
 
-            var transformed = Vector3.Transform(Vector3.Transform(Vector3.UnitY, scaleMat), rotMat) + before;
+            var transformed = Vector3.Transform(Vector3.Transform(Vector3.UnitY, scaleMat), state.RotationMatrix) + before;
 
             return new TurtleState()
             {
@@ -92,13 +91,15 @@ namespace LSystemsPlants.Core.L_Systems
                     transformed.Y,
                     transformed.Z
                 },
-                Angle = state.Angle
+                Angle = state.Angle,
+                RotationMatrix = state.RotationMatrix
             };
         }
 
         private void UpdateAngle(float delta)
         {
             State.Angle += delta;
+            State.RotationMatrix = Matrix4.CreateRotationZ(State.Angle);
         }
     }
 }

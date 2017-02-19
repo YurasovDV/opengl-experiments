@@ -19,7 +19,10 @@ namespace LSystemsPlants.Core.L_Systems
         {
             var ruleSet = new List<Rule>()
             {
-                // F=FF-[-F+F+F]+[+F-F-F]
+                // F=FF-
+                // [-F+F+F]
+                // +
+                // [+F-F-F]
                 new Rule(Symbol.FORWARD_DRAW, new[]
                 {
                     Symbol.FORWARD_DRAW,// F
