@@ -49,18 +49,25 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LSystemsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LSystemsPlants\LSystemsPlants.csproj">
+      <Project>{4275eec1-9e04-44ef-9fed-d414db8b103a}</Project>
+      <Name>LSystemsPlants</Name>
     </ProjectReference>
     <ProjectReference Include="..\OcTreeRevisited\OcTreeRevisited.csproj">
       <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>

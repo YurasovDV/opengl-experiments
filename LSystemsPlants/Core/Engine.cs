@@ -21,7 +21,7 @@ namespace LSystemsPlants
         private SimpleModel InitModel()
         {
             var generator = new ModelGenerator();
-            SimpleModel treeDefault = generator.Generate();
+            SimpleModel treeDefault = generator.Generate(new SimplestGrammar());
             _trees = new List<SimpleModel>()
             {
                 treeDefault

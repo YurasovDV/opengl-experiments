@@ -58,10 +58,12 @@
     <Compile Include="Core\Engine.cs" />
     <Compile Include="Core\Graphics\RenderEngine.cs" />
     <Compile Include="Core\Graphics\ShaderManager.cs" />
+    <Compile Include="Core\L_Systems\BaseGrammar.cs" />
     <Compile Include="Core\L_Systems\Constants.cs" />
     <Compile Include="Core\L_Systems\GeneratorSettings.cs" />
     <Compile Include="Core\L_Systems\Grammar.cs" />
     <Compile Include="Core\L_Systems\IGrammar.cs" />
+    <Compile Include="Core\L_Systems\KochGrammar.cs" />
     <Compile Include="Core\L_Systems\ModelGenerator.cs" />
     <Compile Include="Core\L_Systems\Rule.cs" />
     <Compile Include="Core\L_Systems\Symbol.cs" />
