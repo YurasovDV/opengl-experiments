@@ -17,6 +17,9 @@ namespace LSystemsPlants.Core.L_Systems
             {Symbol.PUSH_STATE , "["},
             {Symbol.TURN_LEFT , "+"},
             {Symbol.TURN_RIGHT , "-"},
+            {Symbol.L , "L"},
+            {Symbol.R , "R"},
+
             };
 
 

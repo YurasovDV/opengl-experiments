@@ -30,6 +30,16 @@
         /// <summary>
         /// ]
         /// </summary>
-        POP_STATE
+        POP_STATE,
+
+        /// <summary>
+        /// F[l]
+        /// </summary>
+        L,
+
+        /// <summary>
+        /// F[r]
+        /// </summary>
+        R,
     }
 }

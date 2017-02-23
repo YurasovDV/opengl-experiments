@@ -45,6 +45,8 @@ namespace LSystemsPlants.Core.L_Systems
         {
             switch (symbol.Symbol)
             {
+                case Symbol.L:
+                case Symbol.R:
                 case Symbol.FORWARD_DRAW:
 
                     Vertices.Add(new Vector3(State.Coordinates[0], State.Coordinates[1], State.Coordinates[2]));
@@ -75,6 +77,7 @@ namespace LSystemsPlants.Core.L_Systems
                 case Symbol.POP_STATE:
                     State = StateStack.Pop();
                     break;
+
                 default:
                     break;
             }

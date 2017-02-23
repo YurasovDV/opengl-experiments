@@ -54,6 +54,9 @@
             this.tbRule4 = new System.Windows.Forms.TextBox();
             this.btSimple = new System.Windows.Forms.Button();
             this.btSetKoch = new System.Windows.Forms.Button();
+            this.btSquares = new System.Windows.Forms.Button();
+            this.btTriangles = new System.Windows.Forms.Button();
+            this.btDrago = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // portraitControl
@@ -70,7 +73,7 @@
             // 
             // btRegenerate
             // 
-            this.btRegenerate.Location = new System.Drawing.Point(1604, 360);
+            this.btRegenerate.Location = new System.Drawing.Point(1604, 343);
             this.btRegenerate.Name = "btRegenerate";
             this.btRegenerate.Size = new System.Drawing.Size(284, 23);
             this.btRegenerate.TabIndex = 2;
@@ -274,11 +277,44 @@
             this.btSetKoch.UseVisualStyleBackColor = true;
             this.btSetKoch.Click += new System.EventHandler(this.btSetKoch_Click);
             // 
+            // btSquares
+            // 
+            this.btSquares.Location = new System.Drawing.Point(1604, 459);
+            this.btSquares.Name = "btSquares";
+            this.btSquares.Size = new System.Drawing.Size(284, 23);
+            this.btSquares.TabIndex = 27;
+            this.btSquares.Text = "Squares";
+            this.btSquares.UseVisualStyleBackColor = true;
+            this.btSquares.Click += new System.EventHandler(this.btSquares_Click);
+            // 
+            // btTriangles
+            // 
+            this.btTriangles.Location = new System.Drawing.Point(1604, 488);
+            this.btTriangles.Name = "btTriangles";
+            this.btTriangles.Size = new System.Drawing.Size(284, 23);
+            this.btTriangles.TabIndex = 28;
+            this.btTriangles.Text = "Triangles";
+            this.btTriangles.UseVisualStyleBackColor = true;
+            this.btTriangles.Click += new System.EventHandler(this.btTrinagles_Click);
+            // 
+            // btDrago
+            // 
+            this.btDrago.Location = new System.Drawing.Point(1604, 517);
+            this.btDrago.Name = "btDrago";
+            this.btDrago.Size = new System.Drawing.Size(284, 23);
+            this.btDrago.TabIndex = 29;
+            this.btDrago.Text = "Drago";
+            this.btDrago.UseVisualStyleBackColor = true;
+            this.btDrago.Click += new System.EventHandler(this.btDrago_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1900, 1000);
+            this.Controls.Add(this.btDrago);
+            this.Controls.Add(this.btTriangles);
+            this.Controls.Add(this.btSquares);
             this.Controls.Add(this.btSetKoch);
             this.Controls.Add(this.btSimple);
             this.Controls.Add(this.lbRule4);
@@ -343,6 +379,9 @@
         private System.Windows.Forms.TextBox tbRule4;
         private System.Windows.Forms.Button btSimple;
         private System.Windows.Forms.Button btSetKoch;
+        private System.Windows.Forms.Button btSquares;
+        private System.Windows.Forms.Button btTriangles;
+        private System.Windows.Forms.Button btDrago;
     }
 }
 
