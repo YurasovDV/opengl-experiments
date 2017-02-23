@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LSystemsPlants.Core.L_Systems
 {
-    public struct Rule
+    public class Rule
     {
         public Rule(Symbol left, IEnumerable<Symbol> right)
         {

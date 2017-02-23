@@ -41,7 +41,7 @@ namespace LSystemsPlants.Core.Graphics
 
         public void Begin()
         {
-            GL.ClearColor(System.Drawing.Color.Green);
+            GL.ClearColor(System.Drawing.Color.LightGray);
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
 

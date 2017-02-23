@@ -65,8 +65,11 @@
     <Compile Include="Core\L_Systems\IGrammar.cs" />
     <Compile Include="Core\L_Systems\KochGrammar.cs" />
     <Compile Include="Core\L_Systems\ModelGenerator.cs" />
+    <Compile Include="Core\L_Systems\ParseHelper.cs" />
     <Compile Include="Core\L_Systems\Rule.cs" />
     <Compile Include="Core\L_Systems\Symbol.cs" />
+    <Compile Include="Core\L_Systems\SymbolHelper.cs" />
+    <Compile Include="Core\L_Systems\SymbolState.cs" />
     <Compile Include="Core\L_Systems\TurtleInterpreter.cs" />
     <Compile Include="Core\L_Systems\TurtleState.cs" />
     <Compile Include="View\MainForm.cs">

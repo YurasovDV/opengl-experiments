@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenTK;
 
 namespace LSystemsPlants.Core.L_Systems
 {
@@ -9,7 +10,45 @@ namespace LSystemsPlants.Core.L_Systems
         protected IEnumerable<Rule> RuleSet { get; set; }
         protected IEnumerable<Symbol> Axiom { get; set; }
 
-        public IEnumerable<Symbol> GenerateSequence(GeneratorSettings settings)
+        public int RulesCount
+        {
+            get
+            {
+                return RuleSet.Count();
+            }
+        }
+
+        public virtual GeneratorSettings DefaultSettings
+        {
+            get
+            {
+                return GeneratorSettings.Default;
+            }
+        }
+
+        public string GetAxiom()
+        {
+            return SymbolHelper.GetString(Axiom.ToArray());
+        }
+
+        /// <summary>
+        /// from zero
+        /// </summary>
+        /// <param name="ruleNumber"></param>
+        /// <returns></returns>
+        public string GetRule(int ruleNumber)
+        {
+            var rule = RuleSet.ElementAtOrDefault(ruleNumber);
+            if (rule == null)
+            {
+                return string.Empty;
+            }
+
+            return SymbolHelper.GetString(rule.Predecessor) + " -> " + SymbolHelper.GetString(rule.Successor);
+
+        }
+
+        public IEnumerable<SymbolState> GenerateSequence(GeneratorSettings settings)
         {
             if (settings == null)
             {
@@ -22,30 +61,65 @@ namespace LSystemsPlants.Core.L_Systems
                 throw new InvalidOperationException(string.Format("{0} == 0", nameof(maxIteration)));
             }
 
-            var current = new List<Symbol>();
-            var previous = new List<Symbol>(Axiom);
+            var delta = settings.InitialDelta;
+            var step = settings.InitialStep;
+            var color = new Vector3(1, 0, 0);
+            var initialColor = new Vector3(1, 0, 1);
+
+            Func<Symbol, SymbolState> map = s => new SymbolState()
+            {
+                Delta = delta,
+                Step = step,
+                Symbol = s,
+                Color = color
+            };
+
+            var current = new List<SymbolState>();
+            var previous = Axiom
+                .Select(s => new SymbolState()
+                {
+                    Delta = delta,
+                    Step = step,
+                    Symbol = s,
+                    Color = color
+                })
+                .ToList();
 
             for (int iter = 0; iter < maxIteration; iter++)
             {
                 current.Clear();
 
-                foreach (var symbol in previous)
+                foreach (var symbolState in previous)
                 {
-                    IEnumerable<Symbol> replacement = GetReplacement(symbol);
+                    IEnumerable<Symbol> replacement = GetReplacement(symbolState.Symbol);
                     if (replacement.Any())
                     {
-                        current.AddRange(replacement);
+                        current.AddRange(replacement.Select(s => new SymbolState()
+                        {
+                            Delta = delta,
+                            Step = step,
+                            Symbol = s,
+                            Color = color
+                        }));
                     }
                     else
                     {
-                        current.Add(symbol);
+                        current.Add(symbolState);
                     }
                 }
 
-                previous = new List<Symbol>(current);
+
+                float redFade = 1 - (iter / (float)maxIteration);
+                float blueAppear = 1.0f - redFade;
+
+
+                color = new Vector3(initialColor.X * redFade, initialColor.Y, blueAppear * initialColor.Z);
+                previous = new List<SymbolState>(current);
+                step *= settings.StepChangeAtEveryLevel;
+                delta *= settings.DeltaChangeAtEveryLevel;
             }
 
-            IEnumerable<Symbol> result = current;
+            IEnumerable<SymbolState> result = current;
 
             return result;
         }

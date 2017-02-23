@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Common.Utils
 {
-    public class MathHelperMINE
+    public static class MathHelperMINE
     {
         public static float[] Sin;
         public static float[] Cos;
@@ -104,6 +104,11 @@ namespace Common.Utils
             normals[0] = n;
             normals[1] = n;
             normals[2] = n;
+        }
+
+        public static bool Inside(this float valueToCheck, float point, float range)
+        {
+            return point - range <= valueToCheck && point + range >= valueToCheck;
         }
 
     }

@@ -2,9 +2,14 @@
 
 namespace LSystemsPlants.Core.L_Systems
 {
-    interface IGrammar
+    public interface IGrammar
     {
-        IEnumerable<Symbol> GenerateSequence(GeneratorSettings settings);
+        IEnumerable<SymbolState> GenerateSequence(GeneratorSettings settings);
 
+        GeneratorSettings DefaultSettings { get;}
+
+        int RulesCount { get; }
+        string GetAxiom();
+        string GetRule(int ruleNumber);
     }
 }

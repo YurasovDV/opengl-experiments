@@ -11,17 +11,32 @@ namespace LSystemsPlants
 
         private RenderEngine _renderEngine;
 
-        public Engine(int width, int height)
+        private GeneratorSettings Settings { get; set; }
+        private IGrammar Grammar { get; set; }
+
+        public Engine(int width, int height, IGrammar grammar, GeneratorSettings settings)
         {
             _renderEngine = new RenderEngine(width, height);
 
-            InitModel();
+            if (settings == null)
+            {
+                settings = GeneratorSettings.Default;
+            }
+
+            if (grammar == null)
+            {
+                grammar = new SimplestGrammar();
+            }
+
+            InitModel(grammar, settings);
         }
 
-        private SimpleModel InitModel()
+        public SimpleModel InitModel(IGrammar grammar, GeneratorSettings settings)
         {
+            Settings = settings;
+
             var generator = new ModelGenerator();
-            SimpleModel treeDefault = generator.Generate(new SimplestGrammar());
+            SimpleModel treeDefault = generator.Generate(grammar, Settings);
             _trees = new List<SimpleModel>()
             {
                 treeDefault
