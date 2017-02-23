@@ -17,7 +17,7 @@ namespace LSystemsPlants.Core.L_Systems
                     DeltaChangeAtEveryLevel = 1,
                     InitialDelta = 1.570796f,
                     InitialStep = 250,
-                    MaxIteration = 18,
+                    MaxIteration = 19,
                     StepChangeAtEveryLevel = 0.73f
                 };
             }

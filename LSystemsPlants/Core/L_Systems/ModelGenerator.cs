@@ -38,6 +38,11 @@ namespace LSystemsPlants.Core.L_Systems
                 //initialState.Coordinates[0] = -400;
                 initialState.Coordinates[1] = -400;
             }
+            if (g.GetType() == typeof(DragoGrammar))
+            {
+                //initialState.Coordinates[0] = -400;
+                initialState.Coordinates[1] = 100;
+            }
 
             var interpreter = new TurtleInterpreter(initialState);
             return interpreter;

@@ -124,40 +124,35 @@ namespace LSystemsPlants
         private void btSimple_Click(object sender, EventArgs e)
         {
             var grammar = new SimplestGrammar();
-            var settings = grammar.DefaultSettings;
-            _engine.InitModel(grammar, settings);
-            SetFormState(grammar, settings);
+            UpdateState(grammar);
         }
 
         private void btSetKoch_Click(object sender, EventArgs e)
         {
             var grammar = new KochGrammar();
-            var settings = grammar.DefaultSettings;
-            _engine.InitModel(grammar, settings);
-            SetFormState(grammar, settings);
+            UpdateState(grammar);
         }
-
-
 
         private void btSquares_Click(object sender, EventArgs e)
         {
             var grammar = new SquareGrammar();
-            var settings = grammar.DefaultSettings;
-            _engine.InitModel(grammar, settings);
-            SetFormState(grammar, settings);
+            UpdateState(grammar);
         }
 
         private void btTrinagles_Click(object sender, EventArgs e)
         {
             var grammar = new TriangleGrammar();
-            var settings = grammar.DefaultSettings;
-            _engine.InitModel(grammar, settings);
-            SetFormState(grammar, settings);
+            UpdateState(grammar);
         }
 
         private void btDrago_Click(object sender, EventArgs e)
         {
             var grammar = new DragoGrammar();
+            UpdateState(grammar);
+        }
+
+        private void UpdateState(IGrammar grammar)
+        {
             var settings = grammar.DefaultSettings;
             _engine.InitModel(grammar, settings);
             SetFormState(grammar, settings);

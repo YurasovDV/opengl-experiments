@@ -73,7 +73,7 @@
             // 
             // btRegenerate
             // 
-            this.btRegenerate.Location = new System.Drawing.Point(1604, 343);
+            this.btRegenerate.Location = new System.Drawing.Point(1604, 480);
             this.btRegenerate.Name = "btRegenerate";
             this.btRegenerate.Size = new System.Drawing.Size(284, 23);
             this.btRegenerate.TabIndex = 2;
@@ -259,7 +259,7 @@
             // 
             // btSimple
             // 
-            this.btSimple.Location = new System.Drawing.Point(1604, 401);
+            this.btSimple.Location = new System.Drawing.Point(1604, 335);
             this.btSimple.Name = "btSimple";
             this.btSimple.Size = new System.Drawing.Size(284, 23);
             this.btSimple.TabIndex = 25;
@@ -269,7 +269,7 @@
             // 
             // btSetKoch
             // 
-            this.btSetKoch.Location = new System.Drawing.Point(1604, 430);
+            this.btSetKoch.Location = new System.Drawing.Point(1604, 364);
             this.btSetKoch.Name = "btSetKoch";
             this.btSetKoch.Size = new System.Drawing.Size(284, 23);
             this.btSetKoch.TabIndex = 26;
@@ -279,7 +279,7 @@
             // 
             // btSquares
             // 
-            this.btSquares.Location = new System.Drawing.Point(1604, 459);
+            this.btSquares.Location = new System.Drawing.Point(1604, 393);
             this.btSquares.Name = "btSquares";
             this.btSquares.Size = new System.Drawing.Size(284, 23);
             this.btSquares.TabIndex = 27;
@@ -289,7 +289,7 @@
             // 
             // btTriangles
             // 
-            this.btTriangles.Location = new System.Drawing.Point(1604, 488);
+            this.btTriangles.Location = new System.Drawing.Point(1604, 422);
             this.btTriangles.Name = "btTriangles";
             this.btTriangles.Size = new System.Drawing.Size(284, 23);
             this.btTriangles.TabIndex = 28;
@@ -299,7 +299,7 @@
             // 
             // btDrago
             // 
-            this.btDrago.Location = new System.Drawing.Point(1604, 517);
+            this.btDrago.Location = new System.Drawing.Point(1604, 451);
             this.btDrago.Name = "btDrago";
             this.btDrago.Size = new System.Drawing.Size(284, 23);
             this.btDrago.TabIndex = 29;
