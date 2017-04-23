@@ -1,0 +1,84 @@
+﻿using System;
+using System.Diagnostics;
+using OpenTK;
+using OpenTK.Graphics;
+using gl4 = OpenTK.Graphics.OpenGL4;
+
+namespace SimpleShooter
+{
+    class MainWindow : GameWindow
+    {
+
+        private readonly Engine _engine;
+        private GraphicsSystem _graphics;
+        private Stopwatch _watch;
+        private long _start = 0;
+
+
+        public MainWindow() : base(1920, 1000, GraphicsMode.Default, "Simple Shooter", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
+        {
+            _graphics = new GraphicsSystem(Width, Height);
+            _engine = new Engine(_graphics, new ObjectInitializer());
+            _watch = new Stopwatch();
+            CursorVisible = false;
+
+        }
+
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            gl4.GL.Viewport(0, 0, Width, Height);
+        }
+
+        protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case OpenTK.Input.Key.F4:
+                    if (e.Alt)
+                    {
+                         Close();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            if (!_watch.IsRunning)
+            {
+                _watch.Start();
+            }
+            long end = _watch.ElapsedMilliseconds;
+            Vector2 dxdy = GetChanges();
+            _engine.Tick(end - _start, dxdy);
+            ResetMouse();
+
+            SwapBuffers();
+            _start = end;
+        }
+
+        private Vector2 GetChanges()
+        {
+            /*
+              var mouseState = System.Windows.Forms.Cursor.Position;
+
+              Vector2 res = new Vector2()
+              {
+                  X = ((this.Location.X + Width / 2) - mouseState.X) * SimpleShadows.Core.Models.Player.MOUSE_SPEED,
+                  Y = ((this.Location.Y + Height / 2) - mouseState.Y) * SimpleShadows.Core.Models.Player.MOUSE_SPEED
+              };
+                return res;*/
+
+            return new Vector2();
+        }
+
+        private void ResetMouse()
+        {
+            // OpenTK.Input.Mouse.SetPosition(this.Location.X + Width / 2, this.Location.Y + Height / 2);
+        }
+    }
+}

@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowMap", "ShadowMap\Shad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LSystemsPlants", "LSystemsPlants\LSystemsPlants.csproj", "{4275EEC1-9E04-44EF-9FED-D414DB8B103A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleShooter", "SimpleShooter\SimpleShooter.csproj", "{D526CDCA-68A7-442E-9EBC-0405B1A7E670}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,14 @@ Global
 		{4275EEC1-9E04-44EF-9FED-D414DB8B103A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4275EEC1-9E04-44EF-9FED-D414DB8B103A}.Release|x64.ActiveCfg = Release|Any CPU
 		{4275EEC1-9E04-44EF-9FED-D414DB8B103A}.Release|x64.Build.0 = Release|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Debug|x64.Build.0 = Debug|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Release|x64.ActiveCfg = Release|Any CPU
+		{D526CDCA-68A7-442E-9EBC-0405B1A7E670}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
