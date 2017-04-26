@@ -246,15 +246,15 @@ main()
     vec4 tex = texture2D(u_Texture, v_TexCoordinate);
     vec4 tempColor = vec4(color.rgb, 1);
 
-    if(tex.a > 0.98f)
+    /*if(tex.a > 0.98f)
     {
         //tempColor = vec4(0, 1, 0, 1);
 
         //discard;
         /*float rg = max(color.r, color.g);
         float rgb = max(rg, color.b);
-        tempColor = vec4(rgb, rgb, rgb, 1);*/
-    }
+        tempColor = vec4(rgb, rgb, rgb, 1);
+    }*/
 
     outputColor =  tempColor * tex;
     outputColor.a = tex.a;

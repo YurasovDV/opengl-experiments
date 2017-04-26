@@ -36,7 +36,26 @@ namespace SimpleShooter.Core
             GL.UniformMatrix4(_descriptor.uniformMV, false, ref camera.ModelView);
             GL.UniformMatrix4(_descriptor.uniformMVP, false, ref camera.ModelViewProjection);
             GL.UniformMatrix4(_descriptor.uniformProjection, false, ref camera.Projection);
-            GL.Uniform3(_descriptor.uniformLightPos, camera.LightPosition);
+
+            switch (_gameObject.ShaderKind)
+            {
+                case ShadersNeeded.SimpleModel:
+                    break;
+                case ShadersNeeded.Line:
+                    break;
+                case ShadersNeeded.TextureLess:
+                    GL.Uniform3(_descriptor.uniformLightPos, camera.LightPosition);
+
+                    break;
+
+                case ShadersNeeded.TextureLessNoLight:
+
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(_gameObject.ShaderKind), _gameObject.ShaderKind, null);
+            }
+
         }
 
         private void BindBuffers(ShadersNeeded gameObjectShaderKind)
@@ -51,6 +70,12 @@ namespace SimpleShooter.Core
                     BindVertices();
                     BindColors();
                     BindNormals();
+
+                    break;
+
+                case ShadersNeeded.TextureLessNoLight:
+                    BindVertices();
+                    BindColors();
 
                     break;
                 default:

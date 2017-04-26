@@ -17,8 +17,9 @@ namespace SimpleShooter
 
         public MainWindow() : base(1920, 1000, GraphicsMode.Default, "Simple Shooter", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
-            _graphics = new GraphicsSystem(Width, Height);
-            _engine = new Engine(_graphics, new ObjectInitializer());
+            var initializer = new ObjectInitializer();
+            _graphics = new GraphicsSystem(Width, Height, initializer);
+            _engine = new Engine(_graphics, initializer);
             _watch = new Stopwatch();
             CursorVisible = false;
 

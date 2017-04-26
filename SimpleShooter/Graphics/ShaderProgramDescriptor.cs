@@ -4,7 +4,7 @@
     {
         public int  ProgramId;
 
-        public ShadersNeeded ShadersKind;
+        // public ShadersNeeded ShadersKind;
 
         public int AttribVerticesLocation;
         public int AttribColorsLocation;

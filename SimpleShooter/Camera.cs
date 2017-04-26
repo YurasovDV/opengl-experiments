@@ -24,9 +24,6 @@ namespace SimpleShooter
         public Camera(Matrix4 projection)
         {
             Projection = projection;
-            Position = new Vector3(0, 0, 0);
-            LightPosition = new Vector3(0, 20, -20);
-            Target = new Vector3(100, 0, 0);
         }
     }
 }

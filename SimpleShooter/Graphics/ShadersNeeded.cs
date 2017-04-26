@@ -5,5 +5,6 @@
         SimpleModel,
         Line,
         TextureLess,
+        TextureLessNoLight,
     }
 }
