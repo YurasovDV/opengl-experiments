@@ -32,6 +32,7 @@ namespace SimpleShooter
         internal void Tick(long delta, Vector2 dxdy)
         {
             _keyHandler.CheckKeys();
+            PlayerModel.Handle(dxdy, _graphics.Camera);
             _graphics.Render(_models);
         }
 

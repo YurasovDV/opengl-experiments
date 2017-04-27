@@ -64,22 +64,20 @@ namespace SimpleShooter
 
         private Vector2 GetChanges()
         {
-            /*
-              var mouseState = System.Windows.Forms.Cursor.Position;
+            var mouseState = OpenTK.Input.Mouse.GetCursorState();
 
-              Vector2 res = new Vector2()
-              {
-                  X = ((this.Location.X + Width / 2) - mouseState.X) * SimpleShadows.Core.Models.Player.MOUSE_SPEED,
-                  Y = ((this.Location.Y + Height / 2) - mouseState.Y) * SimpleShadows.Core.Models.Player.MOUSE_SPEED
-              };
-                return res;*/
+            Vector2 res = new Vector2()
+            {
+                X = ((this.Location.X + Width / 2) - mouseState.X) * 1,
+                Y = ((this.Location.Y + Height / 2) - mouseState.Y) * 1
+            };
 
-            return new Vector2();
+            return res;
         }
 
         private void ResetMouse()
         {
-            // OpenTK.Input.Mouse.SetPosition(this.Location.X + Width / 2, this.Location.Y + Height / 2);
+            OpenTK.Input.Mouse.SetPosition(this.Location.X + Width / 2, this.Location.Y + Height / 2);
         }
     }
 }

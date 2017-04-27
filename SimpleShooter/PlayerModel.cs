@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace SimpleShooter
 {
-    class PlayerModel
+    public class PlayerModel
     {
         static readonly Vector3 DefaultTarget = new Vector3(100, 0, 0);
         static readonly Vector3 StepForward = new Vector3(0.1f, 0, 0);
@@ -17,11 +17,43 @@ namespace SimpleShooter
         static readonly Vector3 StepLeft = new Vector3(0, 0, -0.1f);
         static readonly Vector3 StepUp = new Vector3(0, 0.1f, 0);
         static readonly Vector3 StepDown = new Vector3(0, -0.1f, 0);
+        static float mouseHandicap = 2700;
 
         private float AngleHorizontal = 0;
         private float AngleVertical = 0;
 
-        internal void Handle(InputSignal signal, Camera camera)
+
+        public void Handle(Vector2 mouseDxDy, Camera camera)
+        {
+            var dx = mouseDxDy.X;
+            if (dx > 1 || dx < -1)
+            {
+                RotateAroundY(camera, mouseDxDy.X);
+            }
+
+            var dy = mouseDxDy.Y;
+            if (dy > 1 || dy < -1)
+            {
+                RotateAroundX(camera, mouseDxDy.Y);
+            }
+        }
+
+
+        protected void RotateAroundY(Camera camera, float mouseDx)
+        {
+            float rotation = mouseDx / mouseHandicap;
+            AngleHorizontal += rotation;
+            Rotate(camera, camera.Position);
+        }
+
+        protected void RotateAroundX(Camera camera, float mouseDy)
+        {
+            float rotation = mouseDy / mouseHandicap;
+            AngleVertical += rotation;
+            Rotate(camera, camera.Position);
+        }
+
+        public void Handle(InputSignal signal, Camera camera)
         {
             var oldPosition = camera.Position;
             var oldTarget = camera.Target;
