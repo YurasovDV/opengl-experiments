@@ -19,19 +19,14 @@ namespace SimpleShooter.Core
             _descriptor = ShaderLoader.Load(_gameObject.ShaderKind);
         }
 
-
-        public void BindBuffers()
+        internal void Bind(Camera camera)
         {
-            if (_descriptor.ProgramId == -1)
-            {
-                throw new InvalidOperationException("ProgramId == -1");
-            }
             GL.UseProgram(_descriptor.ProgramId);
-
+            BindUniforms(camera);
             BindBuffers(_gameObject.ShaderKind);
         }
 
-        public void BindUniforms(Camera camera)
+        private void BindUniforms(Camera camera)
         {
             GL.UniformMatrix4(_descriptor.uniformMV, false, ref camera.ModelView);
             GL.UniformMatrix4(_descriptor.uniformMVP, false, ref camera.ModelViewProjection);

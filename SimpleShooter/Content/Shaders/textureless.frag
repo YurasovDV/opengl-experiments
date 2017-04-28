@@ -1,9 +1,9 @@
 #version 330
 
-varying vec4 color;
-varying vec3 normal;
-varying vec3 position;
-varying vec3 lightPosition;
+in vec4 color;
+in vec3 normal;
+in vec3 position;
+in vec3 lightPosition;
 
 out vec4 outputColor;
 
@@ -17,7 +17,7 @@ void main()
 	
 	float distanceToLight = length(toLight); 
 	
-	float diffuse = 100 * level * (1.0f / (1 +  0.25 * distanceToLight * distanceToLight));
+	float diffuse = 2 * level / (1 +  0.25 * distanceToLight * distanceToLight) + 0.1;
 
-    outputColor = diffuse * color;
+	outputColor = diffuse * color;
 }

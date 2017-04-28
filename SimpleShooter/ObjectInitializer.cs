@@ -33,9 +33,9 @@ namespace SimpleShooter
         public IEnumerable<GameObject> CreateLevel()
         {
             var result = new List<GameObject>();
-            Matrix4 translate = Matrix4.CreateTranslation(30, 0, 0);
+            Matrix4 translate = Matrix4.CreateTranslation(30, 4, 0);
             var green = new Vector3(0, 1, 0);
-            GameObject obj = CreateCube(translate, green, 5, ShadersNeeded.TextureLess);
+            GameObject obj = CreateCube(translate, green, 1, ShadersNeeded.TextureLess);
             result.Add(obj);
 
 

@@ -16,16 +16,16 @@ namespace SimpleShooter
         public Engine(GraphicsSystem graphics, IObjectInitialiser initFunc)
         {
             _graphics = graphics;
-            _models = new List<GameObject>();
-            InitObjects();
+            InitObjects(initFunc);
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += KeyPress;
             PlayerModel = new PlayerModel();
         }
 
-        private void InitObjects()
+        private void InitObjects(IObjectInitialiser initFunc)
         {
-            var objects = new ObjectInitializer().CreateLevel();
+            _models = new List<GameObject>();
+            var objects = initFunc.CreateLevel();
             _models.AddRange(objects);
         }
 

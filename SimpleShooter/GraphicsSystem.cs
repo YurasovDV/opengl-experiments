@@ -51,8 +51,7 @@ namespace SimpleShooter
 
         internal void Render(GameObject obj)
         {
-            obj.Wrapper.BindUniforms(Camera);
-            obj.Wrapper.BindBuffers();
+            obj.Wrapper.Bind(Camera);
             GL.DrawArrays(PrimitiveType.Triangles, 0, obj.Model.Vertices.Length);
         }
     }

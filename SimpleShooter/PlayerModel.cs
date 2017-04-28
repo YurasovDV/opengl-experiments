@@ -17,7 +17,7 @@ namespace SimpleShooter
         static readonly Vector3 StepLeft = new Vector3(0, 0, -0.1f);
         static readonly Vector3 StepUp = new Vector3(0, 0.1f, 0);
         static readonly Vector3 StepDown = new Vector3(0, -0.1f, 0);
-        static float mouseHandicap = 2700;
+        static float mouseHandicap = 2400;
 
         private float AngleHorizontal = 0;
         private float AngleVertical = 0;
@@ -131,9 +131,9 @@ namespace SimpleShooter
 
         private void Rotate(Camera camera, Vector3 oldPosition)
         {
-            Matrix4 rot = Matrix4.CreateRotationZ(AngleVertical);
-            Matrix4 rot2 = Matrix4.CreateRotationY(AngleHorizontal);
-            var targetTransformed = Vector3.Transform(DefaultTarget, rot * rot2);
+            Matrix4 rotVertical = Matrix4.CreateRotationZ(AngleVertical);
+            Matrix4 rotHorizontal = Matrix4.CreateRotationY(AngleHorizontal);
+            var targetTransformed = Vector3.Transform(DefaultTarget, rotVertical * rotHorizontal);
             camera.Target = oldPosition + targetTransformed;
         }
 
