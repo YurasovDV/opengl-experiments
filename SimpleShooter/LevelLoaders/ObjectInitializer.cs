@@ -48,6 +48,9 @@ namespace SimpleShooter.LevelLoaders
             var p = new PlayerModel(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
             level.Player = p;
 
+
+            level.LightPosition = _lightPos;
+
             return level;
         }
 

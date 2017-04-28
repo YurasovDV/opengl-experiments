@@ -43,9 +43,9 @@ namespace SimpleShooter
             }
         }
 
-        public void Bind(Camera camera, Vector3 lightPos)
+        public void Bind(Camera camera, Level level)
         {
-            RenderObject.Bind(camera, lightPos);
+            RenderObject.Bind(camera, level);
         }
     }
 }

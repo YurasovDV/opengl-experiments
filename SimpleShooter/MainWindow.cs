@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics;
-using SimpleShooter.Graphics;
 using SimpleShooter.LevelLoaders;
 using gl4 = OpenTK.Graphics.OpenGL4;
 
@@ -12,7 +11,6 @@ namespace SimpleShooter
     {
 
         private readonly Engine _engine;
-        private GraphicsSystem _graphics;
         private Stopwatch _watch;
         private long _start = 0;
 
@@ -20,11 +18,9 @@ namespace SimpleShooter
         public MainWindow() : base(1920, 1000, GraphicsMode.Default, "Simple Shooter", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
             var initializer = new ObjectInitializer();
-            _graphics = new GraphicsSystem(Width, Height, initializer);
-            _engine = new Engine(_graphics, initializer);
+            _engine = new Engine(Width, Height, initializer);
             _watch = new Stopwatch();
             CursorVisible = false;
-
         }
 
 

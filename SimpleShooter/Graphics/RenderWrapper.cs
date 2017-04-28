@@ -34,10 +34,10 @@ namespace SimpleShooter.Graphics
             set { _renderType = value; }
         }
 
-        public void Bind(Camera camera, Vector3 lightPos)
+        public void Bind(Camera camera, Level level)
         {
             GL.UseProgram(_descriptor.ProgramId);
-            BindUniforms(camera, lightPos);
+            BindUniforms(camera, level.LightPosition);
             BindBuffers(_gameObject.ShaderKind);
         }
 

@@ -5,6 +5,7 @@ using System.Linq;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
+using SimpleShooter.Core;
 using SimpleShooter.Graphics;
 using SimpleShooter.LevelLoaders;
 using SimpleShooter.Player;
@@ -15,16 +16,14 @@ namespace SimpleShooter.Graphics
 {
     internal class GraphicsSystem
     {
-        public Camera Camera { get; set; }
+        private Camera Camera { get; set; }
 
-        public Vector3 LightPosition { get; set; }
-
-        public GraphicsSystem(int width, int height, IObjectInitializer initializer)
+        public GraphicsSystem(int width, int height)
         {
-            InitGraphics(width, height, initializer);
+            InitGraphics(width, height);
         }
 
-        private void InitGraphics(int width, int height, IObjectInitializer initializer)
+        private void InitGraphics(int width, int height)
         {
             float aspect = (float) width / height;
             GL.Viewport(0, 0, width, height);
@@ -32,9 +31,9 @@ namespace SimpleShooter.Graphics
             Camera = new Camera(projection);
         }
 
-        internal void Render(IEnumerable<IRenderWrapper> objects, PlayerModel player)
+        internal void Render(IEnumerable<IRenderWrapper> objects, Level level)
         {
-            Camera.RebuildMatrices(player);
+            Camera.RebuildMatrices(level.Player);
 
             GL.ClearColor(0, 0, 0.0f, 1);
 
@@ -43,16 +42,15 @@ namespace SimpleShooter.Graphics
            
             foreach (var model in objects)
             {
-                Render(model);
+                Render(model, level);
             }
 
             GL.Flush();
         }
 
-
-        internal void Render(IRenderWrapper obj)
+        internal void Render(IRenderWrapper obj, Level level)
         {
-            obj.Bind(Camera, LightPosition);
+            obj.Bind(Camera, level);
             GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
         }
     }

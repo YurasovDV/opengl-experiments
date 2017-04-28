@@ -12,16 +12,17 @@ namespace SimpleShooter
 {
     class Engine
     {
-        private GraphicsSystem _graphics;
-        private List<GameObjectDescriptor> _gameObjects;
         private KeyHandler _keyHandler;
-        private PlayerModel _playerModel;
+        public GraphicsSystem _graphics;
 
-        public Engine(GraphicsSystem graphics, IObjectInitializer initFunc)
-        {
-            _graphics = graphics;
-            
+        private List<GameObjectDescriptor> _gameObjects;
+        private PlayerModel _playerModel;
+        public Level _level;
+
+        public Engine(int width, int height, IObjectInitializer initFunc)
+        {           
             InitObjects(initFunc);
+            _graphics = new GraphicsSystem(width, height);
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += KeyPress;
 
@@ -30,9 +31,9 @@ namespace SimpleShooter
         private void InitObjects(IObjectInitializer initFunc)
         {
             _gameObjects = new List<GameObjectDescriptor>();
-            var level = initFunc.CreateLevel();
-            _playerModel = level.Player;
-            _gameObjects.AddRange( level.Objects.Select(o => new GameObjectDescriptor(o)));
+            _level = initFunc.CreateLevel();
+            _playerModel = _level.Player;
+            _gameObjects.AddRange(_level.Objects.Select(o => new GameObjectDescriptor(o)));
         }
 
         internal void Tick(long delta, Vector2 dxdy)
@@ -40,7 +41,7 @@ namespace SimpleShooter
             _keyHandler.CheckKeys();
             _playerModel.Handle(dxdy);
             PhysicsStep(delta);
-            _graphics.Render(_gameObjects, _playerModel);
+            _graphics.Render(_gameObjects, _level);
         }
 
         private void PhysicsStep(long delta)

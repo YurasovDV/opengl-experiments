@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
+using SimpleShooter.Core;
 
 namespace SimpleShooter.Graphics
 {
@@ -13,6 +14,6 @@ namespace SimpleShooter.Graphics
         PrimitiveType RenderType { get; set; }
         int VerticesCount { get; }
 
-        void Bind(Camera camera, Vector3 lightPosition);
+        void Bind(Camera camera, Level level);
     }
 }
