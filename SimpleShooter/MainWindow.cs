@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics;
+using SimpleShooter.Graphics;
+using SimpleShooter.LevelLoaders;
 using gl4 = OpenTK.Graphics.OpenGL4;
 
 namespace SimpleShooter

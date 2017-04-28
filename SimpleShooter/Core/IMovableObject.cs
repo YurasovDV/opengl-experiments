@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleShooter.Graphics.ShaderLoader
+namespace SimpleShooter.Core
 {
-    interface IShaderLoader
+    interface IMovableObject
     {
-        ShaderProgramDescriptor Load();
+        void Move(long delta);
     }
 }

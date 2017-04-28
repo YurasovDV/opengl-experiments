@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using OpenTK;
 using SimpleShooter.Graphics;
+using SimpleShooter.Player;
 
-namespace SimpleShooter
+namespace SimpleShooter.Graphics
 {
     public class Camera
     {
@@ -10,14 +11,9 @@ namespace SimpleShooter
         public Matrix4 ModelView;
         public Matrix4 ModelViewProjection;
 
-
-        public Vector3 Position { get; set; }
-        public Vector3 Target { get; set; }
-        public Vector3 LightPosition { get; set; }
-
-        public void RebuildMatrices()
+        public void RebuildMatrices(PlayerModel player)
         {
-             ModelView = Matrix4.LookAt(Position, Target, Vector3.UnitY);
+             ModelView = Matrix4.LookAt(player.Position, player.Target, Vector3.UnitY);
              ModelViewProjection = Matrix4.Mult(ModelView, Projection);
         }
 

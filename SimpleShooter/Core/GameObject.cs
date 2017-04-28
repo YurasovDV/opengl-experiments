@@ -6,11 +6,9 @@ namespace SimpleShooter.Core
 {
     public class GameObject
     {
-
-        public Matrix4 Transform { get; set; }
+        public long Id { get; set; }
 
         public SimpleModel Model { get; set; }
-        public RenderWrapper Wrapper { get; set; }
 
         public ShadersNeeded ShaderKind { get; set; }
 
@@ -18,7 +16,6 @@ namespace SimpleShooter.Core
         {
             ShaderKind = shadersNeeded;
             Model = model;
-            Wrapper = new RenderWrapper(this);
         }
 
         public void CalcNormals()
@@ -36,20 +33,16 @@ namespace SimpleShooter.Core
 
         private Vector3[] GetNormals(Vector3[] points)
         {
-            var up = Vector3.UnitY;
             var normals = new Vector3[points.Length];
             var tempVertices = new Vector3[3];
 
             for (int i = 0; i < points.Length; i += 6)
             {
-                //int k = i / 6;
-                Vector3 norm = up;
-
                 tempVertices[0] = points[i];
                 tempVertices[1] = points[i + 1];
                 tempVertices[2] = points[i + 2];
 
-                norm = CalcNormal(tempVertices);
+                var norm = CalcNormal(tempVertices);
 
                 for (int j = i; j < i + 6; j++)
                 {

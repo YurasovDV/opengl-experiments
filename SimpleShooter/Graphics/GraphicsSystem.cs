@@ -5,35 +5,36 @@ using System.Linq;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
-using SimpleShooter.Core;
 using SimpleShooter.Graphics;
+using SimpleShooter.LevelLoaders;
+using SimpleShooter.Player;
 using ClearBufferMask = OpenTK.Graphics.OpenGL4.ClearBufferMask;
 using GL = OpenTK.Graphics.OpenGL4.GL;
 
-namespace SimpleShooter
+namespace SimpleShooter.Graphics
 {
     internal class GraphicsSystem
     {
-
         public Camera Camera { get; set; }
 
+        public Vector3 LightPosition { get; set; }
 
-        public GraphicsSystem(int width, int height, IObjectInitialiser initialiser)
+        public GraphicsSystem(int width, int height, IObjectInitializer initializer)
         {
-            InitGraphics(width, height, initialiser);
+            InitGraphics(width, height, initializer);
         }
 
-        private void InitGraphics(int width, int height, IObjectInitialiser initialiser)
+        private void InitGraphics(int width, int height, IObjectInitializer initializer)
         {
             float aspect = (float) width / height;
             GL.Viewport(0, 0, width, height);
             var projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 200);
-            Camera = initialiser.InitCamera(projection);
+            Camera = new Camera(projection);
         }
 
-        internal void Render(IEnumerable<GameObject> objects)
+        internal void Render(IEnumerable<IRenderWrapper> objects, PlayerModel player)
         {
-            Camera.RebuildMatrices();
+            Camera.RebuildMatrices(player);
 
             GL.ClearColor(0, 0, 0.0f, 1);
 
@@ -49,10 +50,10 @@ namespace SimpleShooter
         }
 
 
-        internal void Render(GameObject obj)
+        internal void Render(IRenderWrapper obj)
         {
-            obj.Wrapper.Bind(Camera);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, obj.Model.Vertices.Length);
+            obj.Bind(Camera, LightPosition);
+            GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
         }
     }
 }

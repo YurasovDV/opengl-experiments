@@ -8,10 +8,11 @@ using Common.Utils;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Graphics;
+using SimpleShooter.Player;
 
-namespace SimpleShooter
+namespace SimpleShooter.LevelLoaders
 {
-    class ObjectInitializer : IObjectInitialiser
+    class ObjectInitializer : IObjectInitializer
     {
         private Vector3 _lightPos = new Vector3(30, 10, 0);
 
@@ -19,34 +20,35 @@ namespace SimpleShooter
 
         private float tapeWidth =0.05f;
 
-        public Camera InitCamera(Matrix4 projection)
+        public Level CreateLevel()
         {
-            return new Camera(projection)
-            {
-                Position = new Vector3(0, 0.5f, 0),
-                LightPosition = _lightPos,
-                Target = new Vector3(100, 0.5f, 0)
-            };
-        }
+            var level = new Level();
 
-
-        public IEnumerable<GameObject> CreateLevel()
-        {
-            var result = new List<GameObject>();
+            var objectList = new List<GameObject>();
             Matrix4 translate = Matrix4.CreateTranslation(30, 4, 0);
             var green = new Vector3(0, 1, 0);
             GameObject obj = CreateCube(translate, green, 1, ShadersNeeded.TextureLess);
-            result.Add(obj);
-
+            objectList.Add(obj);
 
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(100, 100, 100), 0.5f, ShadersNeeded.TextureLessNoLight);
-            result.Add(obj);
+            objectList.Add(obj);
 
             obj = CreateWafer();
-            result.Add(obj);
+            objectList.Add(obj);
 
-            return result;
+
+            translate = Matrix4.CreateTranslation(_lightPos);
+            obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
+            var movableObj = new MovableObject(obj.Model, ShadersNeeded.TextureLessNoLight, new Vector3(1, 0, 0));
+            objectList.Add(movableObj);
+
+            level.Objects = objectList;
+
+            var p = new PlayerModel(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
+            level.Player = p;
+
+            return level;
         }
 
         private GameObject CreateWafer()
@@ -124,8 +126,9 @@ namespace SimpleShooter
                 Vertices = verticesCombined.ToArray(),
                 Colors = colorsCombined
             };
-
-            return new GameObject(model, ShadersNeeded.TextureLessNoLight);
+            var obj = new GameObject(model, ShadersNeeded.TextureLessNoLight);
+            obj.Id = IdService.GetNext();
+            return obj;
         }
 
         private static GameObject CreateCube(Matrix4 translate, Vector3 color, float size, ShadersNeeded shadersKind)
@@ -143,6 +146,7 @@ namespace SimpleShooter
 
             var obj = new GameObject(model, shadersKind);
             obj.CalcNormals();
+            obj.Id = IdService.GetNext();
             return obj;
         }
     }

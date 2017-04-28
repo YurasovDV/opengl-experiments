@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using SimpleShooter.Graphics;
-using SimpleShooter.Graphics.ShaderLoader;
+using SimpleShooter.Core;
+using SimpleShooter.Graphics.ShaderLoad;
 
-namespace SimpleShooter.Core
+namespace SimpleShooter.Graphics
 {
-    public class RenderWrapper
+    public class RenderWrapper : IRenderWrapper
     {
         private GameObject _gameObject;
 
@@ -20,14 +18,30 @@ namespace SimpleShooter.Core
             _descriptor = ShaderLoader.Load(_gameObject.ShaderKind);
         }
 
-        internal void Bind(Camera camera)
+        public int VerticesCount
+        {
+            get
+            {
+                return (_gameObject as GameObject).Model.Vertices.Length;
+            }
+        }
+
+        private PrimitiveType _renderType = PrimitiveType.Triangles;
+
+        public PrimitiveType RenderType
+        {
+            get { return _renderType; }
+            set { _renderType = value; }
+        }
+
+        public void Bind(Camera camera, Vector3 lightPos)
         {
             GL.UseProgram(_descriptor.ProgramId);
-            BindUniforms(camera);
+            BindUniforms(camera, lightPos);
             BindBuffers(_gameObject.ShaderKind);
         }
 
-        private void BindUniforms(Camera camera)
+        private void BindUniforms(Camera camera, Vector3 lightPos)
         {
             GL.UniformMatrix4(_descriptor.uniformMV, false, ref camera.ModelView);
             GL.UniformMatrix4(_descriptor.uniformMVP, false, ref camera.ModelViewProjection);
@@ -40,7 +54,7 @@ namespace SimpleShooter.Core
                 case ShadersNeeded.Line:
                     break;
                 case ShadersNeeded.TextureLess:
-                    GL.Uniform3(_descriptor.uniformLightPos, camera.LightPosition);
+                    GL.Uniform3(_descriptor.uniformLightPos, lightPos);
 
                     break;
 
@@ -105,7 +119,5 @@ namespace SimpleShooter.Core
             GL.VertexAttribPointer(_descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(_descriptor.AttribNormalsLocation);
         }
-
-
     }
 }

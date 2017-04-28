@@ -1,44 +1,63 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Common.Input;
 using OpenTK;
 using SimpleShooter.Core;
+using SimpleShooter.Graphics;
+using SimpleShooter.Player;
+using SimpleShooter.LevelLoaders;
 
 namespace SimpleShooter
 {
     class Engine
     {
         private GraphicsSystem _graphics;
-        private List<GameObject> _models;
+        private List<GameObjectDescriptor> _gameObjects;
         private KeyHandler _keyHandler;
-        private PlayerModel PlayerModel;
+        private PlayerModel _playerModel;
 
-        public Engine(GraphicsSystem graphics, IObjectInitialiser initFunc)
+        public Engine(GraphicsSystem graphics, IObjectInitializer initFunc)
         {
             _graphics = graphics;
+            
             InitObjects(initFunc);
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += KeyPress;
-            PlayerModel = new PlayerModel();
+
         }
 
-        private void InitObjects(IObjectInitialiser initFunc)
+        private void InitObjects(IObjectInitializer initFunc)
         {
-            _models = new List<GameObject>();
-            var objects = initFunc.CreateLevel();
-            _models.AddRange(objects);
+            _gameObjects = new List<GameObjectDescriptor>();
+            var level = initFunc.CreateLevel();
+            _playerModel = level.Player;
+            _gameObjects.AddRange( level.Objects.Select(o => new GameObjectDescriptor(o)));
         }
 
         internal void Tick(long delta, Vector2 dxdy)
         {
             _keyHandler.CheckKeys();
-            PlayerModel.Handle(dxdy, _graphics.Camera);
-            _graphics.Render(_models);
+            _playerModel.Handle(dxdy);
+            PhysicsStep(delta);
+            _graphics.Render(_gameObjects, _playerModel);
+        }
+
+        private void PhysicsStep(long delta)
+        {
+            foreach (var obj in _gameObjects)
+            {
+                var movable = obj.PhysicalObject as IMovableObject;
+                if (movable != null)
+                {
+                    movable.Move(delta);
+                }
+            }
         }
 
         private void KeyPress(InputSignal signal)
         {
-            PlayerModel.Handle(signal, _graphics.Camera);
+            _playerModel.Handle(signal);
         }
 
     }

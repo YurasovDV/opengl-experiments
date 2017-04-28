@@ -2,7 +2,7 @@
 using System.IO;
 using OpenTK.Graphics.OpenGL4;
 
-namespace SimpleShooter.Graphics.ShaderLoader
+namespace SimpleShooter.Graphics.ShaderLoad
 {
     class ShaderLoaderLine : IShaderLoader
     {

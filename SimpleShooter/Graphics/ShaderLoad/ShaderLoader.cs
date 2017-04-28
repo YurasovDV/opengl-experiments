@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SimpleShooter.Graphics.ShaderLoader
+namespace SimpleShooter.Graphics.ShaderLoad
 {
     public class ShaderLoader
     {

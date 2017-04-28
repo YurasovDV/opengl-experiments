@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Common.Input;
 using OpenTK;
 
-namespace SimpleShooter
+namespace SimpleShooter.Player
 {
     public class PlayerModel
     {
@@ -19,86 +19,88 @@ namespace SimpleShooter
         static readonly Vector3 StepDown = new Vector3(0, -0.1f, 0);
         static float mouseHandicap = 2400;
 
+
+        public Vector3 Position { get; set; }
+        public Vector3 Target { get; set; }
+
         private float AngleHorizontal = 0;
         private float AngleVertical = 0;
 
 
-        public void Handle(Vector2 mouseDxDy, Camera camera)
+        public PlayerModel(Vector3 position, Vector3 target)
+        {
+            Position = position;
+            target = Target;
+        }
+
+        public void Handle(Vector2 mouseDxDy)
         {
             var dx = mouseDxDy.X;
             if (dx > 1 || dx < -1)
             {
-                RotateAroundY(camera, mouseDxDy.X);
+                RotateAroundY(mouseDxDy.X);
             }
 
             var dy = mouseDxDy.Y;
             if (dy > 1 || dy < -1)
             {
-                RotateAroundX(camera, mouseDxDy.Y);
+                RotateAroundX(mouseDxDy.Y);
             }
         }
 
 
-        protected void RotateAroundY(Camera camera, float mouseDx)
+        protected void RotateAroundY(float mouseDx)
         {
             float rotation = mouseDx / mouseHandicap;
             AngleHorizontal += rotation;
-            Rotate(camera, camera.Position);
+            Rotate();
         }
 
-        protected void RotateAroundX(Camera camera, float mouseDy)
+        protected void RotateAroundX(float mouseDy)
         {
             float rotation = mouseDy / mouseHandicap;
             AngleVertical += rotation;
-            Rotate(camera, camera.Position);
+            Rotate();
         }
 
-        public void Handle(InputSignal signal, Camera camera)
+        public void Handle(InputSignal signal)
         {
-            var oldPosition = camera.Position;
-            var oldTarget = camera.Target;
-
-            Matrix4 translation;
-            Matrix4 rot;
-            Matrix4 rot2;
-
-            Vector3 targetTransformed;
-            Vector3 dTarget;
-            Vector3 dPosition;
+            var oldPosition = Position;
+            var oldTarget = Target;
 
             switch (signal)
             {
                 case InputSignal.FORWARD:
-                    StepXZ(StepForward, camera);
+                    StepXZ(StepForward);
 
                     break;
                 case InputSignal.BACK:
-                    StepXZ(StepBack, camera);
+                    StepXZ(StepBack);
                     break;
                 case InputSignal.RIGHT:
-                    StepXZ(StepRight, camera);
+                    StepXZ(StepRight);
                     break;
                 case InputSignal.LEFT:
-                    StepXZ(StepLeft, camera);
+                    StepXZ(StepLeft);
                     break;
                 case InputSignal.UP:
 
                     AngleVertical -= 0.01f;
-                    Rotate(camera, oldPosition);
+                    Rotate();
 
                     break;
                 case InputSignal.DOWN:
                     AngleVertical += 0.01f;
-                    Rotate(camera, oldPosition);
+                    Rotate();
 
                     break;
                 case InputSignal.ROTATE_CLOCKWISE:
                     AngleHorizontal += 0.01f;
-                    Rotate(camera, oldPosition);
+                    Rotate();
                     break;
                 case InputSignal.ROTATE_COUNTERCLOCKWISE:
                     AngleHorizontal -= 0.01f;
-                    Rotate(camera, oldPosition);
+                    Rotate();
                     break;
                 case InputSignal.SHOT:
                     break;
@@ -113,10 +115,10 @@ namespace SimpleShooter
                 case InputSignal.NONE:
                     break;
                 case InputSignal.DOWN_PARALLEL:
-                    StepYZ(StepDown, camera);
+                    StepYZ(StepDown);
                     break;
                 case InputSignal.UP_PARALLEL:
-                    StepYZ(StepUp, camera);
+                    StepYZ(StepUp);
                     break;
                 case InputSignal.MOUSE_CLICK:
                     break;
@@ -129,29 +131,29 @@ namespace SimpleShooter
             }
         }
 
-        private void Rotate(Camera camera, Vector3 oldPosition)
+        private void Rotate()
         {
             Matrix4 rotVertical = Matrix4.CreateRotationZ(AngleVertical);
             Matrix4 rotHorizontal = Matrix4.CreateRotationY(AngleHorizontal);
             var targetTransformed = Vector3.Transform(DefaultTarget, rotVertical * rotHorizontal);
-            camera.Target = oldPosition + targetTransformed;
+            Target = Position + targetTransformed;
         }
 
-        private void StepYZ(Vector3 stepDirection, Camera camera)
+        private void StepYZ(Vector3 stepDirection)
         {
-            camera.Position += stepDirection;
-            camera.Target += stepDirection;
+            Position += stepDirection;
+            Target += stepDirection;
         }
 
-        private void StepXZ(Vector3 stepDirection, Camera camera)
+        private void StepXZ(Vector3 stepDirection)
         {
-            var rot = Matrix4.CreateRotationY(AngleHorizontal);
+            var rotation = Matrix4.CreateRotationY(AngleHorizontal);
 
-            Vector3 dPosition = Vector3.Transform(stepDirection, rot);
-            Vector3 dTarget = Vector3.Transform(stepDirection, rot);
+            Vector3 dPosition = Vector3.Transform(stepDirection, rotation);
+            Vector3 dTarget = Vector3.Transform(stepDirection, rotation);
 
-            camera.Position += dPosition;
-            camera.Target += dTarget;
+            Position += dPosition;
+            Target += dTarget;
         }
     }
 }

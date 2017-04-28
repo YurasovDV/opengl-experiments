@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 using SimpleShooter.Core;
+using SimpleShooter.Graphics;
+using SimpleShooter.Player;
 
-namespace SimpleShooter
+namespace SimpleShooter.LevelLoaders
 {
-    interface IObjectInitialiser
+    interface IObjectInitializer
     {
-        IEnumerable<GameObject> CreateLevel();
-        Camera InitCamera(Matrix4 projection);
+        Level CreateLevel();
     }
 }

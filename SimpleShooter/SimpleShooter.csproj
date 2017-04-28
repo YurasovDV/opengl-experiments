@@ -53,24 +53,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
+    <Compile Include="Core\Level.cs" />
+    <Compile Include="GameObjectDescriptor.cs" />
+    <Compile Include="Graphics\Camera.cs" />
     <Compile Include="Core\GameObject.cs" />
-    <Compile Include="Core\RenderWrapper.cs" />
+    <Compile Include="Core\IMovableObject.cs" />
+    <Compile Include="Core\MovableObject.cs" />
+    <Compile Include="Graphics\IRenderWrapper.cs" />
+    <Compile Include="Graphics\RenderWrapper.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="GraphicsSystem.cs" />
-    <Compile Include="Graphics\ShaderLoader\IShaderLoader.cs" />
-    <Compile Include="Graphics\ShaderLoader\ShaderLoader.cs" />
-    <Compile Include="Graphics\ShaderLoader\ShaderLoaderLine.cs" />
-    <Compile Include="Graphics\ShaderLoader\ShaderLoaderSimpleModel.cs" />
-    <Compile Include="Graphics\ShaderLoader\ShaderLoaderTextureLess.cs" />
-    <Compile Include="Graphics\ShaderLoader\ShaderLoaderTextureLessNoLight.cs" />
+    <Compile Include="Graphics\GraphicsSystem.cs" />
+    <Compile Include="Graphics\ShaderLoad\IShaderLoader.cs" />
+    <Compile Include="Graphics\ShaderLoad\ShaderLoader.cs" />
+    <Compile Include="Graphics\ShaderLoad\ShaderLoaderLine.cs" />
+    <Compile Include="Graphics\ShaderLoad\ShaderLoaderSimpleModel.cs" />
+    <Compile Include="Graphics\ShaderLoad\ShaderLoaderTextureLess.cs" />
+    <Compile Include="Graphics\ShaderLoad\ShaderLoaderTextureLessNoLight.cs" />
     <Compile Include="Graphics\ShaderProgramDescriptor.cs" />
     <Compile Include="Graphics\ShadersNeeded.cs" />
     <Compile Include="Graphics\ShaderUniformsLocation.cs" />
-    <Compile Include="IObjectInitialiser.cs" />
+    <Compile Include="IdService.cs" />
+    <Compile Include="LevelLoaders\IObjectInitialiser.cs" />
     <Compile Include="MainWindow.cs" />
-    <Compile Include="ObjectInitializer.cs" />
-    <Compile Include="PlayerModel.cs" />
+    <Compile Include="LevelLoaders\ObjectInitializer.cs" />
+    <Compile Include="Player\PlayerModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
