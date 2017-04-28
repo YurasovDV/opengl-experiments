@@ -4,6 +4,7 @@ using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Graphics;
+using SimpleShooter.Graphics.ShaderLoader;
 
 namespace SimpleShooter.Core
 {

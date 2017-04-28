@@ -2,9 +2,7 @@
 {
     public class ShaderProgramDescriptor
     {
-        public int  ProgramId;
-
-        // public ShadersNeeded ShadersKind;
+        public int ProgramId;
 
         public int AttribVerticesLocation;
         public int AttribColorsLocation;
@@ -12,10 +10,10 @@
         public int AttribTextureCoordsLocation;
 
 
-       public int verticesBuffer;
-       public int colorsBuffer;
-       public int normalsBuffer;
-       public int textureCoordsBuffer;
+        public int verticesBuffer;
+        public int colorsBuffer;
+        public int normalsBuffer;
+        public int textureCoordsBuffer;
 
 
         public int uniformLightPos;
@@ -25,7 +23,25 @@
 
         public ShaderProgramDescriptor()
         {
+            int notSet = -2;
 
+            ProgramId = notSet;
+            AttribVerticesLocation = notSet;
+
+            AttribColorsLocation = notSet;
+            AttribNormalsLocation = notSet;
+            AttribTextureCoordsLocation = notSet;
+
+            verticesBuffer = notSet;
+            colorsBuffer = notSet;
+            normalsBuffer = notSet;
+            textureCoordsBuffer = notSet;
+
+
+            uniformLightPos = notSet;
+            uniformMVP = notSet;
+            uniformMV = notSet;
+            uniformProjection = notSet;
         }
 
     }

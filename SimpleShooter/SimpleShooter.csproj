@@ -58,7 +58,12 @@
     <Compile Include="Core\RenderWrapper.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="GraphicsSystem.cs" />
-    <Compile Include="Graphics\ShaderLoader.cs" />
+    <Compile Include="Graphics\ShaderLoader\IShaderLoader.cs" />
+    <Compile Include="Graphics\ShaderLoader\ShaderLoader.cs" />
+    <Compile Include="Graphics\ShaderLoader\ShaderLoaderLine.cs" />
+    <Compile Include="Graphics\ShaderLoader\ShaderLoaderSimpleModel.cs" />
+    <Compile Include="Graphics\ShaderLoader\ShaderLoaderTextureLess.cs" />
+    <Compile Include="Graphics\ShaderLoader\ShaderLoaderTextureLessNoLight.cs" />
     <Compile Include="Graphics\ShaderProgramDescriptor.cs" />
     <Compile Include="Graphics\ShadersNeeded.cs" />
     <Compile Include="Graphics\ShaderUniformsLocation.cs" />
@@ -77,6 +82,12 @@
     <Content Include="Content\Shaders\texturelessNoLight.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Shaders\line.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Content\Shaders\line.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
