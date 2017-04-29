@@ -4,12 +4,12 @@ using OpenTK;
 
 namespace OcTreeLibrary
 {
-    internal class OcTreeRevisitedEngine
+    internal class OcTreeUsageExample
     {
         private OcTree Tree { get; set; }
         private List<IOctreeItem> Objects { get; set; }
 
-        public OcTreeRevisitedEngine()
+        public OcTreeUsageExample()
         {
             Tree = new OcTree(BoundingVolume.CreateVolume(new Vector3(0, 0, 0), 80));
             var plane2 = new OctreeGameObject(new Vector3(47f, 5, -45));

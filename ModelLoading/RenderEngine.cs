@@ -53,12 +53,12 @@ namespace ModelLoading
             GL.Flush();
         }
 
-        private void BindBuffers(SimpleModel model)
+        private new void BindBuffers(SimpleModel model)
         {
             ShaderManager.BindBuffers(model, Player.FlashlightPosition, refreshVertices: true, refreshColors: true);
         }
 
-        private void Draw(SimpleModel model)
+        private new void Draw(SimpleModel model)
         {
             if (model.TextureId != -1)
             {

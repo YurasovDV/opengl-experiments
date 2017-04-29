@@ -17,7 +17,7 @@ namespace OcTreeLibrary
             BoundingBox = BoundingVolume.InitBoundingBox(points);
         }
 
-        public event Action<object, ReinsertingEventArgs> NeedReinsert;
+        public event EventHandler<ReinsertingEventArgs> NeedReinsert;
 
         public BoundingVolume BoundingBox { get; private set; }
 

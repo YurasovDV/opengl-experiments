@@ -47,8 +47,5 @@ namespace OcTreeLibrary
 
             return result.ToArray();
         }
-
-
-
     }
 }

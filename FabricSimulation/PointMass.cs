@@ -39,11 +39,9 @@ namespace FabricSimulation
 
         public void OnInput()
         {
-            float mouseWEight = 5;
-
-
-
             /*
+
+            float mouseWEight = 5;
             if (mousePressed)
             {
                 float distanceSquared = distPointToSegmentSquared(pmouseX, pmouseY, mouseX, mouseY, x, y);

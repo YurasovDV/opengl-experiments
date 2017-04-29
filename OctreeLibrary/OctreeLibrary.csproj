@@ -48,8 +48,7 @@
     <Compile Include="OcTree\IOctreeItem.cs" />
     <Compile Include="OcTree\OcTree.cs" />
     <Compile Include="OcTree\OcTreeItem.cs" />
-    <Compile Include="OcTree\OcTreeRevisitedEngine.cs" />
-    <Compile Include="OcTree\Player.cs" />
+    <Compile Include="OcTree\OcTreeUsageExample.cs" />
     <Compile Include="OcTree\ReinsertingEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
