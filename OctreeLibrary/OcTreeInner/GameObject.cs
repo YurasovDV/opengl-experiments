@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Common.Geometry;
 using OpenTK;
 
 namespace OcTreeLibrary
 {
-    public class OctreeGameObject : IOctreeItem
+    internal class OctreeGameObject : IOctreeItem
     {
         public Vector3[] Points { get; set; }
 

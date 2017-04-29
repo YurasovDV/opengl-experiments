@@ -3,37 +3,17 @@ using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Geometry;
+using OcTreeLibrary;
 
-namespace OcTreeLibrary
+namespace OctreeLibrary
 {
-    public class OcTree
+    internal class TreeVisitor
     {
-        /*
-        e g, 
-            child:	0 1 2 3 4 5 6 7
-				x:      - - - - + + + +
-				y:      - - + + - - + +
-				z:      - + - + - + - +
-            */
-        public OcTreeItem Root { get; set; }
+        OcTree tree;
 
-        public OcTree(BoundingVolume world)
+        public TreeVisitor(OcTree tree)
         {
-            Root = new OcTreeItem(world);
-
-            Root.Number = 0;
-            Root.Level = 0;
-        }
-
-        public BoundingVolume Insert(IOctreeItem obj)
-        {
-            return Root.Insert(obj);
-        }
-
-        public void Remove(IOctreeItem obj)
-        {
-            Root.Remove(obj);
+            this.tree = tree;
         }
 
         public SimpleModel GetModel()
@@ -43,7 +23,7 @@ namespace OcTreeLibrary
             var green = new Vector3(0, 1, 0);
             var red = new Vector3(1, 0, 0);
 
-            var array = VisitVertices(Root, objColor: red, volumeColor: green);
+            var array = VisitVertices(tree.Root, objColor: red, volumeColor: green);
 
             model.Vertices = array.Item1.ToArray();
 
@@ -54,7 +34,7 @@ namespace OcTreeLibrary
 
         public IEnumerable<OcTreeItem> Visit()
         {
-            return VisitAll(Root).ToList();
+            return VisitAll(tree.Root).ToList();
         }
 
         private IEnumerable<OcTreeItem> VisitAll(OcTreeItem item)
@@ -64,7 +44,7 @@ namespace OcTreeLibrary
             if (item != null)
             {
                 result.Add(item);
-                if (item.Children!=null)
+                if (item.Children != null)
                 {
                     foreach (var child in item.Children.Where(i => i != null))
                     {

@@ -43,14 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OcTree\Extensions.cs" />
-    <Compile Include="OcTree\GameObject.cs" />
-    <Compile Include="OcTree\IOctreeItem.cs" />
-    <Compile Include="OcTree\OcTree.cs" />
-    <Compile Include="OcTree\OcTreeItem.cs" />
-    <Compile Include="OcTree\OcTreeUsageExample.cs" />
-    <Compile Include="OcTree\ReinsertingEventArgs.cs" />
+    <Compile Include="Public\Extensions.cs" />
+    <Compile Include="OcTreeInner\GameObject.cs" />
+    <Compile Include="Public\IOctreeItem.cs" />
+    <Compile Include="Public\OcTree.cs" />
+    <Compile Include="Public\OcTreeItem.cs" />
+    <Compile Include="OcTreeInner\OcTreeUsageExample.cs" />
+    <Compile Include="Public\ReinsertingEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OcTreeInner\TreeVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
