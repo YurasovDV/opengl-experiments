@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Input;
 using OpenTK;
+using SimpleShooter.Core;
 using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player

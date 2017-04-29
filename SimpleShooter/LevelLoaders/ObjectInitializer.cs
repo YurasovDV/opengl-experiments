@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Common.Geometry;
 using Common.Utils;
 using OpenTK;
 using SimpleShooter.Core;
@@ -16,9 +17,9 @@ namespace SimpleShooter.LevelLoaders
     {
         private Vector3 _lightPos = new Vector3(30, 10, 0);
 
-        private float edge = 50;
+        public static float Edge = 100;
 
-        private float tapeWidth =0.05f;
+        public static float TapeWidth = 0.05f;
 
         public Level CreateLevel()
         {
@@ -27,6 +28,7 @@ namespace SimpleShooter.LevelLoaders
             InitObjects(level);
             InitPlayer(level);
             level.LightPosition = _lightPos;
+            level.Volume = BoundingVolume.CreateVolume(new Vector3(0, 0, 0), Edge);
 
             return level;
         }
@@ -37,19 +39,25 @@ namespace SimpleShooter.LevelLoaders
             Matrix4 translate = Matrix4.CreateTranslation(30, 4, 0);
             var green = new Vector3(0, 1, 0);
             GameObject obj = CreateCube(translate, green, 1, ShadersNeeded.TextureLess);
+            obj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
             objectList.Add(obj);
 
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(100, 100, 100), 0.5f, ShadersNeeded.TextureLessNoLight);
+            obj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
             objectList.Add(obj);
 
             obj = CreateWafer();
+            obj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
+
             objectList.Add(obj);
 
 
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
             var movableObj = new MovableObject(obj.Model, ShadersNeeded.TextureLessNoLight, new Vector3(1, 0, 0));
+            movableObj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
+
             objectList.Add(movableObj);
 
             level.Objects = objectList;
@@ -57,43 +65,64 @@ namespace SimpleShooter.LevelLoaders
 
         protected virtual void InitPlayer(Level level)
         {
-            var p = new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
-            level.Player = p;
+            var player = new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
+
+            level.Player = player;
+
+            var vertices = new Vector3[] 
+            {
+                new Vector3(100, 1f, 0),
+                new Vector3(100, 0.0f, 0),
+                          
+                new Vector3(100, 0.5f, -0.5f),
+                new Vector3(100, 0.5f, 0.5f)
+            };
+
+            var model = new SimpleModel()
+            {
+                Vertices = vertices,
+                Colors = Enumerable.Repeat(new Vector3(1, 0, 0), vertices.Length).ToArray()
+            };
+
+            var mark = new GameObject(model, ShadersNeeded.Line);
+            player.Mark = mark;
+
+            level.Objects.Add(mark);
         }
 
         private GameObject CreateWafer()
         {
             var verticesPlane = new[]
             {
-                new Vector3(edge, 0, -edge),
-                new Vector3(-edge, 0, edge),
-                new Vector3(-edge, 0, -edge),
+                new Vector3(Edge, 0, -Edge),
+                new Vector3(-Edge, 0, Edge),
+                new Vector3(-Edge, 0, -Edge),
 
-                new Vector3(edge, 0, -edge),
-                new Vector3(edge, 0, edge),
-                new Vector3(-edge, 0, edge),
+                new Vector3(Edge, 0, -Edge),
+                new Vector3(Edge, 0, Edge),
+                new Vector3(-Edge, 0, Edge),
             };
 
             var verticesOx = new[]
             {
-                new Vector3(edge, 0.2f, -tapeWidth),
-                new Vector3(-edge, 0.2f, tapeWidth),
-                new Vector3(-edge, 0.2f, -tapeWidth),
+                new Vector3(Edge, 0.2f, -TapeWidth),
+                new Vector3(-Edge, 0.2f, TapeWidth),
+                new Vector3(-Edge, 0.2f, -TapeWidth),
 
-                new Vector3(edge, 0.2f, -tapeWidth),
-                new Vector3(edge, 0.2f, tapeWidth),
-                new Vector3(-edge, 0.2f, tapeWidth),
+                new Vector3(Edge, 0.2f, -TapeWidth),
+                new Vector3(Edge, 0.2f, TapeWidth),
+                new Vector3(-Edge, 0.2f, TapeWidth),
             };
 
             var verticesOZ = new[]
             {
-                new Vector3(tapeWidth, 0.2f, -edge),
-                new Vector3(-tapeWidth, 0.2f, edge),
-                new Vector3(-tapeWidth, 0.2f, -edge),
+                new Vector3(TapeWidth, 0.2f, -Edge),
+                new Vector3(-TapeWidth, 0.2f, Edge),
+                new Vector3(-TapeWidth, 0.2f, -Edge),
 
-                new Vector3(tapeWidth, 0.2f, -edge),
-                new Vector3(tapeWidth, 0.2f, edge),
-                new Vector3(-tapeWidth, 0.2f, edge),
+                new Vector3(TapeWidth, 0.2f, -Edge),
+                new Vector3(TapeWidth, 0.2f, Edge),
+                new Vector3(-TapeWidth, 0.2f, Edge),
             };
 
             var colorsCombined = new[]

@@ -15,7 +15,15 @@ namespace SimpleShooter.Graphics
         public RenderWrapper(GameObject gameObject)
         {
             _gameObject = gameObject;
-            _descriptor = ShaderLoader.Load(_gameObject.ShaderKind);
+            bool loaded = ShaderLoader.TryGet(_gameObject.ShaderKind, out _descriptor);
+            if (!loaded)
+            {
+                throw new InvalidOperationException();
+            }
+            if (_gameObject.ShaderKind == ShadersNeeded.Line)
+            {
+                RenderType = PrimitiveType.Lines;
+            }
         }
 
         public int VerticesCount
@@ -25,6 +33,8 @@ namespace SimpleShooter.Graphics
                 return (_gameObject as GameObject).Model.Vertices.Length;
             }
         }
+
+        public ShadersNeeded ShaderKind { get { return _gameObject.ShaderKind; } }
 
         private PrimitiveType _renderType = PrimitiveType.Triangles;
 
@@ -70,23 +80,20 @@ namespace SimpleShooter.Graphics
 
         private void BindBuffers(ShadersNeeded gameObjectShaderKind)
         {
+            BindVertices();
+            BindColors();
+
             switch (gameObjectShaderKind)
             {
                 case ShadersNeeded.SimpleModel:
+                    BindNormals();
+                    break;
+                case ShadersNeeded.TextureLess:
+                    BindNormals();
                     break;
                 case ShadersNeeded.Line:
                     break;
-                case ShadersNeeded.TextureLess:
-                    BindVertices();
-                    BindColors();
-                    BindNormals();
-
-                    break;
-
                 case ShadersNeeded.TextureLessNoLight:
-                    BindVertices();
-                    BindColors();
-
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(gameObjectShaderKind), gameObjectShaderKind, null);

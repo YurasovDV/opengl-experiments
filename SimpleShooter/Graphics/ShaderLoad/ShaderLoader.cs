@@ -12,9 +12,9 @@ namespace SimpleShooter.Graphics.ShaderLoad
             {ShadersNeeded.TextureLessNoLight, new ShaderLoaderTextureLessNoLight() },
         };
 
-        public static Dictionary<ShadersNeeded, int> programs = new Dictionary<ShadersNeeded, int>();
+        public static Dictionary<ShadersNeeded, ShaderProgramDescriptor> programs = new Dictionary<ShadersNeeded, ShaderProgramDescriptor>();
 
-        public static bool TryGet(ShadersNeeded kind, out int programId)
+        public static bool TryGet(ShadersNeeded kind, out ShaderProgramDescriptor programId)
         {
             if (programs.ContainsKey(kind))
             {
@@ -23,16 +23,15 @@ namespace SimpleShooter.Graphics.ShaderLoad
             }
 
             var desc = Load(kind);
-            programId = desc.ProgramId;
+            programId = desc;
             return true;
         }
 
-        public static ShaderProgramDescriptor Load(ShadersNeeded kind)
+        private static ShaderProgramDescriptor Load(ShadersNeeded kind)
         {
             var loader = _loaders[kind];
             var result = loader.Load();
-            programs[kind] = result.ProgramId;
-
+            programs[kind] = result;
             return result;
         }
 

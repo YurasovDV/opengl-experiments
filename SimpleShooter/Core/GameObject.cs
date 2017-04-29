@@ -1,4 +1,5 @@
 ﻿using Common;
+using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Graphics;
 
@@ -10,12 +11,15 @@ namespace SimpleShooter.Core
 
         public SimpleModel Model { get; set; }
 
+        public IOctreeItem OctreeItem { get; set; }
+
         public ShadersNeeded ShaderKind { get; set; }
 
         public GameObject(SimpleModel model, ShadersNeeded shadersNeeded)
         {
             ShaderKind = shadersNeeded;
             Model = model;
+            OctreeItem = new OctreeGameObject();
         }
 
         public void CalcNormals()

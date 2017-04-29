@@ -5,7 +5,7 @@ namespace OcTreeLibrary
 {
     public interface IOctreeItem
     {
-        BoundingVolume BoundingBox { get; }
+        BoundingVolume BoundingBox { get; set; }
         BoundingVolume TreeSegment { get; set; }
         event EventHandler<ReinsertingEventArgs> NeedReinsert;
         void UpdateBoundingBox(BoundingVolume newBox);

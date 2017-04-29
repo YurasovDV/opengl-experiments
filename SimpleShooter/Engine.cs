@@ -8,6 +8,8 @@ using SimpleShooter.Graphics;
 using SimpleShooter.Player;
 using SimpleShooter.LevelLoaders;
 using SimpleShooter.Player.Events;
+using Common.Geometry;
+using OcTreeLibrary;
 
 namespace SimpleShooter
 {
@@ -19,6 +21,7 @@ namespace SimpleShooter
         private List<GameObjectDescriptor> _gameObjects;
         private IPlayer _player;
         public Level _level;
+        private OcTree _tree;
 
         public Engine(int width, int height, IObjectInitializer initFunc)
         {           
@@ -34,9 +37,30 @@ namespace SimpleShooter
             _level = initFunc.CreateLevel();
             _gameObjects.AddRange(_level.Objects.Select(o => new GameObjectDescriptor(o)));
             InitPlayer();
+            InitTree();
+        }
 
-           // tree.OcTree tree = new tree.OcTree();
-           // tree.Insert(
+        private void InitTree()
+        {
+            _tree = new OcTree(_level.Volume);
+            foreach (var o in _gameObjects)
+            {
+                if (o.RenderIdentity.ShaderKind != ShadersNeeded.Line)
+                {
+                    o.GameIdentity.OctreeItem.NeedReinsert += OctreeItem_NeedReinsert;
+                    _tree.Insert(o.GameIdentity.OctreeItem);
+                }
+            }
+        }
+
+        private void OctreeItem_NeedReinsert(object sender, ReinsertingEventArgs args)
+        {
+            var gameObj = sender as IOctreeItem;
+            if (gameObj == null)
+                throw new ArgumentException();
+            _tree.Remove(gameObj);
+            gameObj.UpdateBoundingBox(args.NewBox);
+            _tree.Insert(gameObj);
         }
 
         private void InitPlayer()
@@ -45,6 +69,26 @@ namespace SimpleShooter
             _player.Jump += Player_Jump;
             _player.Move += Player_Move;
             _player.Shot += Player_Shot;
+        }
+
+        internal void Tick(long delta, Vector2 dxdy)
+        {
+            _keyHandler.CheckKeys();
+            _player.HandleMouseMove(dxdy);
+            PhysicsStep(delta);
+            _graphics.Render(_gameObjects, _level);
+        }
+
+        private void PhysicsStep(long delta)
+        {
+            foreach (var obj in _gameObjects)
+            {
+                var movable = obj.GameIdentity as IMovableObject;
+                if (movable != null)
+                {
+                    movable.Move(delta);
+                }
+            }
         }
 
         private ActionStatus Player_Shot(object sender, ShotEventArgs args)
@@ -75,26 +119,6 @@ namespace SimpleShooter
             };
 
             return res;
-        }
-
-        internal void Tick(long delta, Vector2 dxdy)
-        {
-            _keyHandler.CheckKeys();
-            _player.HandleMouseMove(dxdy);
-            PhysicsStep(delta);
-            _graphics.Render(_gameObjects, _level);
-        }
-
-        private void PhysicsStep(long delta)
-        {
-            foreach (var obj in _gameObjects)
-            {
-                var movable = obj.GameIdentity as IMovableObject;
-                if (movable != null)
-                {
-                    movable.Move(delta);
-                }
-            }
         }
 
         private void KeyPress(InputSignal signal)

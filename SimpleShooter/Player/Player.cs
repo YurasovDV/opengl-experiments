@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Input;
 using OpenTK;
+using SimpleShooter.Core;
 using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player
 {
     public abstract class Player : IPlayer
     {
-        protected Vector3 DefaultTarget = new Vector3(100, 0, 0);
+        public Vector3 DefaultTarget = new Vector3(100, 0, 0);
         protected Vector3 StepForward = new Vector3(0.1f, 0, 0);
         protected Vector3 StepBack = new Vector3(-0.1f, 0, 0);
         protected Vector3 StepRight = new Vector3(0, 0, 0.1f);
@@ -22,10 +23,12 @@ namespace SimpleShooter.Player
         protected float mouseHandicap = 2400;
 
         #region state
+        public GameObject Mark { get; set; }
+
         public Vector3 Position { get; set; }
         public Vector3 Target { get; set; }
-        protected float AngleHorizontalRadians = 0;
-        protected float AngleVerticalRadians = 0;
+        public float AngleHorizontalRadians = 0;
+        public float AngleVerticalRadians = 0;
 
         #endregion
 
@@ -105,34 +108,51 @@ namespace SimpleShooter.Player
         {
             Matrix4 rotVertical = Matrix4.CreateRotationZ(AngleVerticalRadians);
             Matrix4 rotHorizontal = Matrix4.CreateRotationY(AngleHorizontalRadians);
-            var targetTransformed = Vector3.Transform(DefaultTarget, rotVertical * rotHorizontal);
+
+            var rotationResulting = rotVertical * rotHorizontal;
+
+            var targetTransformed = Vector3.Transform(DefaultTarget, rotationResulting);
             Target = Position + targetTransformed;
+
+            if (Mark != null)
+            {
+                MarkController.SetTo(this, Mark, rotationResulting);
+            }
         }
 
         protected virtual void StepYZ(Vector3 stepDirection)
         {
             Position += stepDirection;
             Target += stepDirection;
+
+            for (int i = 0; i < Mark.Model.Vertices.Length; i++)
+            {
+                Mark.Model.Vertices[i] += stepDirection;
+            }
+
         }
 
         protected virtual void StepXZ(Vector3 stepDirection)
         {
             var rotation = Matrix4.CreateRotationY(AngleHorizontalRadians);
-
             Vector3 dPosition = Vector3.Transform(stepDirection, rotation);
-            Vector3 dTarget = Vector3.Transform(stepDirection, rotation);
 
             var args = new MoveEventArgs()
             {
                 Position = Position + dPosition,
-                Target = Target + dTarget
+                Target = Target + dPosition
             };
 
             var actionResult = OnMove(args);
             if (actionResult.Success)
             {
                 Position += dPosition;
-                Target += dTarget;
+                Target += dPosition;
+
+                for (int i = 0; i < Mark.Model.Vertices.Length; i++)
+                {
+                    Mark.Model.Vertices[i] += dPosition;
+                }
             }
         }
 

@@ -45,15 +45,12 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Level.cs" />
+    <Compile Include="Core\OctreeGameObject.cs" />
     <Compile Include="GameObjectDescriptor.cs" />
     <Compile Include="Graphics\Camera.cs" />
     <Compile Include="Core\GameObject.cs" />
@@ -83,6 +80,7 @@
     <Compile Include="Player\Events\ShotEventArgs.cs" />
     <Compile Include="Player\HumanPlayer.cs" />
     <Compile Include="Player\IPlayer.cs" />
+    <Compile Include="Player\MarkController.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\PlayerModelUnleashed.cs" />
     <Compile Include="Program.cs" />

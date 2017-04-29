@@ -1,18 +1,18 @@
 ﻿using System;
-using Common.Geometry;
 using OpenTK;
+using System.Collections.Generic;
+using Common.Geometry;
+using OcTreeLibrary;
 
-namespace OcTreeLibrary
+namespace SimpleShooter.Core
 {
-    internal class OctreeGameObject : IOctreeItem
+    class OctreeGameObject : IOctreeItem
     {
         public Vector3[] Points { get; set; }
 
-        public OctreeGameObject(Vector3 centre, float angle = 3.1415f)
+        public OctreeGameObject()
         {
-            var points = Extensions.CreatePlane(centre, angle);
-            Points = points;
-            BoundingBox = BoundingVolume.InitBoundingBox(points);
+            //BoundingBox = BoundingVolume.InitBoundingBox(points);
         }
 
         public event EventHandler<ReinsertingEventArgs> NeedReinsert;
@@ -21,7 +21,7 @@ namespace OcTreeLibrary
 
         public BoundingVolume TreeSegment { get; set; }
 
-        public void Tick(long delta)
+        /*public void Tick(long delta)
         {
             // change points positions
             BoundingVolume newBox = BoundingVolume.InitBoundingBox(Points);
@@ -30,11 +30,13 @@ namespace OcTreeLibrary
             {
                 NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newBox });
             }
-        }
+        }*/
 
         public void UpdateBoundingBox(BoundingVolume newBox)
         {
             BoundingBox = newBox;
         }
+
+
     }
 }

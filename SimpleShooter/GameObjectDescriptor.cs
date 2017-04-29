@@ -17,14 +17,11 @@ namespace SimpleShooter
         {
             GameIdentity = o;
             RenderIdentity = new RenderWrapper(o);
-            TreeIdentity = null;
         }
 
         public GameObject GameIdentity { get; set; }
 
         public IRenderWrapper RenderIdentity { get; set; }
-
-        public IOctreeItem TreeIdentity { get; set; }
 
         public PrimitiveType RenderType
         {
@@ -36,6 +33,14 @@ namespace SimpleShooter
             set
             {
                 RenderIdentity.RenderType = value;
+            }
+        }
+
+        public ShadersNeeded ShaderKind
+        {
+            get
+            {
+                return RenderIdentity.ShaderKind;
             }
         }
 
