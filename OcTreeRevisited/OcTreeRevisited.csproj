@@ -91,7 +91,6 @@
     <Compile Include="LineRender.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="OcTreeRevisitedEngine.cs" />
-    <Compile Include="OcTree\BoundingVolume.cs" />
     <Compile Include="OcTree\OcTree.cs" />
     <Compile Include="OcTree\OcTreeItem.cs" />
     <Compile Include="Player.cs" />

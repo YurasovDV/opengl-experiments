@@ -6,8 +6,8 @@ namespace SimpleShooter.Core
 {
     public class Level
     {
-        public Vector3 LightPosition { get; internal set; }
+        public Vector3 LightPosition { get; set; }
         public IEnumerable<GameObject> Objects { get; set; }
-        public PlayerModel Player { get; set; }
+        public IPlayer Player { get; set; }
     }
 }

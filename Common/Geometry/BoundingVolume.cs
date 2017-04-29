@@ -1,12 +1,13 @@
-﻿using OpenTK;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Common.Utils;
+using OpenTK;
 
-namespace OcTreeRevisited.OcTree
+namespace Common.Geometry
 {
-    /// <summary>
-    /// AABB
-    /// </summary>
     public class BoundingVolume
     {
         private float _maxDimension;
@@ -248,4 +249,5 @@ namespace OcTreeRevisited.OcTree
         }
 
     }
+
 }

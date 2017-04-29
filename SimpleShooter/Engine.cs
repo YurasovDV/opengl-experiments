@@ -7,6 +7,8 @@ using SimpleShooter.Core;
 using SimpleShooter.Graphics;
 using SimpleShooter.Player;
 using SimpleShooter.LevelLoaders;
+using SimpleShooter.Player.Events;
+using tree = OcTreeRevisited.OcTree;
 
 namespace SimpleShooter
 {
@@ -16,7 +18,7 @@ namespace SimpleShooter
         public GraphicsSystem _graphics;
 
         private List<GameObjectDescriptor> _gameObjects;
-        private PlayerModel _playerModel;
+        private IPlayer _player;
         public Level _level;
 
         public Engine(int width, int height, IObjectInitializer initFunc)
@@ -25,21 +27,61 @@ namespace SimpleShooter
             _graphics = new GraphicsSystem(width, height);
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += KeyPress;
-
         }
 
         private void InitObjects(IObjectInitializer initFunc)
         {
             _gameObjects = new List<GameObjectDescriptor>();
             _level = initFunc.CreateLevel();
-            _playerModel = _level.Player;
             _gameObjects.AddRange(_level.Objects.Select(o => new GameObjectDescriptor(o)));
+            InitPlayer();
+
+           // tree.OcTree tree = new tree.OcTree();
+           // tree.Insert(
+        }
+
+        private void InitPlayer()
+        {
+            _player = _level.Player;
+            _player.Jump += Player_Jump;
+            _player.Move += Player_Move;
+            _player.Shot += Player_Shot;
+        }
+
+        private ActionStatus Player_Shot(object sender, ShotEventArgs args)
+        {
+            var res = new ActionStatus()
+            {
+                Success = true
+            };
+
+            return res;
+        }
+
+        private ActionStatus Player_Move(object sender, MoveEventArgs args)
+        {
+            var res = new ActionStatus()
+            {
+                Success = true
+            };
+
+            return res;
+        }
+
+        private ActionStatus Player_Jump(object sender, JumpEventArgs args)
+        {
+            var res = new ActionStatus()
+            {
+                Success = true
+            };
+
+            return res;
         }
 
         internal void Tick(long delta, Vector2 dxdy)
         {
             _keyHandler.CheckKeys();
-            _playerModel.Handle(dxdy);
+            _player.HandleMouseMove(dxdy);
             PhysicsStep(delta);
             _graphics.Render(_gameObjects, _level);
         }
@@ -58,7 +100,7 @@ namespace SimpleShooter
 
         private void KeyPress(InputSignal signal)
         {
-            _playerModel.Handle(signal);
+            _player.Handle(signal);
         }
 
     }

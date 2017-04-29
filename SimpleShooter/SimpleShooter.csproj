@@ -76,7 +76,15 @@
     <Compile Include="LevelLoaders\IObjectInitialiser.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="LevelLoaders\ObjectInitializer.cs" />
-    <Compile Include="Player\PlayerModel.cs" />
+    <Compile Include="Player\Events\ActionStatus.cs" />
+    <Compile Include="Player\Events\JumpEventArgs.cs" />
+    <Compile Include="Player\Events\MoveEventArgs.cs" />
+    <Compile Include="Player\Events\PlayerActionHandler.cs" />
+    <Compile Include="Player\Events\ShotEventArgs.cs" />
+    <Compile Include="Player\HumanPlayer.cs" />
+    <Compile Include="Player\IPlayer.cs" />
+    <Compile Include="Player\Player.cs" />
+    <Compile Include="Player\PlayerModelUnleashed.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -7,13 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using Common.Geometry;
 
 namespace OcTreeRevisited.OcTree
 {
     public class OcTree
     {
         /*
-        например, 
+        e g, 
             child:	0 1 2 3 4 5 6 7
 				x:      - - - - + + + +
 				y:      - - + + - - + +

@@ -24,6 +24,15 @@ namespace SimpleShooter.LevelLoaders
         {
             var level = new Level();
 
+            InitObjects(level);
+            InitPlayer(level);
+            level.LightPosition = _lightPos;
+
+            return level;
+        }
+
+        protected virtual void InitObjects(Level level)
+        {
             var objectList = new List<GameObject>();
             Matrix4 translate = Matrix4.CreateTranslation(30, 4, 0);
             var green = new Vector3(0, 1, 0);
@@ -44,14 +53,12 @@ namespace SimpleShooter.LevelLoaders
             objectList.Add(movableObj);
 
             level.Objects = objectList;
+        }
 
-            var p = new PlayerModel(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
+        protected virtual void InitPlayer(Level level)
+        {
+            var p = new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
             level.Player = p;
-
-
-            level.LightPosition = _lightPos;
-
-            return level;
         }
 
         private GameObject CreateWafer()

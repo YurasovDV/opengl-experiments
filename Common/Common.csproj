@@ -55,6 +55,7 @@
     <Compile Include="AbstractPlayer.cs" />
     <Compile Include="AbstractRenderEngine.cs" />
     <Compile Include="AbstractShaderManager.cs" />
+    <Compile Include="Geometry\BoundingVolume.cs" />
     <Compile Include="Input\InputSignal.cs" />
     <Compile Include="Input\KeyHandler.cs" />
     <Compile Include="IPlayer.cs" />
