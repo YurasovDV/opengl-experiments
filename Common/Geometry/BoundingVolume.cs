@@ -205,6 +205,26 @@ namespace Common.Geometry
                centre + shift);
         }
 
+        public static BoundingVolume InitBoundingBox(Vector3[] points)
+        {
+            var minX = points.Min(p => p.X);
+            var maxX = points.Max(p => p.X);
+
+            var minY = points.Min(p => p.Y);
+            var maxY = points.Max(p => p.Y);
+
+            var minZ = points.Min(p => p.Z);
+            var maxZ = points.Max(p => p.Z);
+
+            var min = new Vector3(minX, minY, minZ);
+            var max = new Vector3(maxX, maxY, maxZ);
+
+            var volume = new BoundingVolume(min, max);
+
+            return volume;
+        }
+
+
         public Vector3[] GetLines()
         {
             return new Vector3[]
