@@ -8,7 +8,7 @@ using OpenTK;
 namespace OctreeTests
 {
     [TestClass]
-    public class UnitTest1
+    public class OctreeTests
     {
         //[TestMethod]
         //public void TestMethod1()

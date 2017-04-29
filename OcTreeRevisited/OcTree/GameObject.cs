@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Common.Geometry;
-using OcTreeRevisited.OcTree;
 using OpenTK;
 
 namespace OcTreeRevisited
@@ -56,18 +55,6 @@ namespace OcTreeRevisited
             {
                 NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newBox });
             }
-
-            //if (TreeSegment != null)
-            //{
-            //if (!TreeSegment.Contains(newBox))
-            //{
-            //NeedReinsert
-            // }
-            // else
-            // {
-            //    BoundingBox.Reinit(newBox);
-            //  }
-            //}
         }
 
         public SimpleModel GetAsModel()
