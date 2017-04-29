@@ -10,7 +10,7 @@ using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player
 {
-    public abstract class Player : IPlayer
+    public abstract class Player : IShooterPlayer
     {
         public Vector3 DefaultTarget = new Vector3(100, 0, 0);
         protected Vector3 StepForward = new Vector3(0.1f, 0, 0);

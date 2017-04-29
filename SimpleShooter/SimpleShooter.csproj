@@ -46,6 +46,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +58,7 @@
     <Compile Include="Core\IMovableObject.cs" />
     <Compile Include="Core\MovableObject.cs" />
     <Compile Include="Graphics\IRenderWrapper.cs" />
+    <Compile Include="Graphics\OctreeRenderWrapper.cs" />
     <Compile Include="Graphics\RenderWrapper.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="Graphics\ShaderProgramDescriptor.cs" />
     <Compile Include="Graphics\ShadersNeeded.cs" />
     <Compile Include="Graphics\ShaderUniformsLocation.cs" />
+    <Compile Include="Helpers\Projectileshelper.cs" />
     <Compile Include="IdService.cs" />
     <Compile Include="LevelLoaders\IObjectInitialiser.cs" />
     <Compile Include="MainWindow.cs" />

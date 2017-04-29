@@ -17,7 +17,7 @@ namespace Common.Input
 
         public event ProcessKeyDelegate KeyPress;
 
-        public Keys[] KeysToWatch { get; set; }
+        public List<Keys> KeysToWatch { get; set; }
 
         private Dictionary<Keys, InputSignal> keysToSignal;
         public KeyHandler()
@@ -42,7 +42,7 @@ namespace Common.Input
             };
 
 
-            KeysToWatch = new Keys[]
+            KeysToWatch = new List<Keys>()
             {
             Keys.A,
             Keys.W,

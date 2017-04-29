@@ -10,6 +10,6 @@ namespace SimpleShooter.Core
         public BoundingVolume Volume { get; set; }
         public Vector3 LightPosition { get; set; }
         public List<GameObject> Objects { get; set; }
-        public IPlayer Player { get; set; }
+        public IShooterPlayer Player { get; set; }
     }
 }

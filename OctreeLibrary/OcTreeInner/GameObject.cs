@@ -26,15 +26,20 @@ namespace OcTreeLibrary
             // change points positions
             BoundingVolume newBox = BoundingVolume.InitBoundingBox(Points);
 
-            if (NeedReinsert != null)
-            {
-                NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newBox });
-            }
+            RaiseReinsert(newBox);
         }
 
         public void UpdateBoundingBox(BoundingVolume newBox)
         {
             BoundingBox = newBox;
+        }
+
+        public void RaiseReinsert(BoundingVolume newVolume)
+        {
+            if (NeedReinsert != null)
+            {
+                NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newVolume });
+            }
         }
     }
 }

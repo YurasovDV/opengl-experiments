@@ -5,7 +5,7 @@ using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player
 {
-    public interface IPlayer
+    public interface IShooterPlayer
     {
         Vector3 Position { get; set; }
         Vector3 Target { get; set; }

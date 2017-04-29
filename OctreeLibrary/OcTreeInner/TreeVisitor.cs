@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using OcTreeLibrary;
 
-namespace OctreeLibrary
+namespace OcTreeLibrary
 {
-    internal class TreeVisitor
+    public class TreeVisitor
     {
         OcTree tree;
 

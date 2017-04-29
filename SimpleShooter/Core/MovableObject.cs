@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Common.Geometry;
 using OpenTK;
 using SimpleShooter.Graphics;
 
@@ -31,6 +32,11 @@ namespace SimpleShooter.Core
             {
                 Model.Vertices[i] = Model.Vertices[i] + s;
             }
+
+            var newVolume = BoundingVolume.InitBoundingBox(Model.Vertices);
+
+            OctreeItem.RaiseReinsert(newVolume);
+
 
         }
     }

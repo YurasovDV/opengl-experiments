@@ -9,5 +9,6 @@ namespace OcTreeLibrary
         BoundingVolume TreeSegment { get; set; }
         event EventHandler<ReinsertingEventArgs> NeedReinsert;
         void UpdateBoundingBox(BoundingVolume newBox);
+        void RaiseReinsert(BoundingVolume newVolume);
     }
 }

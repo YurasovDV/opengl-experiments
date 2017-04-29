@@ -11,7 +11,7 @@ namespace SimpleShooter.Graphics
         public Matrix4 ModelView;
         public Matrix4 ModelViewProjection;
 
-        public void RebuildMatrices(IPlayer player)
+        public void RebuildMatrices(IShooterPlayer player)
         {
              ModelView = Matrix4.LookAt(player.Position, player.Target, Vector3.UnitY);
              ModelViewProjection = Matrix4.Mult(ModelView, Projection);

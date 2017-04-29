@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Geometry;
 using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Graphics;
@@ -20,6 +21,7 @@ namespace SimpleShooter.Core
             ShaderKind = shadersNeeded;
             Model = model;
             OctreeItem = new OctreeGameObject();
+            OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(Model.Vertices);
         }
 
         public void CalcNormals()
@@ -27,13 +29,13 @@ namespace SimpleShooter.Core
             Model.Normals = GetNormals(Model.Vertices);
         }
 
-        public void InvertNormals()
+        /*public void InvertNormals()
         {
             for (int i = 0; i < Model.Normals.Length; i++)
             {
                 Model.Normals[i] *= -1;
             }
-        }
+        }*/
 
         private Vector3[] GetNormals(Vector3[] points)
         {

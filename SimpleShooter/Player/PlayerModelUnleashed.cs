@@ -56,6 +56,7 @@ namespace SimpleShooter.Player
                     Rotate();
                     break;
                 case InputSignal.SHOT:
+                    OnShot(new ShotEventArgs());
                     break;
                 case InputSignal.LOOK_UP:
                     break;
@@ -74,6 +75,7 @@ namespace SimpleShooter.Player
                     StepYZ(StepUp);
                     break;
                 case InputSignal.MOUSE_CLICK:
+                    OnShot(new ShotEventArgs());
                     break;
                 case InputSignal.RENDER_MODE:
                     break;

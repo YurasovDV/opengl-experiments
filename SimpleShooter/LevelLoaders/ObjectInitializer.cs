@@ -39,16 +39,13 @@ namespace SimpleShooter.LevelLoaders
             Matrix4 translate = Matrix4.CreateTranslation(30, 4, 0);
             var green = new Vector3(0, 1, 0);
             GameObject obj = CreateCube(translate, green, 1, ShadersNeeded.TextureLess);
-            obj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
             objectList.Add(obj);
 
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(100, 100, 100), 0.5f, ShadersNeeded.TextureLessNoLight);
-            obj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
             objectList.Add(obj);
 
             obj = CreateWafer();
-            obj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
 
             objectList.Add(obj);
 
@@ -56,8 +53,6 @@ namespace SimpleShooter.LevelLoaders
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
             var movableObj = new MovableObject(obj.Model, ShadersNeeded.TextureLessNoLight, new Vector3(1, 0, 0));
-            movableObj.OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(obj.Model.Vertices);
-
             objectList.Add(movableObj);
 
             level.Objects = objectList;

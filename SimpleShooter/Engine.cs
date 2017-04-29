@@ -10,6 +10,9 @@ using SimpleShooter.LevelLoaders;
 using SimpleShooter.Player.Events;
 using Common.Geometry;
 using OcTreeLibrary;
+using Common;
+using SimpleShooter.Helpers;
+using System.Windows.Forms;
 
 namespace SimpleShooter
 {
@@ -19,7 +22,7 @@ namespace SimpleShooter
         public GraphicsSystem _graphics;
 
         private List<GameObjectDescriptor> _gameObjects;
-        private IPlayer _player;
+        private IShooterPlayer _player;
         public Level _level;
         private OcTree _tree;
 
@@ -28,6 +31,7 @@ namespace SimpleShooter
             InitObjects(initFunc);
             _graphics = new GraphicsSystem(width, height);
             _keyHandler = new KeyHandler();
+            _keyHandler.KeysToWatch.Add(Keys.Space);
             _keyHandler.KeyPress += KeyPress;
         }
 
@@ -35,22 +39,16 @@ namespace SimpleShooter
         {
             _gameObjects = new List<GameObjectDescriptor>();
             _level = initFunc.CreateLevel();
-            _gameObjects.AddRange(_level.Objects.Select(o => new GameObjectDescriptor(o)));
-            InitPlayer();
-            InitTree();
-        }
-
-        private void InitTree()
-        {
             _tree = new OcTree(_level.Volume);
-            foreach (var o in _gameObjects)
+
+            InitPlayer();
+
+            foreach (var obj in _level.Objects)
             {
-                if (o.RenderIdentity.ShaderKind != ShadersNeeded.Line)
-                {
-                    o.GameIdentity.OctreeItem.NeedReinsert += OctreeItem_NeedReinsert;
-                    _tree.Insert(o.GameIdentity.OctreeItem);
-                }
+                AddObject(obj);
             }
+
+            _level.Objects.Clear();
         }
 
         private void OctreeItem_NeedReinsert(object sender, ReinsertingEventArgs args)
@@ -76,7 +74,23 @@ namespace SimpleShooter
             _keyHandler.CheckKeys();
             _player.HandleMouseMove(dxdy);
             PhysicsStep(delta);
-            _graphics.Render(_gameObjects, _level);
+
+            List<IRenderWrapper> lst = null;
+
+            var wrapper = new OctreeRenderWrapper(_tree);
+            lst = new List<IRenderWrapper>(_gameObjects);
+            lst.Add(wrapper);
+
+            if (lst != null)
+            {
+                _graphics.Render(lst, _level);
+            }
+            else
+            {
+                _graphics.Render(_gameObjects, _level);
+            }
+            
+           //_graphics.Render(_gameObjects, _level);
         }
 
         private void PhysicsStep(long delta)
@@ -95,10 +109,29 @@ namespace SimpleShooter
         {
             var res = new ActionStatus()
             {
-                Success = true
+                Success = false
             };
 
+            var player = sender as IShooterPlayer;
+            if (player != null)
+            {
+                res.Success = true;
+                var projectile = Projectileshelper.CreateProjectile(player);
+                AddObject(projectile);
+            }
+
             return res;
+        }
+
+        private void AddObject(GameObject obj)
+        {
+            var desc = new GameObjectDescriptor(obj);
+            _gameObjects.Add(desc);
+            if (desc.RenderIdentity.ShaderKind != ShadersNeeded.Line)
+            {
+                desc.GameIdentity.OctreeItem.NeedReinsert += OctreeItem_NeedReinsert;
+                _tree.Insert(desc.GameIdentity.OctreeItem);
+            }
         }
 
         private ActionStatus Player_Move(object sender, MoveEventArgs args)

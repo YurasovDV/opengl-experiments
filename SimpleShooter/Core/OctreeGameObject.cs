@@ -21,22 +21,17 @@ namespace SimpleShooter.Core
 
         public BoundingVolume TreeSegment { get; set; }
 
-        /*public void Tick(long delta)
-        {
-            // change points positions
-            BoundingVolume newBox = BoundingVolume.InitBoundingBox(Points);
-
-            if (NeedReinsert != null)
-            {
-                NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newBox });
-            }
-        }*/
-
         public void UpdateBoundingBox(BoundingVolume newBox)
         {
             BoundingBox = newBox;
         }
 
-
+        public void RaiseReinsert(BoundingVolume newVolume)
+        {
+            if (NeedReinsert != null)
+            {
+                NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newVolume });
+            }
+        }
     }
 }
