@@ -108,9 +108,9 @@
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OcTreeRevisited\OcTreeRevisited.csproj">
-      <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>
-      <Name>OcTreeRevisited</Name>
+    <ProjectReference Include="..\OctreeLibrary\OctreeLibrary.csproj">
+      <Project>{51395108-fccb-4511-8294-4163697e74cd}</Project>
+      <Name>OctreeLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

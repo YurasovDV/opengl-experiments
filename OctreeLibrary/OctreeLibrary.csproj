@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="OcTree\Extensions.cs" />
     <Compile Include="OcTree\GameObject.cs" />
+    <Compile Include="OcTree\IOctreeItem.cs" />
     <Compile Include="OcTree\OcTree.cs" />
     <Compile Include="OcTree\OcTreeItem.cs" />
     <Compile Include="OcTree\OcTreeRevisitedEngine.cs" />

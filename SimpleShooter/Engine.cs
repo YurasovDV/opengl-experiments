@@ -8,7 +8,6 @@ using SimpleShooter.Graphics;
 using SimpleShooter.Player;
 using SimpleShooter.LevelLoaders;
 using SimpleShooter.Player.Events;
-using tree = OcTreeRevisited.OcTree;
 
 namespace SimpleShooter
 {
@@ -90,7 +89,7 @@ namespace SimpleShooter
         {
             foreach (var obj in _gameObjects)
             {
-                var movable = obj.PhysicalObject as IMovableObject;
+                var movable = obj.GameIdentity as IMovableObject;
                 if (movable != null)
                 {
                     movable.Move(delta);

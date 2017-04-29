@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace OcTreeLibrary
 {
-    public class GameObject
+    public class OctreeGameObject : IOctreeItem
     {
         public static Vector3[] ColorsForCube;
         public static Vector3 blue;
@@ -16,39 +16,29 @@ namespace OcTreeLibrary
 
         public Vector3[] Points { get; set; }
 
-        static GameObject()
+        static OctreeGameObject()
         {
             blue = new Vector3(0, 0, 1);
             ColorsForCube = Enumerable.Repeat(blue, 24).ToArray();
         }
 
-        public GameObject(Vector3 centre, float angle = 3.1415f)
+        public OctreeGameObject(Vector3 centre, float angle = 3.1415f)
         {
             var points = CreatePlane(centre, angle);
             Points = points;
             AngleHorizontal = angle;
-            Speed = new Vector3(0, 0, 0);
 
             BoundingBox = InitBoundingBox(points);
         }
 
         public event Action<object, ReinsertingEventArgs> NeedReinsert;
 
-        public Vector3 Speed { get; set; }
-
         public BoundingVolume BoundingBox { get; private set; }
 
         public BoundingVolume TreeSegment { get; set; }
 
-        public string Name { get; set; }
-
         public void Tick(long delta)
         {
-            for (int i = 0; i < Points.Length; i++)
-            {
-                Points[i] = Points[i] + Speed;
-            }
-
             BoundingVolume newBox = InitBoundingBox(Points);
 
             if (NeedReinsert != null)
@@ -78,7 +68,7 @@ namespace OcTreeLibrary
             };
         }
 
-        internal void UpdateBoundingBox(BoundingVolume newBox)
+        public void UpdateBoundingBox(BoundingVolume newBox)
         {
             BoundingBox = newBox;
         }
@@ -98,11 +88,6 @@ namespace OcTreeLibrary
             }
 
             return list.ToArray();
-        }
-
-        public override string ToString()
-        {
-            return Name;
         }
 
         public Vector3[] GetLines()

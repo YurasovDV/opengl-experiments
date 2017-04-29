@@ -10,16 +10,11 @@ namespace OcTreeLibrary
 {
     internal class OcTreeRevisitedEngine
     {
-
-        public SimpleModel Model { get; set; }
-
         OcTree Tree { get; set; }
 
-        public AbstractRenderEngine MainRender { get; set; }
+        public List<IOctreeItem> Objects { get; set; }
 
-        public List<GameObject> Objects { get; set; }
-
-        public OcTreeRevisitedEngine(int Width, int Height)
+        public OcTreeRevisitedEngine()
         {
             Tree = CreateTree();
         }
@@ -30,7 +25,7 @@ namespace OcTreeLibrary
             {
                 throw new ArgumentNullException();
             }
-            var gameObj = sender as GameObject;
+            var gameObj = sender as IOctreeItem;
             if (gameObj == null)
             {
                 throw new ArgumentException($"{gameObj.GetType()}", nameof(sender));
@@ -59,35 +54,30 @@ namespace OcTreeLibrary
             return tree;
         }
 
-        private List<GameObject> CreateListObjects()
+        private List<IOctreeItem> CreateListObjects()
         {
-            var result = new List<GameObject>();
+            var result = new List<IOctreeItem>();
 
             Random rand = new Random(300);
-            AddRandomPlane(result, new Vector3(47f, 5, -45), rand, "n11");
+            AddRandomPlane(result, new Vector3(47f, 5, -45), rand);
 
-            AddRandomPlane(result, new Vector3(46f, 17, -45), rand, "n12");
+            AddRandomPlane(result, new Vector3(46f, 17, -45), rand);
 
-            AddRandomPlane(result, new Vector3(40f, 35, -45), rand, "n13");
+            AddRandomPlane(result, new Vector3(40f, 35, -45), rand);
 
-            AddRandomPlane(result, new Vector3(55f, -35, -15), rand, "n14");
+            AddRandomPlane(result, new Vector3(55f, -35, -15), rand);
 
-            AddRandomPlane(result, new Vector3(60f, 45, -35), rand, "n15");
+            AddRandomPlane(result, new Vector3(60f, 45, -35), rand);
 
-            AddRandomPlane(result, new Vector3(54f, 12, -5), rand, "n16");
+            AddRandomPlane(result, new Vector3(54f, 12, -5), rand);
 
             return result;
         }
 
-        private void AddRandomPlane(List<GameObject> result, Vector3 centre, Random rand, string name)
+        private void AddRandomPlane(List<IOctreeItem> result, Vector3 centre, Random rand)
         {
             var dx = (float)rand.NextDouble() * -0.5f;
-            var speed = new Vector3(dx, 0, 0);
-            var plane2 = new GameObject(centre)
-            {
-                Name = name,
-                Speed = speed
-            };
+            var plane2 = new OctreeGameObject(centre);
             plane2.NeedReinsert += HandleLeavingOctant;
             result.Add(plane2);
         }

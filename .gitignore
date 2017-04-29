@@ -3,6 +3,7 @@
 ################################################################################
 
 /Common/bin
+/Common/obj
 /FabricSimulation/obj
 /FabricSimulation/bin
 /LSystemsPlants/obj
@@ -28,10 +29,11 @@
 /SimpleTerrain/bin
 /TkShader/obj
 /TkShader/bin
-/WindowsFormsApplication1/obj/Debug
-/Particles/obj/Debug
-/Particles/bin/Debug
+/WindowsFormsApplication1/obj
+/WindowsFormsApplication1/bin
 /SimpleShadows/obj
 /SimpleShadows/bin
-/Particles/bin/Debug
-/Common/obj
+/Particles/obj
+/Particles/bin
+/OctreeLibrary/obj
+/OctreeLibrary/bin

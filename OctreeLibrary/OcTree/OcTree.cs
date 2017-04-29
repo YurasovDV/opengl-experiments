@@ -3,10 +3,6 @@ using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.IO;
 using Common.Geometry;
 
 namespace OcTreeLibrary
@@ -30,12 +26,12 @@ namespace OcTreeLibrary
             Root.Level = 0;
         }
 
-        public BoundingVolume Insert(GameObject obj)
+        public BoundingVolume Insert(IOctreeItem obj)
         {
             return Root.Insert(obj);
         }
 
-        public void Remove(GameObject obj)
+        public void Remove(IOctreeItem obj)
         {
             Root.Remove(obj);
         }
@@ -110,30 +106,6 @@ namespace OcTreeLibrary
             return result;
         }
 
-        /*internal void Serialize(string path)
-        {
-            using (StreamWriter wr = new StreamWriter(path))
-            {
-                var vertices = Visit();
-                int currentLevel = vertices.First().Level;
-
-                while (vertices.Any())
-                {
-                    var verticesOnCurrentLevel = vertices.Where(i => i.Level == currentLevel);
-                    foreach (var v in verticesOnCurrentLevel)
-                    {
-                        wr.Write(v);
-                        wr.Write(" NEXT ");
-                    }
-
-                    vertices = vertices.Where(i => i.Level != currentLevel).ToList();
-
-                    currentLevel++;
-                    wr.WriteLine();
-                }
-            }
-        }*/
-
         private Tuple<List<Vector3>, List<Vector3>> GetCubeLines(OcTreeItem item, Vector3 objColor, Vector3 volumeColor)
         {
             List<Vector3> resultVertices = new List<Vector3>(50);
@@ -143,25 +115,9 @@ namespace OcTreeLibrary
             resultVertices.AddRange(a);
             resultColors.AddRange(Enumerable.Repeat(volumeColor, a.Length));
 
-            // AddObjectsLines(item, objColor, resultVertices, resultColors);
-
             resultVertices.TrimExcess();
 
             return new Tuple<List<Vector3>, List<Vector3>>(resultVertices, resultColors);
-        }
-
-        private static void AddObjectsLines(OcTreeItem item, Vector3 objColor, List<Vector3> resultVertices, List<Vector3> resultColors)
-        {
-            if (item.Objects != null)
-            {
-                var realObjects = item.Objects.Where(o => o != null);
-                foreach (var obj in realObjects)
-                {
-                    Vector3[] a = obj.GetLines();
-                    resultVertices.AddRange(a);
-                    resultColors.AddRange(Enumerable.Repeat(objColor, a.Length));
-                }
-            }
         }
     }
 }

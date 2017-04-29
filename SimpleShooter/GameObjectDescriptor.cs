@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OcTreeLibrary;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Core;
@@ -14,24 +15,27 @@ namespace SimpleShooter
     {
         public GameObjectDescriptor(GameObject o)
         {
-            PhysicalObject = o;
-            RenderObject = new RenderWrapper(o);
+            GameIdentity = o;
+            RenderIdentity = new RenderWrapper(o);
+            TreeIdentity = null;
         }
 
-        public GameObject PhysicalObject { get; set; }
+        public GameObject GameIdentity { get; set; }
 
-        public IRenderWrapper RenderObject { get; set; }
+        public IRenderWrapper RenderIdentity { get; set; }
+
+        public IOctreeItem TreeIdentity { get; set; }
 
         public PrimitiveType RenderType
         {
             get
             {
-                return RenderObject.RenderType;
+                return RenderIdentity.RenderType;
             }
 
             set
             {
-                RenderObject.RenderType = value;
+                RenderIdentity.RenderType = value;
             }
         }
 
@@ -39,13 +43,13 @@ namespace SimpleShooter
         {
             get
             {
-                return RenderObject.VerticesCount;
+                return RenderIdentity.VerticesCount;
             }
         }
 
         public void Bind(Camera camera, Level level)
         {
-            RenderObject.Bind(camera, level);
+            RenderIdentity.Bind(camera, level);
         }
     }
 }

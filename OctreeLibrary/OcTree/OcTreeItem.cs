@@ -12,7 +12,7 @@ namespace OcTreeLibrary
         public OcTreeItem(BoundingVolume volume)
         {
             Volume = volume;
-            Objects = new List<GameObject>();
+            Objects = new List<IOctreeItem>();
 
             TryClearChildren();
 
@@ -23,7 +23,7 @@ namespace OcTreeLibrary
 
         public float HalfSize { get; set; }
 
-        public List<GameObject> Objects { get; set; }
+        public List<IOctreeItem> Objects { get; set; }
 
         public OcTreeItem[] Children { get; set; }
 
@@ -33,15 +33,15 @@ namespace OcTreeLibrary
 
         public int InsertedObjectsCount { get; set; }
 
-        public bool IsLeaf => Children[0] == null;// && Objects.Count == 0;
+        public bool IsLeaf => Children[0] == null;
 
-        public void AddObject(GameObject obj)
+        public void AddObject(IOctreeItem obj)
         {
             Objects.Add(obj);
             AssureChildrenInitialized();
         }
 
-        public BoundingVolume Insert(GameObject dataToInsert)
+        public BoundingVolume Insert(IOctreeItem dataToInsert)
         {
             BoundingVolume insertedWhere = null;
 
@@ -62,7 +62,7 @@ namespace OcTreeLibrary
                     insertedWhere = child.Insert(dataToInsert);
                     InsertedObjectsCount++;
 
-                    var old = new List<GameObject>(Objects);
+                    var old = new List<IOctreeItem>(Objects);
 
                     foreach (var o in old)
                     {
@@ -82,27 +82,11 @@ namespace OcTreeLibrary
             return insertedWhere;
         }
 
-        public override string ToString()
-        {
-            string res = string.Format("L {0}, N {1}, Hs {2}, (", Level, Number, HalfSize);
-
-            foreach (var o in Objects)
-            {
-                res += o.Name + ", ";
-            }
-
-            res = res.Trim(',');
-
-            res += ")";
-
-            return res;
-        }
-
         /// <summary>
-        /// возвращает число удаленных
+        /// returns count of deleted
         /// </summary>
         /// <param name="dataToRemove"></param>
-        public int Remove(GameObject dataToRemove)
+        public int Remove(IOctreeItem dataToRemove)
         {
             int result = 0;
             var inside = Volume.Contains(dataToRemove.BoundingBox);
@@ -167,7 +151,7 @@ namespace OcTreeLibrary
             }
         }
 
-        #region создание дочерних узлов
+        #region init of children
 
         private void CreateChild0(Vector3 parentCentre, float halfSize)
         {

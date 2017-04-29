@@ -9,7 +9,7 @@ namespace OcTreeLibrary
 {
     public static class Extensions
     {
-        public static OcTreeItem FindVolume(this OcTreeItem[] items, GameObject obj)
+        public static OcTreeItem FindVolume(this OcTreeItem[] items, IOctreeItem obj)
         {
             OcTreeItem res = null;
             foreach (var vol in items)
