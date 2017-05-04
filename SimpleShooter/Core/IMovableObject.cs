@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SimpleShooter.Core
 {
-    interface IMovableObject
+    public interface IMovableObject
     {
-        void Move(long delta);
+        void Tick(long delta);
     }
 }

@@ -105,11 +105,6 @@ namespace OcTreeLibrary
                         InsertedObjectsCount -= result;
                         TryClearChildren();
                     }
-                    else
-                    {
-                        int i = 10;
-                        i++;
-                    }
                 }
             }
 

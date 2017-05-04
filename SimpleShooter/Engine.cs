@@ -56,7 +56,7 @@ namespace SimpleShooter
             var gameObj = sender as IOctreeItem;
             if (gameObj == null)
                 throw new ArgumentException();
-            _tree.Remove(gameObj);
+            _tree.Remove(gameObj);            
             gameObj.UpdateBoundingBox(args.NewBox);
             _tree.Insert(gameObj);
         }
@@ -100,9 +100,10 @@ namespace SimpleShooter
                 var movable = obj.GameIdentity as IMovableObject;
                 if (movable != null)
                 {
-                    movable.Move(delta);
+                    movable.Tick(delta);
                 }
             }
+            _player.Tick(delta);
         }
 
         private ActionStatus Player_Shot(object sender, ShotEventArgs args)

@@ -11,45 +11,18 @@ namespace Common.Geometry
     public class BoundingVolume
     {
         private float _maxDimension;
-        private float _space = -1;
-
-        public string Path { get; set; }
 
         public Vector3 BottomLeftBack { get; set; }
         public Vector3 TopRightFront { get; set; }
 
         public Vector3 Centre { get; set; }
 
-        /// <summary>
-        /// X
-        /// </summary>
-        public float Width { get; set; }
-
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Height { get; set; }
-
-        /// <summary>
-        /// Z
-        /// </summary>
-        public float Depth { get; set; }
+       
 
         public Vector3[] VerticesTop { get; set; }
 
         public Vector3[] VerticesBottom { get; set; }
 
-        public float Space
-        {
-            get
-            {
-                if (_space == -1)
-                {
-                    _space = Width * Height * Depth;
-                }
-                return _space;
-            }
-        }
 
         public float MaxDimension
         {
@@ -59,14 +32,16 @@ namespace Common.Geometry
             }
         }
 
+        public float Width { get; private set; }
+
         public BoundingVolume(Vector3 bottomLeftBack, Vector3 topRightFront)
         {
             BottomLeftBack = new Vector3(bottomLeftBack);
             TopRightFront = new Vector3(topRightFront);
 
             Width = topRightFront.X - bottomLeftBack.X;
-            Height = topRightFront.Y - bottomLeftBack.Y;
-            Depth = topRightFront.Z - bottomLeftBack.Z;
+            var Height = topRightFront.Y - bottomLeftBack.Y;
+            var Depth = topRightFront.Z - bottomLeftBack.Z;
 
             VerticesTop = new Vector3[]
                 {
@@ -93,40 +68,42 @@ namespace Common.Geometry
 
         }
 
-        public void Reinit(BoundingVolume newBox)
+        public static BoundingVolume CreateVolume(Vector3 centre, float halfSize)
         {
-            var bottomLeftBack = newBox.BottomLeftBack;
-            var topRightFront = newBox.TopRightFront;
+            var shift = new Vector3(halfSize, halfSize, halfSize);
 
-            BottomLeftBack = new Vector3(bottomLeftBack);
-            TopRightFront = new Vector3(topRightFront);
+            return new BoundingVolume(
+               centre - shift,
+                centre + shift
+                );
+        }
 
-            Width = topRightFront.X - bottomLeftBack.X;
-            Height = topRightFront.Y - bottomLeftBack.Y;
-            Depth = topRightFront.Z - bottomLeftBack.Z;
+        public static BoundingVolume CreateVolume(Vector3 centre, int halfSizeX, int halfSizeZ, int halfSizeY = 4)
+        {
+            var shift = new Vector3(halfSizeX, halfSizeY, halfSizeZ);
 
-            VerticesTop = new Vector3[]
-                {
-                    new Vector3(bottomLeftBack) + new Vector3(0, Height, 0),
-                    new Vector3(bottomLeftBack) + new Vector3(Width, Height, 0),
-                    new Vector3(TopRightFront),
-                    new Vector3(bottomLeftBack) + new Vector3(0, Height, Depth)
-                };
+            return new BoundingVolume(
+              centre - shift,
+               centre + shift);
+        }
 
-            VerticesBottom = new Vector3[]
-                {
-                    new Vector3(bottomLeftBack),
-                    new Vector3(bottomLeftBack) + new Vector3(Width, 0, 0),
-                    new Vector3(bottomLeftBack) + new Vector3(Width, 0, Depth),
-                    new Vector3(bottomLeftBack) + new Vector3(0, 0, Depth)
-                };
+        public static BoundingVolume InitBoundingBox(Vector3[] points)
+        {
+            var minX = points.Min(p => p.X);
+            var maxX = points.Max(p => p.X);
 
-            Centre = new Vector3(
-               (bottomLeftBack.X + topRightFront.X) * 0.5f,
-                (bottomLeftBack.Y + topRightFront.Y) * 0.5f,
-                (bottomLeftBack.Z + topRightFront.Z) * 0.5f);
+            var minY = points.Min(p => p.Y);
+            var maxY = points.Max(p => p.Y);
 
-            _maxDimension = Math.Max(Width, (Math.Max(Height, Depth)));
+            var minZ = points.Min(p => p.Z);
+            var maxZ = points.Max(p => p.Z);
+
+            var min = new Vector3(minX, minY, minZ);
+            var max = new Vector3(maxX, maxY, maxZ);
+
+            var volume = new BoundingVolume(min, max);
+
+            return volume;
         }
 
         public bool Contains(BoundingVolume another)
@@ -185,45 +162,6 @@ namespace Common.Geometry
             return cnts;
 
         }
-
-        public static BoundingVolume CreateVolume(Vector3 centre, float halfSize)
-        {
-            var shift = new Vector3(halfSize, halfSize, halfSize);
-
-            return new BoundingVolume(
-               centre - shift,
-                centre + shift
-                );
-        }
-
-        public static BoundingVolume CreateVolume(Vector3 centre, int halfSizeX, int halfSizeZ, int halfSizeY = 4)
-        {
-            var shift = new Vector3(halfSizeX, halfSizeY, halfSizeZ);
-
-            return new BoundingVolume(
-              centre - shift,
-               centre + shift);
-        }
-
-        public static BoundingVolume InitBoundingBox(Vector3[] points)
-        {
-            var minX = points.Min(p => p.X);
-            var maxX = points.Max(p => p.X);
-
-            var minY = points.Min(p => p.Y);
-            var maxY = points.Max(p => p.Y);
-
-            var minZ = points.Min(p => p.Z);
-            var maxZ = points.Max(p => p.Z);
-
-            var min = new Vector3(minX, minY, minZ);
-            var max = new Vector3(maxX, maxY, maxZ);
-
-            var volume = new BoundingVolume(min, max);
-
-            return volume;
-        }
-
 
         public Vector3[] GetLines()
         {

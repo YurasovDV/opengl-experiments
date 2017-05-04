@@ -21,6 +21,21 @@ namespace OcTreeLibrary
                 }
             }
 
+            /*if (res == null && obj.TreeSegment != null)
+            {
+                foreach (var vol in items)
+                {
+                    if (vol != null)
+                    {
+                        if (vol.Volume == obj.TreeSegment)
+                        {
+                            res = vol;
+                            break;
+                        }
+                    }
+                }
+            }*/
+
             return res;
         }
 

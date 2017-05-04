@@ -1,11 +1,12 @@
 ﻿using System;
 using Common.Input;
 using OpenTK;
+using SimpleShooter.Core;
 using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player
 {
-    public interface IShooterPlayer
+    public interface IShooterPlayer : IMovableObject
     {
         Vector3 Position { get; set; }
         Vector3 Target { get; set; }

@@ -30,6 +30,9 @@ namespace SimpleShooter.Player
         public float AngleHorizontalRadians = 0;
         public float AngleVerticalRadians = 0;
 
+        protected long shotCoolDown = 0;
+        protected long shotCoolDownDefault = 1000;
+
         #endregion
 
         #region engine callbacks
@@ -47,8 +50,9 @@ namespace SimpleShooter.Player
                 Success = true
             };
 
-            if (Shot != null)
+            if (Shot != null && shotCoolDown <= 0)
             {
+                shotCoolDown = shotCoolDownDefault;
                 result = Shot(this, args);
             }
 
@@ -102,6 +106,11 @@ namespace SimpleShooter.Player
             {
                 RotateAroundX(mouseDxDy.Y);
             }
+        }
+
+        public void Tick(long delta)
+        {
+            shotCoolDown -= delta;
         }
 
         protected virtual void Rotate()
