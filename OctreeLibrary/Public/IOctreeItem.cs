@@ -1,5 +1,6 @@
 ﻿using System;
 using Common.Geometry;
+using OpenTK;
 
 namespace OcTreeLibrary
 {
@@ -7,8 +8,12 @@ namespace OcTreeLibrary
     {
         BoundingVolume BoundingBox { get; set; }
         BoundingVolume TreeSegment { get; set; }
-        event EventHandler<ReinsertingEventArgs> NeedReinsert;
-        void UpdateBoundingBox(BoundingVolume newBox);
-        void RaiseReinsert(BoundingVolume newVolume);
+
+        event EventHandler<ReinsertingEventArgs> NeedsRemoval;
+        event EventHandler<ReinsertingEventArgs> NeedsInsert;
+
+
+        void RaiseRemove();
+        void RaiseInsert();
     }
 }

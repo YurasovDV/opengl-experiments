@@ -12,13 +12,15 @@ namespace SimpleShooter.Player
 {
     public abstract class Player : IShooterPlayer
     {
+       const float stepLen = 0.4f;
+
         public Vector3 DefaultTarget = new Vector3(100, 0, 0);
-        protected Vector3 StepForward = new Vector3(0.1f, 0, 0);
-        protected Vector3 StepBack = new Vector3(-0.1f, 0, 0);
-        protected Vector3 StepRight = new Vector3(0, 0, 0.1f);
-        protected Vector3 StepLeft = new Vector3(0, 0, -0.1f);
-        protected Vector3 StepUp = new Vector3(0, 0.1f, 0);
-        protected Vector3 StepDown = new Vector3(0, -0.1f, 0);
+        protected Vector3 StepForward = new Vector3(stepLen, 0, 0);
+        protected Vector3 StepBack = new Vector3(-stepLen, 0, 0);
+        protected Vector3 StepRight = new Vector3(0, 0, stepLen);
+        protected Vector3 StepLeft = new Vector3(0, 0, -stepLen);
+        protected Vector3 StepUp = new Vector3(0, stepLen, 0);
+        protected Vector3 StepDown = new Vector3(0, -stepLen, 0);
 
         protected float mouseHandicap = 2400;
 
@@ -31,7 +33,8 @@ namespace SimpleShooter.Player
         public float AngleVerticalRadians = 0;
 
         protected long shotCoolDown = 0;
-        protected long shotCoolDownDefault = 1000;
+        //protected long shotCoolDownDefault = 1000;
+        protected long shotCoolDownDefault = 0;
 
         #endregion
 

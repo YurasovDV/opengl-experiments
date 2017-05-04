@@ -78,9 +78,12 @@ namespace OcTreeLibrary
 
             foreach (var child in item.Children)
             {
-                x = VisitVertices(child, objColor, volumeColor);
-                result.Item1.AddRange(x.Item1);
-                result.Item2.AddRange(x.Item2);
+                if (child != null)
+                {
+                    x = VisitVertices(child, objColor, volumeColor);
+                    result.Item1.AddRange(x.Item1);
+                    result.Item2.AddRange(x.Item2);
+                }
             }
 
             return result;

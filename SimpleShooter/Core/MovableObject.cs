@@ -26,6 +26,12 @@ namespace SimpleShooter.Core
 
         public void Tick(long delta)
         {
+            // stop and wait for death
+            if (OctreeItem.TreeSegment == null)
+            {
+                return;
+            }
+
             if (delta == 0)
             {
                 delta = 1;
@@ -34,19 +40,12 @@ namespace SimpleShooter.Core
             Speed += Acceleration * delta;
             Path = Speed / delta;
 
-            TranslateAll(Model.Vertices, Path);
+            var updatedBox = new BoundingVolume(OctreeItem.BoundingBox.BottomLeftBack + Path, OctreeItem.BoundingBox.TopRightFront + Path);
 
-            TranslateAll(OctreeItem.BoundingBox.VerticesBottom, Path);
-            TranslateAll(OctreeItem.BoundingBox.VerticesTop, Path);
+                OctreeItem.RaiseRemove();
+                Move();
+                OctreeItem.RaiseInsert();
 
-            OctreeItem.BoundingBox.BottomLeftBack += Path;
-            OctreeItem.BoundingBox.TopRightFront += Path;
-            OctreeItem.BoundingBox.Centre += Path;
-
-           // if (!OctreeItem.TreeSegment.Contains(OctreeItem.BoundingBox))
-           // {
-                OctreeItem.RaiseReinsert(OctreeItem.BoundingBox);
-           // }
         }
 
         private void TranslateAll(Vector3[] vertices, Vector3 transformed)
@@ -55,6 +54,16 @@ namespace SimpleShooter.Core
             {
                 vertices[i] += transformed;
             }
+        }
+
+        public void Move()
+        {
+            TranslateAll(Model.Vertices, Path);
+            TranslateAll(OctreeItem.BoundingBox.VerticesBottom, Path);
+            TranslateAll(OctreeItem.BoundingBox.VerticesTop, Path);
+            OctreeItem.BoundingBox.BottomLeftBack += Path;
+            OctreeItem.BoundingBox.TopRightFront += Path;
+            OctreeItem.BoundingBox.Centre += Path;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SimpleShooter.LevelLoaders
     {
         private Vector3 _lightPos = new Vector3(30, 10, 0);
 
-        public static float Edge = 100;
+        public static float Edge = 200;
 
         public static float TapeWidth = 0.05f;
 
@@ -41,12 +41,13 @@ namespace SimpleShooter.LevelLoaders
             GameObject obj = CreateCube(translate, green, 1, ShadersNeeded.TextureLess);
             objectList.Add(obj);
 
+
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(100, 100, 100), 0.5f, ShadersNeeded.TextureLessNoLight);
             objectList.Add(obj);
 
-            obj = CreateWafer();
 
+            obj = CreateWafer();
             objectList.Add(obj);
 
 

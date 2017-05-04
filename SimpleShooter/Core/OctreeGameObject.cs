@@ -8,29 +8,33 @@ namespace SimpleShooter.Core
 {
     class OctreeGameObject : IOctreeItem
     {
-        public Vector3[] Points { get; set; }
 
         public OctreeGameObject()
         {
-            //BoundingBox = BoundingVolume.InitBoundingBox(points);
-        }
 
-        public event EventHandler<ReinsertingEventArgs> NeedReinsert;
+        }
 
         public BoundingVolume BoundingBox { get; set; }
 
         public BoundingVolume TreeSegment { get; set; }
 
-        public void UpdateBoundingBox(BoundingVolume newBox)
+        public event EventHandler<ReinsertingEventArgs> NeedsRemoval;
+        public event EventHandler<ReinsertingEventArgs> NeedsInsert;
+
+
+        public void RaiseRemove()
         {
-            BoundingBox = newBox;
+            if (NeedsRemoval != null)
+            {
+                NeedsRemoval(this, new ReinsertingEventArgs());
+            }
         }
 
-        public void RaiseReinsert(BoundingVolume newVolume)
+        public void RaiseInsert()
         {
-            if (NeedReinsert != null)
+            if (NeedsInsert != null)
             {
-                NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newVolume });
+                NeedsInsert(this, new ReinsertingEventArgs());
             }
         }
     }

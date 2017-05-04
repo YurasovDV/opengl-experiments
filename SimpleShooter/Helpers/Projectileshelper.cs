@@ -24,7 +24,7 @@ namespace SimpleShooter.Helpers
             }
 
             model.Colors = Enumerable.Repeat(new Vector3(1, 0, 0), model.Vertices.Length).ToArray();
-            var movableObj = new MovableObject(model, ShadersNeeded.TextureLess, speed, new Vector3());
+            var movableObj = new MovableObject(model, ShadersNeeded.TextureLessNoLight, speed, new Vector3());
             movableObj.CalcNormals();
             return movableObj;
         }

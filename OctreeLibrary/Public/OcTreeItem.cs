@@ -1,18 +1,18 @@
 ﻿using OpenTK;
 using System.Collections.Generic;
 using Common.Geometry;
+using System;
 
 namespace OcTreeLibrary
 {
     public class OcTreeItem
     {
-
         public OcTreeItem(BoundingVolume volume)
         {
             Volume = volume;
             Objects = new List<IOctreeItem>();
 
-            TryClearChildren();
+            Children = new OcTreeItem[8];
 
             HalfSize = volume.Width * 0.5f;
         }
@@ -36,47 +36,47 @@ namespace OcTreeLibrary
         public void AddObject(IOctreeItem obj)
         {
             Objects.Add(obj);
-            AssureChildrenInitialized();
+            if (Objects.Count > 2)
+            {
+                AssureChildrenInitialized();
+            }
         }
 
         public BoundingVolume Insert(IOctreeItem dataToInsert)
         {
             BoundingVolume insertedWhere = null;
-
-            var maxDimensionObject = dataToInsert.BoundingBox.MaxDimension;
-            bool forceSetToChildren = Volume.MaxDimension > maxDimensionObject * 10;
-
-            if (IsLeaf && !forceSetToChildren)
+            if (Volume.Contains(dataToInsert.BoundingBox))
             {
-                AddObject(dataToInsert);
-                insertedWhere = Volume;
-            }
-            else
-            {
-                AssureChildrenInitialized();
-                var child = Children.FindVolume(dataToInsert);
-                if (child != null)
-                {
-                    insertedWhere = child.Insert(dataToInsert);
-                    InsertedObjectsCount++;
+                var maxDimensionObject = dataToInsert.BoundingBox.MaxDimension;
+                bool forceSetToChildren = Volume.MaxDimension > maxDimensionObject * 10;
 
-                    var old = new List<IOctreeItem>(Objects);
-
-                    foreach (var o in old)
-                    {
-                        Objects.Remove(o);
-                        Insert(o);
-                    }
-                }
-                else
+                if (IsLeaf && !forceSetToChildren)
                 {
                     AddObject(dataToInsert);
                     insertedWhere = Volume;
                 }
+                else
+                {
+                    AssureChildrenInitialized();
+                    foreach (var c in Children)
+                    {
+                        insertedWhere = c.Insert(dataToInsert);
+                        if (insertedWhere != null)
+                        {
+                            InsertedObjectsCount++;
+                            break;
+                        }
+                    }
+
+                    if (insertedWhere == null)
+                    {
+                        AddObject(dataToInsert);
+                        insertedWhere = Volume;
+                    }
+                }
             }
 
             dataToInsert.TreeSegment = insertedWhere;
-
             return insertedWhere;
         }
 
@@ -101,11 +101,10 @@ namespace OcTreeLibrary
                     if (child != null)
                     {
                         result = child.Remove(dataToRemove);
-
                         InsertedObjectsCount -= result;
-                        TryClearChildren();
                     }
                 }
+                TryClearChildren();
             }
 
             return result;

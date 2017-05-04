@@ -1,9 +1,4 @@
-﻿using Common;
-using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Common.Geometry;
+﻿using Common.Geometry;
 
 namespace OcTreeLibrary
 {
@@ -11,7 +6,7 @@ namespace OcTreeLibrary
     {
         /*
         e g, 
-            child:	0 1 2 3 4 5 6 7
+            child:	    0 1 2 3 4 5 6 7
 				x:      - - - - + + + +
 				y:      - - + + - - + +
 				z:      - + - + - + - +

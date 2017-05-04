@@ -51,14 +51,24 @@ namespace SimpleShooter
             _level.Objects.Clear();
         }
 
-        private void OctreeItem_NeedReinsert(object sender, ReinsertingEventArgs args)
+        private void OctreeItem_Remove(object sender, ReinsertingEventArgs args)
         {
             var gameObj = sender as IOctreeItem;
             if (gameObj == null)
                 throw new ArgumentException();
             _tree.Remove(gameObj);            
-            gameObj.UpdateBoundingBox(args.NewBox);
-            _tree.Insert(gameObj);
+        }
+
+        private void OctreeItem_Insert(object sender, ReinsertingEventArgs args)
+        {
+            var gameObj = sender as IOctreeItem;
+            if (gameObj == null)
+                throw new ArgumentException();
+           var v = _tree.Insert(gameObj);
+            if (v == null)
+            {
+                // remove it
+            }       
         }
 
         private void InitPlayer()
@@ -90,7 +100,6 @@ namespace SimpleShooter
                 _graphics.Render(_gameObjects, _level);
             }
             
-           //_graphics.Render(_gameObjects, _level);
         }
 
         private void PhysicsStep(long delta)
@@ -130,8 +139,14 @@ namespace SimpleShooter
             _gameObjects.Add(desc);
             if (desc.RenderIdentity.ShaderKind != ShadersNeeded.Line)
             {
-                desc.GameIdentity.OctreeItem.NeedReinsert += OctreeItem_NeedReinsert;
-                _tree.Insert(desc.GameIdentity.OctreeItem);
+                desc.GameIdentity.OctreeItem.NeedsRemoval += OctreeItem_Remove;
+                desc.GameIdentity.OctreeItem.NeedsInsert += OctreeItem_Insert;
+
+                var volume = _tree.Insert(desc.GameIdentity.OctreeItem);
+                if (volume == null)
+                {
+                    _gameObjects.Remove(desc);
+                }
             }
         }
 
