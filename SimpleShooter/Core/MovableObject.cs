@@ -22,8 +22,6 @@ namespace SimpleShooter.Core
             Acceleration = acceleration;
         }
 
-
-
         public void Tick(long delta)
         {
             // stop and wait for death
@@ -41,11 +39,16 @@ namespace SimpleShooter.Core
             Path = Speed / delta;
 
             var updatedBox = new BoundingVolume(OctreeItem.BoundingBox.BottomLeftBack + Path, OctreeItem.BoundingBox.TopRightFront + Path);
-
+            if (OctreeItem.ReinsertImmediately || !OctreeItem.TreeSegment.Contains(updatedBox))
+            {
                 OctreeItem.RaiseRemove();
                 Move();
                 OctreeItem.RaiseInsert();
-
+            }
+            else
+            {
+                Move();
+            }
         }
 
         private void TranslateAll(Vector3[] vertices, Vector3 transformed)

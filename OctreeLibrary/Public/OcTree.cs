@@ -23,11 +23,13 @@ namespace OcTreeLibrary
 
         public BoundingVolume Insert(IOctreeItem obj)
         {
+            obj.ReinsertImmediately = false;
             return Root.Insert(obj);
         }
 
         public void Remove(IOctreeItem obj)
         {
+            obj.ReinsertImmediately = false;
             Root.Remove(obj);
         }
     }

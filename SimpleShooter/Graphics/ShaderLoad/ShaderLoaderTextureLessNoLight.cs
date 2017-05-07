@@ -57,6 +57,7 @@ namespace SimpleShooter.Graphics.ShaderLoad
             GL.GenBuffers(1, out result.colorsBuffer);
             GL.GenBuffers(1, out result.normalsBuffer);
 
+            result.ShaderKind = ShadersNeeded.TextureLessNoLight;
 
             return result;
         }

@@ -11,5 +11,7 @@ namespace SimpleShooter.Graphics
         int VerticesCount { get; }
 
         void Bind(Camera camera, Level level);
+
+        ShaderProgramDescriptor GetDescriptor();
     }
 }

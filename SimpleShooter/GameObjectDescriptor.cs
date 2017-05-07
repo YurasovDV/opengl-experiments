@@ -56,5 +56,10 @@ namespace SimpleShooter
         {
             RenderIdentity.Bind(camera, level);
         }
+
+        public ShaderProgramDescriptor GetDescriptor()
+        {
+            return RenderIdentity.GetDescriptor();
+        }
     }
 }

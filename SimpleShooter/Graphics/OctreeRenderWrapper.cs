@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System;
+using Common;
 using OcTreeLibrary;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Core;
@@ -49,6 +50,11 @@ namespace SimpleShooter.Graphics
         public void Bind(Camera camera, Level level)
         {
             _wrapper.Bind(camera, level);
+        }
+
+        public ShaderProgramDescriptor GetDescriptor()
+        {
+            return _wrapper.GetDescriptor();
         }
     }
 }

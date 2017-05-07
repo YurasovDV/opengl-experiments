@@ -51,7 +51,7 @@ namespace SimpleShooter.Graphics
             BindBuffers(_gameObject.ShaderKind);
         }
 
-        private void BindUniforms(Camera camera, Vector3 lightPos)
+        public void BindUniforms(Camera camera, Vector3 lightPos)
         {
             GL.UniformMatrix4(_descriptor.uniformMV, false, ref camera.ModelView);
             GL.UniformMatrix4(_descriptor.uniformMVP, false, ref camera.ModelViewProjection);
@@ -100,6 +100,60 @@ namespace SimpleShooter.Graphics
             }
         }
 
+        public static void BindUniforms(ShaderProgramDescriptor _descriptor, Camera camera, Vector3 lightPos)
+        {
+            GL.UniformMatrix4(_descriptor.uniformMV, false, ref camera.ModelView);
+            GL.UniformMatrix4(_descriptor.uniformMVP, false, ref camera.ModelViewProjection);
+            GL.UniformMatrix4(_descriptor.uniformProjection, false, ref camera.Projection);
+
+            switch (_descriptor.ShaderKind)
+            {
+                case ShadersNeeded.SimpleModel:
+                    break;
+                case ShadersNeeded.Line:
+                    break;
+                case ShadersNeeded.TextureLess:
+                    GL.Uniform3(_descriptor.uniformLightPos, lightPos);
+
+                    break;
+
+                case ShadersNeeded.TextureLessNoLight:
+
+
+                    break;
+            }
+        }
+
+
+        public static void BindVertices(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.verticesBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
+                data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_descriptor.AttribVerticesLocation);
+        }
+
+        public static void BindColors(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.colorsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
+                data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_descriptor.AttribColorsLocation);
+        }
+
+        public static void BindNormals(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.normalsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
+                data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_descriptor.AttribNormalsLocation);
+        }
+
+
+
         private void BindVertices()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.verticesBuffer);
@@ -125,6 +179,11 @@ namespace SimpleShooter.Graphics
                 _gameObject.Model.Normals, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(_descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(_descriptor.AttribNormalsLocation);
+        }
+
+        public ShaderProgramDescriptor GetDescriptor()
+        {
+            return _descriptor;
         }
     }
 }

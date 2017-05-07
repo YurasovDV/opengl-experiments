@@ -9,6 +9,7 @@ namespace SimpleShooter.Graphics.ShaderLoad
         public ShaderProgramDescriptor Load()
         {
             throw new NotImplementedException();
+            // result.ShaderKind = ShadersNeeded.SimpleModel;
         }
     }
 }

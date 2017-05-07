@@ -21,6 +21,8 @@
         public int uniformMV;
         public int uniformProjection;
 
+        public ShadersNeeded ShaderKind { get; set; }
+
         public ShaderProgramDescriptor()
         {
             int notSet = -2;

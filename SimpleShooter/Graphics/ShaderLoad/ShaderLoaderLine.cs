@@ -53,6 +53,8 @@ namespace SimpleShooter.Graphics.ShaderLoad
             GL.GenBuffers(1, out result.verticesBuffer);
             GL.GenBuffers(1, out result.colorsBuffer);
 
+            result.ShaderKind = ShadersNeeded.Line;
+
             return result;
         }
     }

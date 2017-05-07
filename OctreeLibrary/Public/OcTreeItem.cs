@@ -33,13 +33,10 @@ namespace OcTreeLibrary
 
         public bool IsLeaf => Children[0] == null;
 
-        public void AddObject(IOctreeItem obj)
+        public void AddObject(IOctreeItem obj, bool reinsertIfMoves = false)
         {
             Objects.Add(obj);
-            if (Objects.Count > 2)
-            {
-                AssureChildrenInitialized();
-            }
+            obj.ReinsertImmediately = reinsertIfMoves;
         }
 
         public BoundingVolume Insert(IOctreeItem dataToInsert)
@@ -52,7 +49,7 @@ namespace OcTreeLibrary
 
                 if (IsLeaf && !forceSetToChildren)
                 {
-                    AddObject(dataToInsert);
+                    AddObject(dataToInsert, reinsertIfMoves:false);
                     insertedWhere = Volume;
                 }
                 else
@@ -70,7 +67,7 @@ namespace OcTreeLibrary
 
                     if (insertedWhere == null)
                     {
-                        AddObject(dataToInsert);
+                        AddObject(dataToInsert, reinsertIfMoves: true);
                         insertedWhere = Volume;
                     }
                 }
@@ -103,8 +100,8 @@ namespace OcTreeLibrary
                         result = child.Remove(dataToRemove);
                         InsertedObjectsCount -= result;
                     }
+                    //TryClearChildren();
                 }
-                TryClearChildren();
             }
 
             return result;
@@ -112,7 +109,7 @@ namespace OcTreeLibrary
 
         private void TryClearChildren()
         {
-            if (InsertedObjectsCount == 0)
+            if (InsertedObjectsCount == 0 && Level > 10)
             {
                 Children = new OcTreeItem[8];
             }

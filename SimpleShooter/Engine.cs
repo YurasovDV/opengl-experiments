@@ -21,10 +21,11 @@ namespace SimpleShooter
         private KeyHandler _keyHandler;
         public GraphicsSystem _graphics;
 
-        private List<GameObjectDescriptor> _gameObjects;
         private IShooterPlayer _player;
         public Level _level;
         private OcTree _tree;
+
+        private ObjectsGrouped _objects;
 
         public Engine(int width, int height, IObjectInitializer initFunc)
         {           
@@ -37,7 +38,8 @@ namespace SimpleShooter
 
         private void InitObjects(IObjectInitializer initFunc)
         {
-            _gameObjects = new List<GameObjectDescriptor>();
+            _objects = new ObjectsGrouped();
+
             _level = initFunc.CreateLevel();
             _tree = new OcTree(_level.Volume);
 
@@ -87,32 +89,49 @@ namespace SimpleShooter
 
             List<IRenderWrapper> lst = null;
 
-            var wrapper = new OctreeRenderWrapper(_tree);
-            lst = new List<IRenderWrapper>(_gameObjects);
-            lst.Add(wrapper);
+            //var wrapper = new OctreeRenderWrapper(_tree);
+            //lst = new List<IRenderWrapper>(_gameObjects);
+            //lst.Add(wrapper);
 
-            if (lst != null)
-            {
-                _graphics.Render(lst, _level);
-            }
-            else
-            {
-                _graphics.Render(_gameObjects, _level);
-            }
+            //if (lst != null)
+            //{
+            //    _graphics.Render(lst, _level);
+            //}
+            //else
+            //{
+                _graphics.Render(_objects, _level);
+          //  }
             
         }
 
         private void PhysicsStep(long delta)
         {
-            foreach (var obj in _gameObjects)
+            foreach (var obj in _objects.GameObjectsLine)
             {
-                var movable = obj.GameIdentity as IMovableObject;
-                if (movable != null)
-                {
-                    movable.Tick(delta);
-                }
+                TickForMovable(delta, obj);
+            }
+            foreach (var obj in _objects.GameObjectsSimpleModel)
+            {
+                TickForMovable(delta, obj);
+            }
+            foreach (var obj in _objects.GameObjectsTextureLess)
+            {
+                TickForMovable(delta, obj);
+            }
+            foreach (var obj in _objects.GameObjectsTextureLessNoLight)
+            {
+                TickForMovable(delta, obj);
             }
             _player.Tick(delta);
+        }
+
+        private static void TickForMovable(long delta, GameObjectDescriptor obj)
+        {
+            var movable = obj.GameIdentity as IMovableObject;
+            if (movable != null)
+            {
+                movable.Tick(delta);
+            }
         }
 
         private ActionStatus Player_Shot(object sender, ShotEventArgs args)
@@ -136,7 +155,8 @@ namespace SimpleShooter
         private void AddObject(GameObject obj)
         {
             var desc = new GameObjectDescriptor(obj);
-            _gameObjects.Add(desc);
+            _objects.AddObject(desc);
+
             if (desc.RenderIdentity.ShaderKind != ShadersNeeded.Line)
             {
                 desc.GameIdentity.OctreeItem.NeedsRemoval += OctreeItem_Remove;
@@ -145,7 +165,8 @@ namespace SimpleShooter
                 var volume = _tree.Insert(desc.GameIdentity.OctreeItem);
                 if (volume == null)
                 {
-                    _gameObjects.Remove(desc);
+                    _objects.Remove(desc);
+
                 }
             }
         }

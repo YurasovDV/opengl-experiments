@@ -9,6 +9,11 @@ namespace OcTreeLibrary
         BoundingVolume BoundingBox { get; set; }
         BoundingVolume TreeSegment { get; set; }
 
+        /// <summary>
+        /// if obj in box too big, then try reinsert at next movement
+        /// </summary>
+        bool ReinsertImmediately { get; set; }
+
         event EventHandler<ReinsertingEventArgs> NeedsRemoval;
         event EventHandler<ReinsertingEventArgs> NeedsInsert;
 

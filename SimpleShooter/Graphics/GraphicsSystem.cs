@@ -6,9 +6,6 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Core;
-using SimpleShooter.Graphics;
-using SimpleShooter.LevelLoaders;
-using SimpleShooter.Player;
 using ClearBufferMask = OpenTK.Graphics.OpenGL4.ClearBufferMask;
 using GL = OpenTK.Graphics.OpenGL4.GL;
 
@@ -17,6 +14,21 @@ namespace SimpleShooter.Graphics
     internal class GraphicsSystem
     {
         private Camera Camera { get; set; }
+
+        private Vector3[] GameObjectsSimpleModelVertices;
+        private Vector3[] GameObjectsSimpleModelColors;
+        private Vector3[] GameObjectsSimpleModelNormals;
+
+        private Vector3[] GameObjectsLineVertices;
+        private Vector3[] GameObjectsLineColors;
+
+        private Vector3[] GameObjectsTextureLessVertices;
+        private Vector3[] GameObjectsTextureLessColors;
+        private Vector3[] GameObjectsTextureLessNormals;
+
+        private Vector3[] GameObjectsTextureLessNoLightVertices;
+        private Vector3[] GameObjectsTextureLessNoLightColors;
+
 
         public GraphicsSystem(int width, int height)
         {
@@ -31,7 +43,7 @@ namespace SimpleShooter.Graphics
             Camera = new Camera(projection);
         }
 
-        internal void Render(IEnumerable<IRenderWrapper> objects, Level level)
+        internal void Render(ObjectsGrouped objects, Level level)
         {
             Camera.RebuildMatrices(level.Player);
 
@@ -39,14 +51,121 @@ namespace SimpleShooter.Graphics
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.Enable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
-           
-            foreach (var model in objects)
-            {
-                Render(model, level);
-            }
+
+            RenderByTypes(objects, level);
 
             GL.Flush();
         }
+
+        private void RenderByTypes(ObjectsGrouped objects, Level level)
+        {
+            RenderLines(objects.GameObjectsLine, level);
+            RenderTextureless(objects.GameObjectsTextureLess, level);
+            RenderTexturelessNoLight(objects.GameObjectsTextureLessNoLight, level);
+            RenderModels(objects.GameObjectsSimpleModel, level);
+        }
+
+        private void RenderModels(List<GameObjectDescriptor> simpleModels, Level level)
+        {
+            /*obj.Bind(Camera, level);
+            GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);*/
+        }
+
+        private void RenderTexturelessNoLight(List<GameObjectDescriptor> textureLessNoLight, Level level)
+        {
+            BindColorsAndVertices(textureLessNoLight, level, ref GameObjectsTextureLessNoLightVertices, ref GameObjectsTextureLessNoLightColors);
+        }
+
+        private void RenderTextureless(List<GameObjectDescriptor> textureLess, Level level)
+        {
+
+            BindColorsAndVerticesAndNormals(textureLess, level, ref GameObjectsTextureLessVertices, ref GameObjectsTextureLessColors, ref GameObjectsTextureLessNormals);
+
+        }
+
+        private void RenderLines(List<GameObjectDescriptor> lines, Level level)
+        {
+            BindColorsAndVertices(lines, level, ref GameObjectsLineVertices, ref GameObjectsLineColors);
+        }
+
+        private void BindColorsAndVertices(List<GameObjectDescriptor> objects, Level level, ref Vector3[] verticesMember, ref Vector3[] colorsMember)
+        {
+            var descriptor = objects.FirstOrDefault()?.GetDescriptor();
+            if (descriptor != null)
+            {
+                GL.UseProgram(descriptor.ProgramId);
+
+                int vCount = objects.Aggregate(0, (acc, d) => d.VerticesCount + acc);
+
+                if (verticesMember == null || verticesMember.Length < vCount)
+                {
+                    verticesMember = new Vector3[vCount];
+                    colorsMember = new Vector3[vCount];
+                }
+
+                int pointer = 0;
+
+                foreach (var o in objects)
+                {
+                    var objectVertices = o.GameIdentity.Model.Vertices;
+                    var objectColors = o.GameIdentity.Model.Colors;
+                    for (int i = 0; i < objectVertices.Length; i++)
+                    {
+                        verticesMember[pointer] = objectVertices[i];
+                        colorsMember[pointer] = objectColors[i];
+                        pointer++;
+                    }
+                }
+
+                RenderWrapper.BindUniforms(descriptor, Camera, level.LightPosition);
+                RenderWrapper.BindVertices(descriptor, verticesMember);
+                RenderWrapper.BindColors(descriptor, colorsMember);
+
+                GL.DrawArrays(objects[0].RenderType, 0, vCount);
+            }
+        }
+
+        private void BindColorsAndVerticesAndNormals(List<GameObjectDescriptor> objects, Level level, ref Vector3[] verticesMember, ref Vector3[] colorsMember, ref Vector3[] normalsMember)
+        {
+            var descriptor = objects.FirstOrDefault()?.GetDescriptor();
+            if (descriptor != null)
+            {
+                GL.UseProgram(descriptor.ProgramId);
+
+                int vCount = objects.Aggregate(0, (acc, d) => d.VerticesCount + acc);
+
+                if (verticesMember == null || verticesMember.Length < vCount)
+                {
+                    verticesMember = new Vector3[vCount];
+                    colorsMember = new Vector3[vCount];
+                    normalsMember = new Vector3[vCount];
+                }
+
+                int pointer = 0;
+
+                foreach (var o in objects)
+                {
+                    var objectVertices = o.GameIdentity.Model.Vertices;
+                    var objectColors = o.GameIdentity.Model.Colors;
+                    var objectNormals = o.GameIdentity.Model.Normals;
+                    for (int i = 0; i < objectVertices.Length; i++)
+                    {
+                        verticesMember[pointer] = objectVertices[i];
+                        colorsMember[pointer] = objectColors[i];
+                        normalsMember[pointer] = objectNormals[i];
+                        pointer++;
+                    }
+                }
+
+                RenderWrapper.BindUniforms(descriptor, Camera, level.LightPosition);
+                RenderWrapper.BindVertices(descriptor, verticesMember);
+                RenderWrapper.BindColors(descriptor, colorsMember);
+                RenderWrapper.BindNormals(descriptor, normalsMember);
+
+                GL.DrawArrays(objects[0].RenderType, 0, vCount);
+            }
+        }
+
 
         internal void Render(IRenderWrapper obj, Level level)
         {
