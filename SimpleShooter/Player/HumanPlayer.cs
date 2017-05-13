@@ -14,8 +14,10 @@ namespace SimpleShooter.Player
         protected Vector3 JumpSpeed { get; set; }
         protected Vector3 JumpSpeedDefault { get; set; }
 
-        public HumanPlayer()
+        public HumanPlayer(Vector3 position, Vector3 target)
         {
+            Position = position;
+            Target = target;
             JumpSpeedDefault = new Vector3(1, 0, 0);
         }
 
@@ -36,7 +38,8 @@ namespace SimpleShooter.Player
                 case InputSignal.LEFT:
                     StepXZ(StepLeft);
                     break;
-                case InputSignal.SHOT:
+                case InputSignal.SPACE:
+
                     TryJump();
                     break;
                 case InputSignal.MOUSE_CLICK:

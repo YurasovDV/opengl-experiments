@@ -1,4 +1,5 @@
-﻿using Common.Geometry;
+﻿using System.Collections.Generic;
+using Common.Geometry;
 
 namespace OcTreeLibrary
 {
@@ -32,5 +33,13 @@ namespace OcTreeLibrary
             obj.ReinsertImmediately = false;
             Root.Remove(obj);
         }
+
+        public List<IOctreeItem> GetPossibleCollisions(IOctreeItem obj)
+        {
+            var result = new List<IOctreeItem>();
+            Root.EnumeratePossibleCollision(obj, result);
+            return result;
+        }
+
     }
 }

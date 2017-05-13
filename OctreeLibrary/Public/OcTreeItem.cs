@@ -107,6 +107,21 @@ namespace OcTreeLibrary
             return result;
         }
 
+        public void EnumeratePossibleCollision(IOctreeItem dataToCheck, List<IOctreeItem> result)
+        {
+            if (Volume.Contains(dataToCheck.BoundingBox))
+            {
+                result.AddRange(Objects);
+                if (!IsLeaf)
+                {
+                    foreach (var c in Children)
+                    {
+                        c.EnumeratePossibleCollision(dataToCheck, result);
+                    }
+                }
+            }
+        }
+
         private void TryClearChildren()
         {
             if (InsertedObjectsCount == 0 && Level > 20)

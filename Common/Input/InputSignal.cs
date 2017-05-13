@@ -16,7 +16,7 @@ namespace Common.Input
         DOWN,
         ROTATE_CLOCKWISE,
         ROTATE_COUNTERCLOCKWISE,
-        SHOT,
+        SPACE,
         LOOK_UP,
         LOOK_DOWN,
         FLY_BY_CLOCKWISE,

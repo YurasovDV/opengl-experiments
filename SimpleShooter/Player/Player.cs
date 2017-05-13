@@ -33,8 +33,7 @@ namespace SimpleShooter.Player
         public float AngleVerticalRadians = 0;
 
         protected long shotCoolDown = 0;
-        //protected long shotCoolDownDefault = 1000;
-        protected long shotCoolDownDefault = 0;
+        protected long shotCoolDownDefault = 1000;
 
         #endregion
 

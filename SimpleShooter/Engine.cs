@@ -20,6 +20,7 @@ namespace SimpleShooter
     {
         private KeyHandler _keyHandler;
         public GraphicsSystem _graphics;
+        private List<InputSignal> eventsQueue;
 
         private IShooterPlayer _player;
         public Level _level;
@@ -31,9 +32,16 @@ namespace SimpleShooter
         {           
             InitObjects(initFunc);
             _graphics = new GraphicsSystem(width, height);
+
             _keyHandler = new KeyHandler();
             _keyHandler.KeysToWatch.Add(Keys.Space);
             _keyHandler.KeyPress += KeyPress;
+            eventsQueue = new List<InputSignal>();
+        }
+
+        internal void PostEvent(InputSignal signal)
+        {
+            eventsQueue.Add(signal);
         }
 
         private void InitObjects(IObjectInitializer initFunc)
@@ -69,7 +77,7 @@ namespace SimpleShooter
            var v = _tree.Insert(gameObj);
             if (v == null)
             {
-                // remove it
+                //_objects.Remove(gameObj);
             }       
         }
 
@@ -83,25 +91,23 @@ namespace SimpleShooter
 
         internal void Tick(long delta, Vector2 dxdy)
         {
-            _keyHandler.CheckKeys();
-            _player.HandleMouseMove(dxdy);
+            HandleAllInputs(dxdy);
+
             PhysicsStep(delta);
 
-            List<IRenderWrapper> lst = null;
+            _graphics.Render(_objects, _level);
+        }
 
-            //var wrapper = new OctreeRenderWrapper(_tree);
-            //lst = new List<IRenderWrapper>(_gameObjects);
-            //lst.Add(wrapper);
+        private void HandleAllInputs(Vector2 dxdy)
+        {
+            _keyHandler.CheckKeys();
+            _player.HandleMouseMove(dxdy);
 
-            //if (lst != null)
-            //{
-            //    _graphics.Render(lst, _level);
-            //}
-            //else
-            //{
-                _graphics.Render(_objects, _level);
-          //  }
-            
+            for (int i = 0; i < eventsQueue.Count; i++)
+            {
+                KeyPress(eventsQueue[i]);
+            }
+            eventsQueue.Clear();
         }
 
         private void PhysicsStep(long delta)
@@ -166,7 +172,6 @@ namespace SimpleShooter
                 if (volume == null)
                 {
                     _objects.Remove(desc);
-
                 }
             }
         }

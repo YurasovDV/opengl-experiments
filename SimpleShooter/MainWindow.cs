@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using Common.Input;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Input;
 using SimpleShooter.LevelLoaders;
 using gl4 = OpenTK.Graphics.OpenGL4;
 
@@ -23,6 +25,10 @@ namespace SimpleShooter
             CursorVisible = false;
         }
 
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            _engine.PostEvent(InputSignal.MOUSE_CLICK);
+        }
 
         protected override void OnResize(EventArgs e)
         {

@@ -61,15 +61,16 @@ namespace SimpleShooter.LevelLoaders
 
         protected virtual void InitPlayer(Level level)
         {
-            var player = new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
+            var player = new HumanPlayer(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
+            // new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
 
             level.Player = player;
 
-            var vertices = new Vector3[] 
+            var vertices = new Vector3[]
             {
                 new Vector3(100, 1f, 0),
                 new Vector3(100, 0.0f, 0),
-                          
+
                 new Vector3(100, 0.5f, -0.5f),
                 new Vector3(100, 0.5f, 0.5f)
             };

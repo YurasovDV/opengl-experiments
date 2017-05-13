@@ -32,7 +32,7 @@ namespace Common.Input
                     {Keys.Down,InputSignal.DOWN },
                     {Keys.Q, InputSignal.ROTATE_CLOCKWISE},
                     {Keys.E, InputSignal.ROTATE_COUNTERCLOCKWISE},
-                    {Keys.Space,InputSignal.SHOT },
+                    {Keys.Space,InputSignal.SPACE },
                     {Keys.Left, InputSignal.FLY_BY_CLOCKWISE},
                     {Keys.Right, InputSignal.FLY_BY_COUNTERCLOCKWISE},
                     {Keys.H, InputSignal.UP_PARALLEL},

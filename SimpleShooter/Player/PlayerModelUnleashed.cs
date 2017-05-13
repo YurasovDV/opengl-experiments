@@ -55,7 +55,7 @@ namespace SimpleShooter.Player
                     AngleHorizontalRadians -= 0.01f;
                     Rotate();
                     break;
-                case InputSignal.SHOT:
+                case InputSignal.SPACE:
                     OnShot(new ShotEventArgs());
                     break;
                 case InputSignal.LOOK_UP:

@@ -129,7 +129,7 @@ namespace ShadowMap
                 case InputSignal.ROTATE_COUNTERCLOCKWISE:
                     RotateCounterClock();
                     break;
-                case InputSignal.SHOT:
+                case InputSignal.SPACE:
                     break;
                 case InputSignal.LOOK_UP:
                     break;
