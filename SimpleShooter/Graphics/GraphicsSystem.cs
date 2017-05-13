@@ -95,7 +95,7 @@ namespace SimpleShooter.Graphics
             {
                 GL.UseProgram(descriptor.ProgramId);
 
-                int vCount = objects.Aggregate(0, (acc, d) => d.VerticesCount + acc);
+                int vCount = GetVerticesCount(objects);
 
                 if (verticesMember == null || verticesMember.Length < vCount)
                 {
@@ -171,6 +171,17 @@ namespace SimpleShooter.Graphics
         {
             obj.Bind(Camera, level);
             GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
+        }
+
+        private static int GetVerticesCount(List<GameObjectDescriptor> objects)
+        {
+            // objects.Aggregate(0, (acc, d) => d.VerticesCount + acc);
+            int res = 0;
+            for (int i = 0; i < objects.Count; i++)
+            {
+                res += objects[i].VerticesCount;
+            }
+            return res;
         }
     }
 }

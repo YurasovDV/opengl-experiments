@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Common.Geometry;
 using OcTreeLibrary;
 using OpenTK;
@@ -6,36 +7,26 @@ using SimpleShooter.Graphics;
 
 namespace SimpleShooter.Core
 {
-    public class GameObject
+    public class GameObject : IOctreeItem
     {
         public long Id { get; set; }
 
         public SimpleModel Model { get; set; }
 
-        public IOctreeItem OctreeItem { get; set; }
-
         public ShadersNeeded ShaderKind { get; set; }
+
 
         public GameObject(SimpleModel model, ShadersNeeded shadersNeeded)
         {
             ShaderKind = shadersNeeded;
             Model = model;
-            OctreeItem = new OctreeGameObject();
-            OctreeItem.BoundingBox = BoundingVolume.InitBoundingBox(Model.Vertices);
+            BoundingBox = BoundingVolume.InitBoundingBox(Model.Vertices);
         }
 
         public void CalcNormals()
         {
             Model.Normals = GetNormals(Model.Vertices);
         }
-
-        /*public void InvertNormals()
-        {
-            for (int i = 0; i < Model.Normals.Length; i++)
-            {
-                Model.Normals[i] *= -1;
-            }
-        }*/
 
         private Vector3[] GetNormals(Vector3[] points)
         {
@@ -65,5 +56,35 @@ namespace SimpleShooter.Core
             n.Normalize();
             return n;
         }
+
+        #region IOctreeItem
+
+        public BoundingVolume BoundingBox { get; set; }
+
+        public BoundingVolume TreeSegment { get; set; }
+
+        public bool ReinsertImmediately { get; set; }
+
+        public event EventHandler<ReinsertingEventArgs> NeedsRemoval;
+        public event EventHandler<ReinsertingEventArgs> NeedsInsert;
+
+
+        public void RaiseRemove()
+        {
+            if (NeedsRemoval != null)
+            {
+                NeedsRemoval(this, new ReinsertingEventArgs());
+            }
+        }
+
+        public void RaiseInsert()
+        {
+            if (NeedsInsert != null)
+            {
+                NeedsInsert(this, new ReinsertingEventArgs());
+            }
+        }
+
+        #endregion
     }
 }

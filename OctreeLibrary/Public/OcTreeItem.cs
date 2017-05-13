@@ -109,7 +109,7 @@ namespace OcTreeLibrary
 
         private void TryClearChildren()
         {
-            if (InsertedObjectsCount == 0 && Level > 10)
+            if (InsertedObjectsCount == 0 && Level > 20)
             {
                 Children = new OcTreeItem[8];
             }

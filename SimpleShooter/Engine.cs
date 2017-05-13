@@ -159,10 +159,10 @@ namespace SimpleShooter
 
             if (desc.RenderIdentity.ShaderKind != ShadersNeeded.Line)
             {
-                desc.GameIdentity.OctreeItem.NeedsRemoval += OctreeItem_Remove;
-                desc.GameIdentity.OctreeItem.NeedsInsert += OctreeItem_Insert;
+                desc.GameIdentity.NeedsRemoval += OctreeItem_Remove;
+                desc.GameIdentity.NeedsInsert += OctreeItem_Insert;
 
-                var volume = _tree.Insert(desc.GameIdentity.OctreeItem);
+                var volume = _tree.Insert(desc.GameIdentity);
                 if (volume == null)
                 {
                     _objects.Remove(desc);

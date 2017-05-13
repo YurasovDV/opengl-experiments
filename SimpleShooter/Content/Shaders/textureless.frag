@@ -17,7 +17,7 @@ void main()
 	
 	float distanceToLight = length(toLight); 
 	
-	float diffuse = 2 * level / (1 +  0.25 * distanceToLight * distanceToLight) + 0.1;
+	float diffuse = 2 * level / (1 +  0.25 * distanceToLight * distanceToLight) + 0.2;
 
 	outputColor = diffuse * color;
 }
