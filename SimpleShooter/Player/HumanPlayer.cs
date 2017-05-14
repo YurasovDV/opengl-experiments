@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common;
 using Common.Geometry;
 using Common.Input;
 using OpenTK;
@@ -9,17 +10,11 @@ namespace SimpleShooter.Player
 {
     class HumanPlayer : Player
     {
-        public Vector3 Acceleration { get; set; }
-        public Vector3 Speed { get; set; }
 
-        public HumanPlayer(Vector3 position, Vector3 target)
+        public HumanPlayer(SimpleModel model, Vector3 position, Vector3 target) : base(model)
         {
             Position = position;
             Target = target;
-
-
-            Speed = new Vector3(0, 0, 0);
-            Acceleration = new Vector3(0, 0, 0);
 
             BoundingBox = BoundingVolume.CreateVolume(position, 1);
 

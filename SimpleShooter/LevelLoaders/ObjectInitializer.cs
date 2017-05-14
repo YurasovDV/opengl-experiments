@@ -61,12 +61,28 @@ namespace SimpleShooter.LevelLoaders
 
         protected virtual void InitPlayer(Level level)
         {
-            var player = new HumanPlayer(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
+            var position = new Vector3(0, 0.5f, 0);
+            Matrix4 translate = Matrix4.CreateTranslation(position);
+
+            var vertices = GeometryHelper.GetVerticesForCube(1);
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] = Vector3.Transform(vertices[i], translate);
+            }
+
+            var model = new SimpleModel()
+            {
+                Normals = new Vector3[0],
+                Vertices = vertices,
+                Colors = new Vector3[0]
+            };
+
+            var player = new HumanPlayer(model, position, new Vector3(100, 0.5f, 0));
             // new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
 
             level.Player = player;
 
-            var vertices = new Vector3[]
+            vertices = new Vector3[]
             {
                 new Vector3(100, 1f, 0),
                 new Vector3(100, 0.0f, 0),
@@ -75,7 +91,7 @@ namespace SimpleShooter.LevelLoaders
                 new Vector3(100, 0.5f, 0.5f)
             };
 
-            var model = new SimpleModel()
+            model = new SimpleModel()
             {
                 Vertices = vertices,
                 Colors = Enumerable.Repeat(new Vector3(1, 0, 0), vertices.Length).ToArray()

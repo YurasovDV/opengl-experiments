@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using Common.Geometry;
+using Common.Utils;
 using OpenTK;
 using SimpleShooter.Graphics;
 
 namespace SimpleShooter.Core
 {
-    class MovableObject : GameObject, IMovableObject
+    public class MovableObject : GameObject, IMovableObject
     {
-        private Vector3 Acceleration { get; set; }
-        private Vector3 Speed { get; set; }
-        private Vector3 Path { get; set; }
+        public Vector3 Acceleration { get; set; }
+        public Vector3 Speed { get; set; }
+        private BoundingVolume _updatedBox;
 
         public MovableObject(SimpleModel model, ShadersNeeded shadersNeeded, Vector3 speed, Vector3 acceleration) : base(model, shadersNeeded)
         {
             Speed = speed;
             Acceleration = acceleration;
+            _updatedBox = BoundingVolume.InitBoundingBox(Model.Vertices);
         }
 
-        public void Tick(long delta)
+        public virtual void Tick(long delta)
         {
             // stop and wait for death
             if (TreeSegment == null)
@@ -36,37 +36,32 @@ namespace SimpleShooter.Core
             }
 
             Speed += Acceleration * delta;
-            Path = Speed / delta;
+            var path = Speed / delta;
 
-            var updatedBox = new BoundingVolume(BoundingBox.BottomLeftBack + Path, BoundingBox.TopRightFront + Path);
-            if (ReinsertImmediately || !TreeSegment.Contains(updatedBox))
+            _updatedBox.MoveBox(path);
+            if (ReinsertImmediately || !TreeSegment.Contains(_updatedBox))
             {
                 RaiseRemove();
-                Move();
+                Move(path);
                 RaiseInsert();
             }
             else
             {
-                Move();
+                Move(path);
             }
         }
 
-        private void TranslateAll(Vector3[] vertices, Vector3 transformed)
+        protected virtual void Move(Vector3 Path)
         {
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                vertices[i] += transformed;
-            }
+            GeometryHelper.TranslateAll(Model.Vertices, Path);
+            BoundingBox.MoveBox(Path);
         }
 
-        public void Move()
+        public virtual void MoveAfterCollision(Vector3 rollback)
         {
-            TranslateAll(Model.Vertices, Path);
-            TranslateAll(BoundingBox.VerticesBottom, Path);
-            TranslateAll(BoundingBox.VerticesTop, Path);
-            BoundingBox.BottomLeftBack += Path;
-            BoundingBox.TopRightFront += Path;
-            BoundingBox.Centre += Path;
+            ReinsertImmediately = true;
+            _updatedBox.MoveBox(rollback);
+            Move(rollback);
         }
     }
 }

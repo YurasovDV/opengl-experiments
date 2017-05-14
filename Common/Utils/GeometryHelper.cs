@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 
 namespace Common.Utils
 {
@@ -26,6 +27,17 @@ namespace Common.Utils
                 && point.BetweenZ(bottomLeftBack, topRightFront);
         }
 
+        public static void TranslateAll(this Vector3[] vertices, Vector3 transformed)
+        {
+            if (vertices == null)
+            {
+                throw new ArgumentNullException(nameof(vertices));
+            }
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] += transformed;
+            }
+        }
 
         public static Vector3[] GetVerticesForCube(float size)
         {

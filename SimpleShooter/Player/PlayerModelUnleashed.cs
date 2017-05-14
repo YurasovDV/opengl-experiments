@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 using Common.Input;
 using OpenTK;
 using SimpleShooter.Core;
@@ -13,7 +14,7 @@ namespace SimpleShooter.Player
     public class PlayerModelUnleashed : Player
     {
 
-        public PlayerModelUnleashed(Vector3 position, Vector3 target)
+        public PlayerModelUnleashed(SimpleModel model, Vector3 position, Vector3 target) : base(model)
         {
             Position = position;
             target = Target;

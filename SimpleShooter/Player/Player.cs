@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 using Common.Geometry;
 using Common.Input;
 using OcTreeLibrary;
@@ -12,9 +13,15 @@ using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player
 {
-    public abstract class Player : IShooterPlayer
+    public abstract class Player : MovableObject, IShooterPlayer
     {
-       const float stepLen = 0.4f;
+
+        public Player(SimpleModel model) : base(model, Graphics.ShadersNeeded.Line, new Vector3(), new Vector3())
+        {
+
+        }
+
+        const float stepLen = 0.4f;
 
         public Vector3 DefaultTarget = new Vector3(100, 0, 0);
         protected Vector3 StepForward = new Vector3(stepLen, 0, 0);
@@ -41,8 +48,6 @@ namespace SimpleShooter.Player
 
         #region engine callbacks
 
-
-
         public event PlayerActionHandler<ShotEventArgs> Shot;
 
         protected virtual ActionStatus OnShot(ShotEventArgs args)
@@ -63,6 +68,8 @@ namespace SimpleShooter.Player
 
         #endregion
 
+        #region moves
+
         public abstract void Handle(InputSignal signal);
 
         public void HandleMouseMove(Vector2 mouseDxDy)
@@ -80,42 +87,20 @@ namespace SimpleShooter.Player
             }
         }
 
-        public void Tick(long delta)
+        public override void Tick(long delta)
         {
+            if (delta == 0)
+            {
+                delta = 1;
+            }
+
             shotCoolDown -= delta;
-        }
 
+            base.Tick(delta);
 
-        #region IOctreeItem
-
-        public BoundingVolume BoundingBox { get; set; }
-
-        public BoundingVolume TreeSegment { get; set; }
-
-        public bool ReinsertImmediately { get; set; }
-
-        public event EventHandler<ReinsertingEventArgs> NeedsRemoval;
-        public event EventHandler<ReinsertingEventArgs> NeedsInsert;
-
-
-        public void RaiseRemove()
-        {
-            if (NeedsRemoval != null)
-            {
-                NeedsRemoval(this, new ReinsertingEventArgs());
-            }
-        }
-
-        public void RaiseInsert()
-        {
-            if (NeedsInsert != null)
-            {
-                NeedsInsert(this, new ReinsertingEventArgs());
-            }
         }
 
         #endregion
-
 
         protected virtual void Rotate()
         {
