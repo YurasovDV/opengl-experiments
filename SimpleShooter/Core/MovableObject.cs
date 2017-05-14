@@ -13,7 +13,7 @@ namespace SimpleShooter.Core
     {
         public Vector3 Acceleration { get; set; }
         public Vector3 Speed { get; set; }
-        private BoundingVolume _updatedBox;
+        protected BoundingVolume _updatedBox;
 
         public MovableObject(SimpleModel model, ShadersNeeded shadersNeeded, Vector3 speed, Vector3 acceleration) : base(model, shadersNeeded)
         {
@@ -22,12 +22,12 @@ namespace SimpleShooter.Core
             _updatedBox = BoundingVolume.InitBoundingBox(Model.Vertices);
         }
 
-        public virtual void Tick(long delta)
+        public virtual Vector3 Tick(long delta)
         {
             // stop and wait for death
             if (TreeSegment == null)
             {
-                return;
+                return Vector3.Zero;
             }
 
             if (delta == 0)
@@ -39,29 +39,32 @@ namespace SimpleShooter.Core
             var path = Speed / delta;
 
             _updatedBox.MoveBox(path);
-            if (ReinsertImmediately || !TreeSegment.Contains(_updatedBox))
+            Move(path, _updatedBox);
+            return path;
+        }
+
+        protected void Move(Vector3 path, BoundingVolume updatedPosition)
+        {
+            if (ReinsertImmediately || !TreeSegment.Contains(updatedPosition))
             {
                 RaiseRemove();
-                Move(path);
+                Model.Vertices.TranslateAll(path);
+                BoundingBox.MoveBox(path);
                 RaiseInsert();
             }
             else
             {
-                Move(path);
+                Model.Vertices.TranslateAll(path);
+                BoundingBox.MoveBox(path);
             }
-        }
-
-        protected virtual void Move(Vector3 Path)
-        {
-            GeometryHelper.TranslateAll(Model.Vertices, Path);
-            BoundingBox.MoveBox(Path);
         }
 
         public virtual void MoveAfterCollision(Vector3 rollback)
         {
             ReinsertImmediately = true;
             _updatedBox.MoveBox(rollback);
-            Move(rollback);
+            Model.Vertices.TranslateAll(rollback);
+            BoundingBox.MoveBox(rollback);
         }
     }
 }

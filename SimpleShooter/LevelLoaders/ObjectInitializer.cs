@@ -77,7 +77,7 @@ namespace SimpleShooter.LevelLoaders
                 Colors = new Vector3[0]
             };
 
-            var player = new HumanPlayer(model, position, new Vector3(100, 0.5f, 0));
+            var player = new HumanPlayerInertial(model, position, new Vector3(100, 0.5f, 0));
             // new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
 
             level.Player = player;

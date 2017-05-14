@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Common;
 using Common.Geometry;
 using Common.Input;
+using Common.Utils;
 using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
@@ -16,7 +17,7 @@ namespace SimpleShooter.Player
     public abstract class Player : MovableObject, IShooterPlayer
     {
 
-        public Player(SimpleModel model) : base(model, Graphics.ShadersNeeded.Line, new Vector3(), new Vector3())
+        public Player(SimpleModel model) : base(model, Graphics.ShadersNeeded.Line, Vector3.Zero, Vector3.Zero)
         {
 
         }
@@ -87,7 +88,7 @@ namespace SimpleShooter.Player
             }
         }
 
-        public override void Tick(long delta)
+        public override Vector3 Tick(long delta)
         {
             if (delta == 0)
             {
@@ -96,8 +97,14 @@ namespace SimpleShooter.Player
 
             shotCoolDown -= delta;
 
-            base.Tick(delta);
+            var path = base.Tick(delta);
 
+            Mark.Model.Vertices.TranslateAll(path);
+            Position += path;
+            Target += path;
+
+            Acceleration = Vector3.Zero;
+            return path;
         }
 
         #endregion
@@ -123,11 +130,10 @@ namespace SimpleShooter.Player
             Position += stepDirection;
             Target += stepDirection;
 
-            for (int i = 0; i < Mark.Model.Vertices.Length; i++)
-            {
-                Mark.Model.Vertices[i] += stepDirection;
-            }
+            _updatedBox.MoveBox(stepDirection);
+            Move(stepDirection, _updatedBox);
 
+            Mark.Model.Vertices.TranslateAll(stepDirection);
         }
 
         protected virtual void StepXZ(Vector3 stepDirection)
@@ -138,10 +144,10 @@ namespace SimpleShooter.Player
             Position += dPosition;
             Target += dPosition;
 
-            for (int i = 0; i < Mark.Model.Vertices.Length; i++)
-            {
-                Mark.Model.Vertices[i] += dPosition;
-            }
+            _updatedBox.MoveBox(dPosition);
+            Move(dPosition, _updatedBox);
+
+            Mark.Model.Vertices.TranslateAll(dPosition);
         }
 
         protected virtual void RotateAroundY(float mouseDx)

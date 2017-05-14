@@ -67,8 +67,11 @@ namespace SimpleShooter.Graphics
 
         private void RenderModels(List<GameObjectDescriptor> simpleModels, Level level)
         {
-            /*obj.Bind(Camera, level);
-            GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);*/
+            foreach (var obj in simpleModels)
+            {
+                obj.Bind(Camera, level);
+                GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
+            }
         }
 
         private void RenderTexturelessNoLight(List<GameObjectDescriptor> textureLessNoLight, Level level)

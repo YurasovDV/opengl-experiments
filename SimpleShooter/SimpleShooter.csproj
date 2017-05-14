@@ -83,6 +83,7 @@
     <Compile Include="Player\Events\PlayerActionHandler.cs" />
     <Compile Include="Player\Events\ShotEventArgs.cs" />
     <Compile Include="Player\HumanPlayer.cs" />
+    <Compile Include="Player\HumanPlayerInertial.cs" />
     <Compile Include="Player\IPlayer.cs" />
     <Compile Include="Player\MarkController.cs" />
     <Compile Include="Player\Player.cs" />

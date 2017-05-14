@@ -8,7 +8,7 @@ using SimpleShooter.Player;
 
 namespace SimpleShooter.Helpers
 {
-    class Projectileshelper
+    class ProjectilesHelper
     {
         public static GameObject CreateProjectile(IShooterPlayer player)
         {
@@ -24,7 +24,7 @@ namespace SimpleShooter.Helpers
             }
 
             model.Colors = Enumerable.Repeat(new Vector3(1, 0, 0), model.Vertices.Length).ToArray();
-            var movableObj = new MovableObject(model, ShadersNeeded.TextureLessNoLight, speed, new Vector3());
+            var movableObj = new MovableObject(model, ShadersNeeded.TextureLessNoLight, speed, Vector3.Zero);
             movableObj.CalcNormals();
             return movableObj;
         }

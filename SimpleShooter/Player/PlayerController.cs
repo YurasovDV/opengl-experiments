@@ -24,7 +24,7 @@ namespace SimpleShooter.Player
             if (player != null)
             {
                 res.Success = true;
-                var projectile = Projectileshelper.CreateProjectile(player);
+                var projectile = ProjectilesHelper.CreateProjectile(player);
                 _engine.AddObject(projectile);
             }
 

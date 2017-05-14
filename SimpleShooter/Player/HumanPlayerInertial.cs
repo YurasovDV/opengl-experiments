@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Common;
-using Common.Geometry;
 using Common.Input;
+using Common.Utils;
 using OpenTK;
-using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player
 {
-    class HumanPlayer : Player
+    /// <summary>
+    /// uses acceleration for all movements
+    /// </summary>
+    class HumanPlayerInertial : HumanPlayer
     {
-
-        public HumanPlayer(SimpleModel model, Vector3 position, Vector3 target) : base(model)
+        public HumanPlayerInertial(SimpleModel model, Vector3 position, Vector3 target) : base(model, position, target)
         {
-            Position = position;
-            Target = target;
+
         }
 
         public override void Handle(InputSignal signal)
@@ -44,14 +47,12 @@ namespace SimpleShooter.Player
             }
         }
 
-        protected void TryJump()
+        protected override void StepXZ(Vector3 stepDirection)
         {
-            Acceleration += new Vector3(0, 1, 0);
-        }
+            var rotation = Matrix4.CreateRotationY(AngleHorizontalRadians);
+            Vector3 dPosition = Vector3.Transform(stepDirection, rotation);
 
-        protected void TryShoot()
-        {
-            OnShot(new ShotEventArgs());
+            Acceleration += dPosition;
         }
     }
 }

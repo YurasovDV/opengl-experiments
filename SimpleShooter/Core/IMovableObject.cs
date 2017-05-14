@@ -12,7 +12,7 @@ namespace SimpleShooter.Core
         Vector3 Acceleration { get; set; }
         Vector3 Speed { get; set; }
 
-        void Tick(long delta);
+        Vector3 Tick(long delta);
         void MoveAfterCollision(Vector3 rollback);
     }
 }
