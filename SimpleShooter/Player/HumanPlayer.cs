@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Common.Geometry;
 using Common.Input;
 using OpenTK;
 using SimpleShooter.Player.Events;
@@ -11,14 +9,20 @@ namespace SimpleShooter.Player
 {
     class HumanPlayer : Player
     {
-        protected Vector3 JumpSpeed { get; set; }
-        protected Vector3 JumpSpeedDefault { get; set; }
+        public Vector3 Acceleration { get; set; }
+        public Vector3 Speed { get; set; }
 
         public HumanPlayer(Vector3 position, Vector3 target)
         {
             Position = position;
             Target = target;
-            JumpSpeedDefault = new Vector3(1, 0, 0);
+
+
+            Speed = new Vector3(0, 0, 0);
+            Acceleration = new Vector3(0, 0, 0);
+
+            BoundingBox = BoundingVolume.CreateVolume(position, 1);
+
         }
 
 
@@ -39,11 +43,10 @@ namespace SimpleShooter.Player
                     StepXZ(StepLeft);
                     break;
                 case InputSignal.SPACE:
-
                     TryJump();
                     break;
                 case InputSignal.MOUSE_CLICK:
-                    TryShot();
+                    TryShoot();
                     break;
                 default:
                     break;
@@ -52,10 +55,10 @@ namespace SimpleShooter.Player
 
         private void TryJump()
         {
-            OnJump(new JumpEventArgs());
+            
         }
 
-        private void TryShot()
+        private void TryShoot()
         {
             OnShot(new ShotEventArgs());
         }

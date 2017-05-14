@@ -1,12 +1,13 @@
 ﻿using System;
 using Common.Input;
+using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Player.Events;
 
 namespace SimpleShooter.Player
 {
-    public interface IShooterPlayer : IMovableObject
+    public interface IShooterPlayer : IMovableObject, IOctreeItem
     {
         Vector3 Position { get; set; }
         Vector3 Target { get; set; }
@@ -15,7 +16,5 @@ namespace SimpleShooter.Player
         void Handle(InputSignal signal);
 
         event PlayerActionHandler<ShotEventArgs> Shot;
-        event PlayerActionHandler<JumpEventArgs> Jump;
-        event PlayerActionHandler<MoveEventArgs> Move;
     }
 }

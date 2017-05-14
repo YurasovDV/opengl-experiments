@@ -23,10 +23,13 @@ namespace SimpleShooter
         private List<InputSignal> eventsQueue;
 
         private IShooterPlayer _player;
+        private PlayerController _playerCtrl;
+
         public Level _level;
         private OcTree _tree;
 
         private ObjectsGrouped _objects;
+
 
         public Engine(int width, int height, IObjectInitializer initFunc)
         {           
@@ -84,9 +87,13 @@ namespace SimpleShooter
         private void InitPlayer()
         {
             _player = _level.Player;
-            _player.Jump += Player_Jump;
-            _player.Move += Player_Move;
-            _player.Shot += Player_Shot;
+            _playerCtrl = new PlayerController(this);
+            _player.Shot += _playerCtrl.Player_Shot;
+
+            _tree.Insert(_player);
+            _player.NeedsRemoval += OctreeItem_Remove;
+            _player.NeedsInsert += OctreeItem_Insert;
+
         }
 
         internal void Tick(long delta, Vector2 dxdy)
@@ -95,8 +102,11 @@ namespace SimpleShooter
 
             PhysicsStep(delta);
 
+            CheckCollisions(delta);
+
             _graphics.Render(_objects, _level);
         }
+
 
         private void HandleAllInputs(Vector2 dxdy)
         {
@@ -112,53 +122,33 @@ namespace SimpleShooter
 
         private void PhysicsStep(long delta)
         {
-            foreach (var obj in _objects.GameObjectsLine)
-            {
-                TickForMovable(delta, obj);
-            }
-            foreach (var obj in _objects.GameObjectsSimpleModel)
-            {
-                TickForMovable(delta, obj);
-            }
-            foreach (var obj in _objects.GameObjectsTextureLess)
-            {
-                TickForMovable(delta, obj);
-            }
-            foreach (var obj in _objects.GameObjectsTextureLessNoLight)
-            {
-                TickForMovable(delta, obj);
-            }
+
+            TickForMovable(_objects.GameObjectsLine, delta);
+            TickForMovable(_objects.GameObjectsSimpleModel, delta);
+            TickForMovable(_objects.GameObjectsTextureLess, delta);
+            TickForMovable(_objects.GameObjectsTextureLessNoLight, delta);
+
             _player.Tick(delta);
         }
 
-        private static void TickForMovable(long delta, GameObjectDescriptor obj)
+        private void CheckCollisions(long delta)
         {
-            var movable = obj.GameIdentity as IMovableObject;
-            if (movable != null)
+           // _tree.GetPossibleCollisions(_player);
+        }
+
+        private static void TickForMovable(List<GameObjectDescriptor> listOfObjects, long delta)
+        {
+            foreach (var obj in listOfObjects)
             {
-                movable.Tick(delta);
+                var movable = obj.GameIdentity as IMovableObject;
+                if (movable != null)
+                {
+                    movable.Tick(delta);
+                }
             }
         }
 
-        private ActionStatus Player_Shot(object sender, ShotEventArgs args)
-        {
-            var res = new ActionStatus()
-            {
-                Success = false
-            };
-
-            var player = sender as IShooterPlayer;
-            if (player != null)
-            {
-                res.Success = true;
-                var projectile = Projectileshelper.CreateProjectile(player);
-                AddObject(projectile);
-            }
-
-            return res;
-        }
-
-        private void AddObject(GameObject obj)
+        public void AddObject(GameObject obj)
         {
             var desc = new GameObjectDescriptor(obj);
             _objects.AddObject(desc);
@@ -176,25 +166,7 @@ namespace SimpleShooter
             }
         }
 
-        private ActionStatus Player_Move(object sender, MoveEventArgs args)
-        {
-            var res = new ActionStatus()
-            {
-                Success = true
-            };
-
-            return res;
-        }
-
-        private ActionStatus Player_Jump(object sender, JumpEventArgs args)
-        {
-            var res = new ActionStatus()
-            {
-                Success = true
-            };
-
-            return res;
-        }
+        
 
         private void KeyPress(InputSignal signal)
         {

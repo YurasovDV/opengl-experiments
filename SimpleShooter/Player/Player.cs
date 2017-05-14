@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Geometry;
 using Common.Input;
+using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Player.Events;
@@ -42,8 +44,6 @@ namespace SimpleShooter.Player
 
 
         public event PlayerActionHandler<ShotEventArgs> Shot;
-        public event PlayerActionHandler<JumpEventArgs> Jump;
-        public event PlayerActionHandler<MoveEventArgs> Move;
 
         protected virtual ActionStatus OnShot(ShotEventArgs args)
         {
@@ -56,36 +56,6 @@ namespace SimpleShooter.Player
             {
                 shotCoolDown = shotCoolDownDefault;
                 result = Shot(this, args);
-            }
-
-            return result;
-        }
-
-        protected virtual ActionStatus OnJump(JumpEventArgs args)
-        {
-            var result = new ActionStatus()
-            {
-                Success = true
-            };
-
-            if (Jump != null)
-            {
-                result = Jump(this, args);
-            }
-
-            return result;
-        }
-
-        protected virtual ActionStatus OnMove(MoveEventArgs args)
-        {
-            var result = new ActionStatus()
-            {
-                Success = true
-            };
-
-            if (Move != null)
-            {
-                result = Move(this, args);
             }
 
             return result;
@@ -114,6 +84,38 @@ namespace SimpleShooter.Player
         {
             shotCoolDown -= delta;
         }
+
+
+        #region IOctreeItem
+
+        public BoundingVolume BoundingBox { get; set; }
+
+        public BoundingVolume TreeSegment { get; set; }
+
+        public bool ReinsertImmediately { get; set; }
+
+        public event EventHandler<ReinsertingEventArgs> NeedsRemoval;
+        public event EventHandler<ReinsertingEventArgs> NeedsInsert;
+
+
+        public void RaiseRemove()
+        {
+            if (NeedsRemoval != null)
+            {
+                NeedsRemoval(this, new ReinsertingEventArgs());
+            }
+        }
+
+        public void RaiseInsert()
+        {
+            if (NeedsInsert != null)
+            {
+                NeedsInsert(this, new ReinsertingEventArgs());
+            }
+        }
+
+        #endregion
+
 
         protected virtual void Rotate()
         {
@@ -148,22 +150,12 @@ namespace SimpleShooter.Player
             var rotation = Matrix4.CreateRotationY(AngleHorizontalRadians);
             Vector3 dPosition = Vector3.Transform(stepDirection, rotation);
 
-            var args = new MoveEventArgs()
-            {
-                Position = Position + dPosition,
-                Target = Target + dPosition
-            };
+            Position += dPosition;
+            Target += dPosition;
 
-            var actionResult = OnMove(args);
-            if (actionResult.Success)
+            for (int i = 0; i < Mark.Model.Vertices.Length; i++)
             {
-                Position += dPosition;
-                Target += dPosition;
-
-                for (int i = 0; i < Mark.Model.Vertices.Length; i++)
-                {
-                    Mark.Model.Vertices[i] += dPosition;
-                }
+                Mark.Model.Vertices[i] += dPosition;
             }
         }
 
