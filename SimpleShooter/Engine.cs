@@ -32,7 +32,7 @@ namespace SimpleShooter
 
 
         public Engine(int width, int height, IObjectInitializer initFunc)
-        {           
+        {
             InitObjects(initFunc);
             _graphics = new GraphicsSystem(width, height);
 
@@ -69,7 +69,7 @@ namespace SimpleShooter
             var gameObj = sender as IOctreeItem;
             if (gameObj == null)
                 throw new ArgumentException();
-            _tree.Remove(gameObj);            
+            _tree.Remove(gameObj);
         }
 
         private void OctreeItem_Insert(object sender, ReinsertingEventArgs args)
@@ -77,11 +77,11 @@ namespace SimpleShooter
             var gameObj = sender as IOctreeItem;
             if (gameObj == null)
                 throw new ArgumentException();
-           var v = _tree.Insert(gameObj);
+            var v = _tree.Insert(gameObj);
             if (v == null)
             {
                 //_objects.Remove(gameObj);
-            }       
+            }
         }
 
         private void InitPlayer()
@@ -128,12 +128,85 @@ namespace SimpleShooter
             TickForMovable(_objects.GameObjectsTextureLess, delta);
             TickForMovable(_objects.GameObjectsTextureLessNoLight, delta);
 
+            _player.Acceleration -= new Vector3(0, -1, 0);
             _player.Tick(delta);
         }
 
         private void CheckCollisions(long delta)
         {
-           // _tree.GetPossibleCollisions(_player);
+            CheckCollisions(_objects.GameObjectsLine, delta);
+            CheckCollisions(_objects.GameObjectsSimpleModel, delta);
+            CheckCollisions(_objects.GameObjectsTextureLess, delta);
+            CheckCollisions(_objects.GameObjectsTextureLessNoLight, delta);
+
+            CheckCollisions(_player, delta);
+        }
+
+        private void CheckCollisions(List<GameObjectDescriptor> entities, long delta)
+        {
+            foreach (var item in entities)
+            {
+                CheckCollisions(item.GameIdentity, delta);
+            }
+        }
+
+        private void CheckCollisions(IOctreeItem entity, long delta)
+        {
+            var objectsToCheck = _tree.GetPossibleCollisions(entity);
+
+            for (int i = 0; i < objectsToCheck.Count; i++)
+            {
+                if (entity.BoundingBox.Intersects(objectsToCheck[i].BoundingBox))
+                {
+                    if (entity is IMovableObject)
+                    {
+                        if (objectsToCheck[i] is IMovableObject)
+                        {
+                            HandleCollision(entity as IMovableObject, objectsToCheck[i] as IMovableObject);
+                        }
+                        else
+                        {
+                            HandleCollision(entity as IMovableObject, objectsToCheck[i]);
+                        }
+                    }
+                    else
+                    {
+                        if (objectsToCheck[i] is IMovableObject)
+                        {
+                            HandleCollision(entity, objectsToCheck[i] as IMovableObject);
+                        }
+                        else
+                        {
+                            HandleCollision(entity, objectsToCheck[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleCollision(IMovableObject obj1, IMovableObject obj2)
+        {
+            obj1.MoveAfterCollision(Vector3.Zero);
+            obj2.MoveAfterCollision(Vector3.Zero);
+        }
+
+        private void HandleCollision(IMovableObject obj1, IOctreeItem obj2)
+        {
+            obj1.MoveAfterCollision(Vector3.Zero);
+            // obj2.MoveAfterCollision(Vector3.Zero);
+        }
+
+        private void HandleCollision(IOctreeItem obj1, IMovableObject obj2)
+        {
+            //obj1.MoveAfterCollision(Vector3.Zero);
+            obj2.MoveAfterCollision(Vector3.Zero);
+        }
+
+        private void HandleCollision(IOctreeItem obj1, IOctreeItem obj2)
+        {
+            //obj1.
+            //obj1.MoveAfterCollision(Vector3.Zero);
+            //obj2.MoveAfterCollision(Vector3.Zero);
         }
 
         private static void TickForMovable(List<GameObjectDescriptor> listOfObjects, long delta)
@@ -143,6 +216,7 @@ namespace SimpleShooter
                 var movable = obj.GameIdentity as IMovableObject;
                 if (movable != null)
                 {
+                    movable.Acceleration -= new Vector3(0, -1, 0);
                     movable.Tick(delta);
                 }
             }
@@ -165,8 +239,6 @@ namespace SimpleShooter
                 }
             }
         }
-
-        
 
         private void KeyPress(InputSignal signal)
         {

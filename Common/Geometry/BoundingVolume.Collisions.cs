@@ -37,7 +37,7 @@ namespace Common.Geometry
             return res;
         }
 
-        public bool[] CheckPointsInside(BoundingVolume another)
+        private bool[] CheckPointsInside(BoundingVolume another)
         {
             if (another == null)
             {
