@@ -15,6 +15,8 @@ namespace SimpleShooter.Graphics
     {
         private Camera Camera { get; set; }
 
+        private SkyBoxRenderer _skybox;
+
         private Vector3[] GameObjectsSimpleModelVertices;
         private Vector3[] GameObjectsSimpleModelColors;
         private Vector3[] GameObjectsSimpleModelNormals;
@@ -41,6 +43,9 @@ namespace SimpleShooter.Graphics
             GL.Viewport(0, 0, width, height);
             var projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 200);
             Camera = new Camera(projection);
+
+            _skybox = new SkyBoxRenderer(70);
+
         }
 
         internal void Render(ObjectsGrouped objects, Level level)
@@ -50,6 +55,11 @@ namespace SimpleShooter.Graphics
             GL.ClearColor(0, 0, 0.0f, 1);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.Disable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
+
+            _skybox.Render(level.Player, Camera);
+
             GL.Enable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
 
             RenderByTypes(objects, level);

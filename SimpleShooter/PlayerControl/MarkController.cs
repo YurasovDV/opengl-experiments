@@ -1,7 +1,7 @@
 ﻿using OpenTK;
 using SimpleShooter.Core;
 
-namespace SimpleShooter.Player
+namespace SimpleShooter.PlayerControl
 {
     class MarkController
     {

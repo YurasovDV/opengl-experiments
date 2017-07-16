@@ -4,7 +4,7 @@ using Common.Utils;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Graphics;
-using SimpleShooter.Player;
+using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter.Helpers
 {

@@ -7,9 +7,9 @@ using Common;
 using Common.Input;
 using OpenTK;
 using SimpleShooter.Core;
-using SimpleShooter.Player.Events;
+using SimpleShooter.PlayerControl.Events;
 
-namespace SimpleShooter.Player
+namespace SimpleShooter.PlayerControl
 {
     public class PlayerModelUnleashed : Player
     {

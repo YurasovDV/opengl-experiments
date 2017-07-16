@@ -66,11 +66,13 @@
     <Compile Include="Graphics\ShaderLoad\ShaderLoader.cs" />
     <Compile Include="Graphics\ShaderLoad\ShaderLoaderLine.cs" />
     <Compile Include="Graphics\ShaderLoad\ShaderLoaderSimpleModel.cs" />
+    <Compile Include="Graphics\ShaderLoad\ShaderLoaderSkybox.cs" />
     <Compile Include="Graphics\ShaderLoad\ShaderLoaderTextureLess.cs" />
     <Compile Include="Graphics\ShaderLoad\ShaderLoaderTextureLessNoLight.cs" />
     <Compile Include="Graphics\ShaderProgramDescriptor.cs" />
     <Compile Include="Graphics\ShadersNeeded.cs" />
     <Compile Include="Graphics\ShaderUniformsLocation.cs" />
+    <Compile Include="Graphics\SkyBoxRenderer.cs" />
     <Compile Include="Helpers\Projectileshelper.cs" />
     <Compile Include="IdService.cs" />
     <Compile Include="LevelLoaders\IObjectInitialiser.cs" />
@@ -78,22 +80,40 @@
     <Compile Include="LevelLoaders\ObjectInitializer.cs" />
     <Compile Include="ObjectsGrouped.cs" />
     <Compile Include="Physics\AccelerationUpdater.cs" />
-    <Compile Include="Player\Events\ActionStatus.cs" />
-    <Compile Include="Player\Events\JumpEventArgs.cs" />
-    <Compile Include="Player\Events\MoveEventArgs.cs" />
-    <Compile Include="Player\Events\PlayerActionHandler.cs" />
-    <Compile Include="Player\Events\ShotEventArgs.cs" />
-    <Compile Include="Player\HumanPlayer.cs" />
-    <Compile Include="Player\HumanPlayerInertial.cs" />
-    <Compile Include="Player\IPlayer.cs" />
-    <Compile Include="Player\MarkController.cs" />
-    <Compile Include="Player\Player.cs" />
-    <Compile Include="Player\PlayerController.cs" />
-    <Compile Include="Player\PlayerModelUnleashed.cs" />
+    <Compile Include="PlayerControl\Events\ActionStatus.cs" />
+    <Compile Include="PlayerControl\Events\JumpEventArgs.cs" />
+    <Compile Include="PlayerControl\Events\MoveEventArgs.cs" />
+    <Compile Include="PlayerControl\Events\PlayerActionHandler.cs" />
+    <Compile Include="PlayerControl\Events\ShotEventArgs.cs" />
+    <Compile Include="PlayerControl\HumanPlayer.cs" />
+    <Compile Include="PlayerControl\HumanPlayerInertial.cs" />
+    <Compile Include="PlayerControl\IPlayer.cs" />
+    <Compile Include="PlayerControl\MarkController.cs" />
+    <Compile Include="PlayerControl\Player.cs" />
+    <Compile Include="PlayerControl\PlayerController.cs" />
+    <Compile Include="PlayerControl\PlayerModelUnleashed.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Textures\Skybox\back.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\Skybox\bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\Skybox\front.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\Skybox\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\Skybox\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\Skybox\top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <Content Include="Content\Shaders\texturelessNoLight.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -107,6 +127,12 @@
     <None Include="Content\Shaders\line.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Shaders\skybox.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Shaders\skybox.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -118,9 +144,7 @@
       <Name>OctreeLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Textures\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\Shaders\textureless.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

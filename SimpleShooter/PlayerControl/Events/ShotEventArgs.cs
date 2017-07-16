@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleShooter.Player.Events
+namespace SimpleShooter.PlayerControl.Events
 {
-    public class JumpEventArgs : EventArgs
+    public class ShotEventArgs : EventArgs
     {
     }
 }

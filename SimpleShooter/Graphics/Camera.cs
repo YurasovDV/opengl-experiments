@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenTK;
 using SimpleShooter.Graphics;
-using SimpleShooter.Player;
+using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter.Graphics
 {

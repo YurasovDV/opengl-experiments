@@ -21,6 +21,11 @@
         public int uniformMV;
         public int uniformProjection;
 
+        /// <summary>
+        /// skybox
+        /// </summary>
+        public int TextureSampler;
+
         public ShadersNeeded ShaderKind { get; set; }
 
         public ShaderProgramDescriptor()
@@ -44,6 +49,8 @@
             uniformMVP = notSet;
             uniformMV = notSet;
             uniformProjection = notSet;
+
+            TextureSampler = notSet;
         }
 
     }

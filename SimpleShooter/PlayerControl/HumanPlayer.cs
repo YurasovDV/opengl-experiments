@@ -4,9 +4,9 @@ using Common;
 using Common.Geometry;
 using Common.Input;
 using OpenTK;
-using SimpleShooter.Player.Events;
+using SimpleShooter.PlayerControl.Events;
 
-namespace SimpleShooter.Player
+namespace SimpleShooter.PlayerControl
 {
     class HumanPlayer : Player
     {

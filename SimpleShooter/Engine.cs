@@ -5,13 +5,10 @@ using Common.Input;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Graphics;
-using SimpleShooter.Player;
+using SimpleShooter.PlayerControl;
 using SimpleShooter.LevelLoaders;
-using SimpleShooter.Player.Events;
-using Common.Geometry;
 using OcTreeLibrary;
 using Common;
-using SimpleShooter.Helpers;
 using System.Windows.Forms;
 using SimpleShooter.Physics;
 

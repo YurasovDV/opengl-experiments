@@ -10,9 +10,9 @@ using Common.Utils;
 using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
-using SimpleShooter.Player.Events;
+using SimpleShooter.PlayerControl.Events;
 
-namespace SimpleShooter.Player
+namespace SimpleShooter.PlayerControl
 {
     public abstract class Player : MovableObject, IShooterPlayer
     {

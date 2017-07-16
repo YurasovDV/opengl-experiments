@@ -10,6 +10,7 @@ namespace SimpleShooter.Graphics.ShaderLoad
             {ShadersNeeded.SimpleModel, new ShaderLoaderSimpleModel() },
             {ShadersNeeded.TextureLess, new ShaderLoaderTextureLess() },
             {ShadersNeeded.TextureLessNoLight, new ShaderLoaderTextureLessNoLight() },
+            {ShadersNeeded.SkyBox, new ShaderLoaderSkybox() },
         };
 
         public static Dictionary<ShadersNeeded, ShaderProgramDescriptor> programs = new Dictionary<ShadersNeeded, ShaderProgramDescriptor>();

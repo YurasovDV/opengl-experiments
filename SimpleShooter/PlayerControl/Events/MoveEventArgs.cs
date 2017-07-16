@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 
-namespace SimpleShooter.Player.Events
+namespace SimpleShooter.PlayerControl.Events
 {
     public class MoveEventArgs : EventArgs
     {

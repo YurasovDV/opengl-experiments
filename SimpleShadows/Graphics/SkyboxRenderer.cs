@@ -1,13 +1,8 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleShadows.Graphics
 {
@@ -30,7 +25,6 @@ namespace SimpleShadows.Graphics
         {
             GL.UseProgram(shader.ProgramIdForSky);
 
-            // активная текстура - т0
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(shader.UniformSkySampler, 0);
             GL.BindTexture(TextureTarget.TextureCubeMap, SkyboxTextureId);
@@ -38,8 +32,8 @@ namespace SimpleShadows.Graphics
             GL.BindBuffer(BufferTarget.ArrayBuffer, shader.sky_texcoord_buffer_address);
             GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(VERTICES.Length * Vector3.SizeInBytes),
               VERTICES, BufferUsageHint.StaticDraw);
-
             GL.VertexAttribPointer(shader.AttribPositionSkybox, 3, VertexAttribPointerType.Float, false, 0, 0);
+
             GL.BindVertexArray(shader.AttribPositionSkybox);
             GL.EnableVertexAttribArray(shader.AttribPositionSkybox);
 
@@ -49,7 +43,7 @@ namespace SimpleShadows.Graphics
             GL.UniformMatrix4(shader.UniformViewSkybox, false, ref view);
             GL.UniformMatrix4(shader.UniformProjectionSkybox, false, ref render.Projection);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, SkyboxRenderer.VERTICES.Length);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, VERTICES.Length);
         }
 
         public int LoadCubeMapForSkybox(string[] paths)
@@ -94,8 +88,6 @@ namespace SimpleShadows.Graphics
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
-
-
             }
 
             GL.BindTexture(TextureTarget.TextureCubeMap, 0);

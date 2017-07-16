@@ -121,8 +121,7 @@ namespace SimpleShadows.Graphics
 
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
 
-            // Define a simple shader program for our point.
-            String pointVertexShader = null;
+            string pointVertexShader = null;
 
             using (StreamReader rd = new StreamReader(@"Assets\Shaders\skyboxVertex.glsl"))
             {
@@ -153,8 +152,6 @@ namespace SimpleShadows.Graphics
             UniformViewSkybox = GL.GetUniformLocation(ProgramIdForSky, "view");
 
             UniformSkySampler = GL.GetUniformLocation(ProgramIdForSky, "cubemap");
-
-
         }
 
         private void CreateMainProgram()

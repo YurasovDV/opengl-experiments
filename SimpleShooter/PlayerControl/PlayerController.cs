@@ -1,8 +1,8 @@
 ﻿using System;
 using SimpleShooter.Helpers;
-using SimpleShooter.Player.Events;
+using SimpleShooter.PlayerControl.Events;
 
-namespace SimpleShooter.Player
+namespace SimpleShooter.PlayerControl
 {
     class PlayerController
     {

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using Common.Geometry;
 using Common.Utils;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Graphics;
-using SimpleShooter.Player;
+using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter.LevelLoaders
 {

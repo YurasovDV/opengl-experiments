@@ -6,5 +6,6 @@
         Line,
         TextureLess,
         TextureLessNoLight,
+        SkyBox
     }
 }

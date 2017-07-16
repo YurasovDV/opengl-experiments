@@ -8,7 +8,7 @@ using Common.Input;
 using Common.Utils;
 using OpenTK;
 
-namespace SimpleShooter.Player
+namespace SimpleShooter.PlayerControl
 {
     /// <summary>
     /// uses acceleration for all movements

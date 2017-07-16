@@ -3,9 +3,9 @@ using Common.Input;
 using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
-using SimpleShooter.Player.Events;
+using SimpleShooter.PlayerControl.Events;
 
-namespace SimpleShooter.Player
+namespace SimpleShooter.PlayerControl
 {
     public interface IShooterPlayer : IMovableObject, IOctreeItem
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 using SimpleShooter.Core;
-using SimpleShooter.Player;
+using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter.Physics
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Graphics;
-using SimpleShooter.Player;
+using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter.LevelLoaders
 {
