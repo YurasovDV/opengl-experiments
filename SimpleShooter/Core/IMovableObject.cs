@@ -9,6 +9,8 @@ namespace SimpleShooter.Core
 {
     public interface IMovableObject
     {
+
+        float Mass { get; }
         Vector3 Acceleration { get; set; }
         Vector3 Speed { get; set; }
 

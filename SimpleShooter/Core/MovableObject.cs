@@ -15,8 +15,13 @@ namespace SimpleShooter.Core
         public Vector3 Speed { get; set; }
         protected BoundingVolume _updatedBox;
 
-        public MovableObject(SimpleModel model, ShadersNeeded shadersNeeded, Vector3 speed, Vector3 acceleration) : base(model, shadersNeeded)
+        public float Mass { get { return _mass; } }
+
+        protected float _mass;
+
+        public MovableObject(SimpleModel model, ShadersNeeded shadersNeeded, Vector3 speed, Vector3 acceleration, float mass = 0) : base(model, shadersNeeded)
         {
+            _mass = mass;
             Speed = speed;
             Acceleration = acceleration;
             _updatedBox = BoundingVolume.InitBoundingBox(Model.Vertices);
@@ -40,15 +45,17 @@ namespace SimpleShooter.Core
 
             _updatedBox.MoveBox(path);
             Move(path, _updatedBox);
+            Acceleration = Vector3.Zero;
             return path;
         }
 
         protected void Move(Vector3 path, BoundingVolume updatedPosition)
         {
-            if (ReinsertImmediately || !TreeSegment.Contains(updatedPosition))
+            bool outsideOfSegment = TreeSegment == null || !TreeSegment.Contains(updatedPosition);
+            if (ReInsertImmediately || outsideOfSegment)
             {
                 RaiseRemove();
-                Model.Vertices.TranslateAll(path);
+                GeometryHelper.TranslateAll(Model.Vertices, path);
                 BoundingBox.MoveBox(path);
                 RaiseInsert();
             }
@@ -61,7 +68,7 @@ namespace SimpleShooter.Core
 
         public virtual void MoveAfterCollision(Vector3 rollback)
         {
-            ReinsertImmediately = true;
+            ReInsertImmediately = true;
             _updatedBox.MoveBox(rollback);
             Model.Vertices.TranslateAll(rollback);
             BoundingBox.MoveBox(rollback);

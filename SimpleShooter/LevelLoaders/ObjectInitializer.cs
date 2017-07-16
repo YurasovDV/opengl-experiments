@@ -41,7 +41,6 @@ namespace SimpleShooter.LevelLoaders
             GameObject obj = CreateCube(translate, green, 1, ShadersNeeded.TextureLess);
             objectList.Add(obj);
 
-
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(100, 100, 100), 0.5f, ShadersNeeded.TextureLessNoLight);
             objectList.Add(obj);
@@ -54,7 +53,7 @@ namespace SimpleShooter.LevelLoaders
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
             var movableObj = new MovableObject(obj.Model, ShadersNeeded.TextureLessNoLight, new Vector3(1, 0, 0), new Vector3());
-            objectList.Add(movableObj);
+             objectList.Add(movableObj);
 
             level.Objects = objectList;
         }
@@ -77,7 +76,7 @@ namespace SimpleShooter.LevelLoaders
                 Colors = new Vector3[0]
             };
 
-            var player = new HumanPlayerInertial(model, position, new Vector3(100, 0.5f, 0));
+            var player = new HumanPlayer(model, position, new Vector3(100, 0.5f, 0), mass:1); // new HumanPlayerInertial(model, position, new Vector3(100, 0.5f, 0));
             // new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
 
             level.Player = player;
@@ -179,7 +178,6 @@ namespace SimpleShooter.LevelLoaders
                 Colors = colorsCombined
             };
             var obj = new GameObject(model, ShadersNeeded.TextureLessNoLight);
-            obj.Id = IdService.GetNext();
             return obj;
         }
 

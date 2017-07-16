@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common.Utils;
-using OpenTK;
 
 
 namespace Common.Geometry
 {
     public partial class BoundingVolume
     {
+        private static bool[] contains = new bool[8];
+
+
         public bool Contains(BoundingVolume another)
         {
             if (another == null)
@@ -16,9 +18,9 @@ namespace Common.Geometry
                 throw new ArgumentNullException("BoundingVolume.Contains: BoundingVolume another == null");
             }
 
-            var cnts = CheckPointsInside(another);
+            CheckPointsInside(another);
 
-            var res = cnts.All(inside => inside);
+            var res = contains.All(inside => inside);
             return res;
         }
 
@@ -30,39 +32,40 @@ namespace Common.Geometry
                 throw new ArgumentNullException("BoundingVolume.Intersects: BoundingVolume another == null");
             }
 
-            var cnts = CheckPointsInside(another);
+            CheckPointsInside(another);
 
-            var res = cnts.Any(inside => inside);
+            var res = contains.Any(inside => inside);
 
             return res;
         }
 
-        private bool[] CheckPointsInside(BoundingVolume another)
+        private void CheckPointsInside(BoundingVolume another)
         {
             if (another == null)
             {
                 throw new ArgumentNullException("BoundingVolume.CheckPointsInside: BoundingVolume another == null");
             }
 
+            for (int j = 0; j < contains.Length; j++)
+            {
+                contains[j] = false;
+            }
 
             int i = 0;
-            bool[] cnts = new bool[8];
 
             var anotherTop = another.VerticesTop;
             foreach (var vert in anotherTop)
             {
-                cnts[i] = vert.Inside(BottomLeftBack, TopRightFront);
+                contains[i] = vert.Inside(BottomLeftBack, TopRightFront);
                 i++;
             }
 
             var anotherBottom = another.VerticesBottom;
             foreach (var vert in anotherBottom)
             {
-                cnts[i] = vert.Inside(BottomLeftBack, TopRightFront);
+                contains[i] = vert.Inside(BottomLeftBack, TopRightFront);
                 i++;
             }
-
-            return cnts;
 
         }
     }

@@ -13,6 +13,7 @@ using OcTreeLibrary;
 using Common;
 using SimpleShooter.Helpers;
 using System.Windows.Forms;
+using SimpleShooter.Physics;
 
 namespace SimpleShooter
 {
@@ -127,8 +128,7 @@ namespace SimpleShooter
             TickForMovable(_objects.GameObjectsSimpleModel, delta);
             TickForMovable(_objects.GameObjectsTextureLess, delta);
             TickForMovable(_objects.GameObjectsTextureLessNoLight, delta);
-
-            _player.Acceleration -= new Vector3(0, -1, 0);
+             _player.Acceleration += AccelerationUpdater.GetGravityAcceleration(_player);
             _player.Tick(delta);
         }
 
@@ -156,6 +156,11 @@ namespace SimpleShooter
 
             for (int i = 0; i < objectsToCheck.Count; i++)
             {
+                if (Object.ReferenceEquals(entity,objectsToCheck[i]))
+                {
+                    continue;
+                }
+
                 if (entity.BoundingBox.Intersects(objectsToCheck[i].BoundingBox))
                 {
                     if (entity is IMovableObject)
@@ -199,6 +204,7 @@ namespace SimpleShooter
         private void HandleCollision(IOctreeItem obj1, IMovableObject obj2)
         {
             //obj1.MoveAfterCollision(Vector3.Zero);
+            //obj1.BoundingBox.
             obj2.MoveAfterCollision(Vector3.Zero);
         }
 
@@ -216,7 +222,7 @@ namespace SimpleShooter
                 var movable = obj.GameIdentity as IMovableObject;
                 if (movable != null)
                 {
-                    movable.Acceleration -= new Vector3(0, -1, 0);
+                    movable.Acceleration += AccelerationUpdater.GetGravityAcceleration(movable);
                     movable.Tick(delta);
                 }
             }

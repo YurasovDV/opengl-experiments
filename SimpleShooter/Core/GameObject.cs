@@ -18,6 +18,7 @@ namespace SimpleShooter.Core
 
         public GameObject(SimpleModel model, ShadersNeeded shadersNeeded)
         {
+            Id = IdService.GetNext();
             ShaderKind = shadersNeeded;
             Model = model;
             BoundingBox = BoundingVolume.InitBoundingBox(Model.Vertices);
@@ -63,7 +64,7 @@ namespace SimpleShooter.Core
 
         public BoundingVolume TreeSegment { get; set; }
 
-        public bool ReinsertImmediately { get; set; }
+        public bool ReInsertImmediately { get; set; }
 
         public event EventHandler<ReinsertingEventArgs> NeedsRemoval;
         public event EventHandler<ReinsertingEventArgs> NeedsInsert;

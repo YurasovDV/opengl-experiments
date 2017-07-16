@@ -18,7 +18,7 @@ namespace SimpleShooter.Core
 
         public BoundingVolume TreeSegment { get; set; }
 
-        public bool ReinsertImmediately { get; set; }
+        public bool ReInsertImmediately { get; set; }
 
         public event EventHandler<ReinsertingEventArgs> NeedsRemoval;
         public event EventHandler<ReinsertingEventArgs> NeedsInsert;

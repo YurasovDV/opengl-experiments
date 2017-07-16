@@ -15,7 +15,7 @@ namespace SimpleShooter.Player
     /// </summary>
     class HumanPlayerInertial : HumanPlayer
     {
-        public HumanPlayerInertial(SimpleModel model, Vector3 position, Vector3 target) : base(model, position, target)
+        public HumanPlayerInertial(SimpleModel model, Vector3 position, Vector3 target, float mass) : base(model, position, target, mass)
         {
 
         }

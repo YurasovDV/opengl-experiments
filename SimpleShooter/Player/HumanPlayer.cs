@@ -11,7 +11,7 @@ namespace SimpleShooter.Player
     class HumanPlayer : Player
     {
 
-        public HumanPlayer(SimpleModel model, Vector3 position, Vector3 target) : base(model)
+        public HumanPlayer(SimpleModel model, Vector3 position, Vector3 target, float mass) : base(model, mass)
         {
             Position = position;
             Target = target;
@@ -46,7 +46,7 @@ namespace SimpleShooter.Player
 
         protected void TryJump()
         {
-            Acceleration += new Vector3(0, 1, 0);
+            Acceleration += new Vector3(0, 0.05f, 0);
         }
 
         protected void TryShoot()

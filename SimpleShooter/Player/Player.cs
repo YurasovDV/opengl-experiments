@@ -17,7 +17,7 @@ namespace SimpleShooter.Player
     public abstract class Player : MovableObject, IShooterPlayer
     {
 
-        public Player(SimpleModel model) : base(model, Graphics.ShadersNeeded.Line, Vector3.Zero, Vector3.Zero)
+        public Player(SimpleModel model, float mass) : base(model, Graphics.ShadersNeeded.Line, Vector3.Zero, Vector3.Zero, mass)
         {
 
         }
@@ -104,6 +104,11 @@ namespace SimpleShooter.Player
             Target += path;
 
             Acceleration = Vector3.Zero;
+
+            if (Position.Y < 1)
+            {
+                Speed = Vector3.Zero;
+            }
             return path;
         }
 

@@ -14,7 +14,7 @@ namespace SimpleShooter.Player
     public class PlayerModelUnleashed : Player
     {
 
-        public PlayerModelUnleashed(SimpleModel model, Vector3 position, Vector3 target) : base(model)
+        public PlayerModelUnleashed(SimpleModel model, Vector3 position, Vector3 target) : base(model, 0)
         {
             Position = position;
             target = Target;

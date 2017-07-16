@@ -12,7 +12,7 @@ namespace OcTreeLibrary
         /// <summary>
         /// if obj in box too big, then try reinsert at next movement
         /// </summary>
-        bool ReinsertImmediately { get; set; }
+        bool ReInsertImmediately { get; set; }
 
         event EventHandler<ReinsertingEventArgs> NeedsRemoval;
         event EventHandler<ReinsertingEventArgs> NeedsInsert;

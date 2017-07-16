@@ -36,7 +36,7 @@ namespace OcTreeLibrary
         public void AddObject(IOctreeItem obj, bool reinsertIfMoves = false)
         {
             Objects.Add(obj);
-            obj.ReinsertImmediately = reinsertIfMoves;
+            obj.ReInsertImmediately = reinsertIfMoves;
         }
 
         public BoundingVolume Insert(IOctreeItem dataToInsert)
