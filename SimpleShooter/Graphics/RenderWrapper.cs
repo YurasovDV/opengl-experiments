@@ -78,6 +78,38 @@ namespace SimpleShooter.Graphics
 
         }
 
+        public static void BindVertices(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.verticesBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
+                data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_descriptor.AttribVerticesLocation);
+        }
+
+        public static void BindColors(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.colorsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
+                data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_descriptor.AttribColorsLocation);
+        }
+
+        public static void BindNormals(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.normalsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
+                data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_descriptor.AttribNormalsLocation);
+        }
+
+        public ShaderProgramDescriptor GetDescriptor()
+        {
+            return _descriptor;
+        }
+
         private void BindBuffers(ShadersNeeded gameObjectShaderKind)
         {
             BindVertices();
@@ -124,66 +156,19 @@ namespace SimpleShooter.Graphics
             }
         }
 
-
-        public static void BindVertices(ShaderProgramDescriptor _descriptor, Vector3[] data)
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.verticesBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
-                data, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribVerticesLocation);
-        }
-
-        public static void BindColors(ShaderProgramDescriptor _descriptor, Vector3[] data)
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.colorsBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
-                data, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribColorsLocation);
-        }
-
-        public static void BindNormals(ShaderProgramDescriptor _descriptor, Vector3[] data)
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.normalsBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
-                data, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribNormalsLocation);
-        }
-
-
-
         private void BindVertices()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.verticesBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr) (_gameObject.Model.Vertices.Length * Vector3.SizeInBytes),
-                _gameObject.Model.Vertices, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribVerticesLocation);
+            BindVertices(_descriptor, _gameObject.Model.Vertices);
         }
 
         private void BindColors()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.colorsBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr) (_gameObject.Model.Colors.Length * Vector3.SizeInBytes),
-                _gameObject.Model.Colors, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribColorsLocation);
+            BindColors(_descriptor, _gameObject.Model.Colors);
         }
 
         private void BindNormals()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.normalsBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(_gameObject.Model.Normals.Length * Vector3.SizeInBytes),
-                _gameObject.Model.Normals, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribNormalsLocation);
-        }
-
-        public ShaderProgramDescriptor GetDescriptor()
-        {
-            return _descriptor;
+            BindNormals(_descriptor, _gameObject.Model.Normals);
         }
     }
 }

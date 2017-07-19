@@ -93,11 +93,6 @@ namespace SimpleShooter.LevelLoaders
                 Vertices = vertices,
                 Colors = Enumerable.Repeat(new Vector3(1, 0, 0), vertices.Length).ToArray()
             };
-
-            var mark = new GameObject(model, ShadersNeeded.Line);
-            player.Mark = mark;
-
-            level.Objects.Add(mark);
         }
 
         private GameObject CreateWafer()

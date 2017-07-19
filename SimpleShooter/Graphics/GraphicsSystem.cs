@@ -6,6 +6,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Core;
+using SimpleShooter.PlayerControl;
 using ClearBufferMask = OpenTK.Graphics.OpenGL4.ClearBufferMask;
 using GL = OpenTK.Graphics.OpenGL4.GL;
 
@@ -16,6 +17,8 @@ namespace SimpleShooter.Graphics
         private Camera Camera { get; set; }
 
         private SkyBoxRenderer _skybox;
+
+        private MarkController _mark;
 
         private Vector3[] GameObjectsSimpleModelVertices;
         private Vector3[] GameObjectsSimpleModelColors;
@@ -45,7 +48,7 @@ namespace SimpleShooter.Graphics
             Camera = new Camera(projection);
 
             _skybox = new SkyBoxRenderer(70);
-
+            _mark = new MarkController(width, height);
         }
 
         internal void Render(ObjectsGrouped objects, Level level)
@@ -64,7 +67,16 @@ namespace SimpleShooter.Graphics
 
             RenderByTypes(objects, level);
 
+            GL.Disable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
+
+            RenderMark(level);
+
             GL.Flush();
+        }
+
+        private void RenderMark(Level level)
+        {
+            _mark.Render(level.Player);
         }
 
         private void RenderByTypes(ObjectsGrouped objects, Level level)

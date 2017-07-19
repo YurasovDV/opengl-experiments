@@ -73,7 +73,7 @@
     <Compile Include="Graphics\ShadersNeeded.cs" />
     <Compile Include="Graphics\ShaderUniformsLocation.cs" />
     <Compile Include="Graphics\SkyBoxRenderer.cs" />
-    <Compile Include="Helpers\Projectileshelper.cs" />
+    <Compile Include="Helpers\ProjectilesHelper.cs" />
     <Compile Include="IdService.cs" />
     <Compile Include="LevelLoaders\IObjectInitialiser.cs" />
     <Compile Include="MainWindow.cs" />

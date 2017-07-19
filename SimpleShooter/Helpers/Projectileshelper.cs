@@ -13,10 +13,10 @@ namespace SimpleShooter.Helpers
         public static GameObject CreateProjectile(IShooterPlayer player)
         {
             var point = player.Position;
-            var speed = Vector3.Normalize(player.Target - point) * 2;
+            var speed = Vector3.Normalize(player.Target - point) * 40;
 
             var model = new SimpleModel();
-            model.Vertices = GeometryHelper.GetVerticesForCube(0.2f);
+            model.Vertices = GeometryHelper.GetVerticesForCube(0.05f);
 
             for (int i = 0; i < model.Vertices.Length; i++)
             {

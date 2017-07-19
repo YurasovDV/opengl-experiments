@@ -35,7 +35,6 @@ namespace SimpleShooter.PlayerControl
         protected float mouseHandicap = 2400;
 
         #region state
-        public GameObject Mark { get; set; }
 
         public Vector3 Position { get; set; }
         public Vector3 Target { get; set; }
@@ -43,7 +42,7 @@ namespace SimpleShooter.PlayerControl
         public float AngleVerticalRadians = 0;
 
         protected long shotCoolDown = 0;
-        protected long shotCoolDownDefault = 1000;
+        protected long shotCoolDownDefault = 100;
 
         #endregion
 
@@ -99,7 +98,6 @@ namespace SimpleShooter.PlayerControl
 
             var path = base.Tick(delta);
 
-            Mark.Model.Vertices.TranslateAll(path);
             Position += path;
             Target += path;
 
@@ -123,11 +121,6 @@ namespace SimpleShooter.PlayerControl
 
             var targetTransformed = Vector3.Transform(DefaultTarget, rotationResulting);
             Target = Position + targetTransformed;
-
-            if (Mark != null)
-            {
-                MarkController.SetTo(this, Mark, rotationResulting);
-            }
         }
 
         protected virtual void StepYZ(Vector3 stepDirection)
@@ -138,7 +131,6 @@ namespace SimpleShooter.PlayerControl
             _updatedBox.MoveBox(stepDirection);
             Move(stepDirection, _updatedBox);
 
-            Mark.Model.Vertices.TranslateAll(stepDirection);
         }
 
         protected virtual void StepXZ(Vector3 stepDirection)
@@ -151,8 +143,6 @@ namespace SimpleShooter.PlayerControl
 
             _updatedBox.MoveBox(dPosition);
             Move(dPosition, _updatedBox);
-
-            Mark.Model.Vertices.TranslateAll(dPosition);
         }
 
         protected virtual void RotateAroundY(float mouseDx)
