@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Enemies\Enemy.cs" />
     <Compile Include="Core\Level.cs" />
     <Compile Include="Core\OctreeGameObject.cs" />
     <Compile Include="GameObjectDescriptor.cs" />
@@ -87,7 +88,7 @@
     <Compile Include="PlayerControl\Events\ShotEventArgs.cs" />
     <Compile Include="PlayerControl\HumanPlayer.cs" />
     <Compile Include="PlayerControl\HumanPlayerInertial.cs" />
-    <Compile Include="PlayerControl\IPlayer.cs" />
+    <Compile Include="PlayerControl\IShooterPlayer.cs" />
     <Compile Include="PlayerControl\MarkController.cs" />
     <Compile Include="PlayerControl\Player.cs" />
     <Compile Include="PlayerControl\PlayerController.cs" />

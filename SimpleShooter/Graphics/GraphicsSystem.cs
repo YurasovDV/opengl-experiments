@@ -67,7 +67,7 @@ namespace SimpleShooter.Graphics
 
             RenderByTypes(objects, level);
 
-            GL.Disable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
+           // GL.Disable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
 
             RenderMark(level);
 

@@ -6,6 +6,7 @@ using Common.Geometry;
 using Common.Utils;
 using OpenTK;
 using SimpleShooter.Core;
+using SimpleShooter.Core.Enemies;
 using SimpleShooter.Graphics;
 using SimpleShooter.PlayerControl;
 
@@ -53,7 +54,18 @@ namespace SimpleShooter.LevelLoaders
             var movableObj = new MovableObject(obj.Model, ShadersNeeded.TextureLessNoLight, new Vector3(1, 0, 0), new Vector3());
              objectList.Add(movableObj);
 
+
+            AddEnemies(objectList);
+
             level.Objects = objectList;
+        }
+
+        private void AddEnemies(List<GameObject> objectList)
+        {
+            Matrix4 translate = Matrix4.CreateTranslation(50, 4, 50);
+            var obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
+            var enemy = new Enemy(obj.Model, 0, 10);
+            objectList.Add(enemy);
         }
 
         protected virtual void InitPlayer(Level level)

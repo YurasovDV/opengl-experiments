@@ -11,6 +11,7 @@ using OcTreeLibrary;
 using Common;
 using System.Windows.Forms;
 using SimpleShooter.Physics;
+using SimpleShooter.Core.Enemies;
 
 namespace SimpleShooter
 {
@@ -18,7 +19,9 @@ namespace SimpleShooter
     {
         private KeyHandler _keyHandler;
         public GraphicsSystem _graphics;
-        private List<InputSignal> eventsQueue;
+
+        private List<InputSignal> _eventsQueue;
+        private List<GameObject> _nextGeneration;
 
         private IShooterPlayer _player;
         private PlayerController _playerCtrl;
@@ -37,12 +40,19 @@ namespace SimpleShooter
             _keyHandler = new KeyHandler();
             _keyHandler.KeysToWatch.Add(Keys.Space);
             _keyHandler.KeyPress += KeyPress;
-            eventsQueue = new List<InputSignal>();
+
+            _eventsQueue = new List<InputSignal>();
+            _nextGeneration = new List<GameObject>();
         }
 
         internal void PostEvent(InputSignal signal)
         {
-            eventsQueue.Add(signal);
+            _eventsQueue.Add(signal);
+        }
+
+        public void AddObjectAfterTick(GameObject projectile)
+        {
+            _nextGeneration.Add(projectile);
         }
 
         private void InitObjects(IObjectInitializer initFunc)
@@ -103,6 +113,8 @@ namespace SimpleShooter
             CheckCollisions(delta);
 
             _graphics.Render(_objects, _level);
+
+            AddNextGeneration();
         }
 
 
@@ -111,11 +123,11 @@ namespace SimpleShooter
             _keyHandler.CheckKeys();
             _player.HandleMouseMove(dxdy);
 
-            for (int i = 0; i < eventsQueue.Count; i++)
+            for (int i = 0; i < _eventsQueue.Count; i++)
             {
-                KeyPress(eventsQueue[i]);
+                KeyPress(_eventsQueue[i]);
             }
-            eventsQueue.Clear();
+            _eventsQueue.Clear();
         }
 
         private void PhysicsStep(long delta)
@@ -137,6 +149,16 @@ namespace SimpleShooter
             CheckCollisions(_objects.GameObjectsTextureLessNoLight, delta);
 
             CheckCollisions(_player, delta);
+        }
+
+        private void AddNextGeneration()
+        {
+            foreach (var obj in _nextGeneration)
+            {
+                AddObject(obj);
+            }
+
+            _nextGeneration.Clear();
         }
 
         private void CheckCollisions(List<GameObjectDescriptor> entities, long delta)
@@ -229,6 +251,12 @@ namespace SimpleShooter
         {
             var desc = new GameObjectDescriptor(obj);
             _objects.AddObject(desc);
+
+            var enemy = obj as Enemy;
+            if (enemy != null)
+            {
+                enemy.Shot += _playerCtrl.Enemy_Shot;
+            }
 
             if (desc.RenderIdentity.ShaderKind != ShadersNeeded.Line)
             {
