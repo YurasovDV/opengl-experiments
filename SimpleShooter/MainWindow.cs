@@ -37,11 +37,11 @@ namespace SimpleShooter
             gl4.GL.Viewport(0, 0, Width, Height);
         }
 
-        protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
             switch (e.Key)
             {
-                case OpenTK.Input.Key.F4:
+                case Key.F4:
                     if (e.Alt)
                     {
                         _engine.Dispose();
