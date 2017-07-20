@@ -18,7 +18,6 @@
 /OcTreeRevisited/bin
 /OctreeTests/obj
 /OctreeTests/bin
-*.db
 /ShadowMap/obj
 /ShadowMap/bin
 /SimpleLighting/obj
@@ -38,3 +37,7 @@
 /OctreeLibrary/obj
 /OctreeLibrary/bin
 /.vs/TkShader/v14/.suo
+/.idea
+*.iml
+*.user
+*.db
