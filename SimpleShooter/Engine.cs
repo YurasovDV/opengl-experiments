@@ -12,6 +12,7 @@ using Common;
 using System.Windows.Forms;
 using SimpleShooter.Physics;
 using SimpleShooter.Core.Enemies;
+using SimpleShooter.Audio;
 
 namespace SimpleShooter
 {
@@ -24,15 +25,16 @@ namespace SimpleShooter
         private List<GameObject> _nextGeneration;
 
         private IShooterPlayer _player;
-        private PlayerController _playerCtrl;
+        private ShootingController _playerCtrl;
 
         public Level _level;
         private OcTree _tree;
 
         private ObjectsGrouped _objects;
 
+        public SoundManager SoundManager { get; set; }
 
-        public Engine(int width, int height, IObjectInitializer initFunc)
+        public Engine(int width, int height, IObjectInitializer initFunc, SoundManager sound)
         {
             InitObjects(initFunc);
             _graphics = new GraphicsSystem(width, height);
@@ -43,11 +45,18 @@ namespace SimpleShooter
 
             _eventsQueue = new List<InputSignal>();
             _nextGeneration = new List<GameObject>();
+
+            SoundManager = sound;
         }
 
         internal void PostEvent(InputSignal signal)
         {
             _eventsQueue.Add(signal);
+        }
+
+        internal void Dispose()
+        {
+            SoundManager.Dispose();
         }
 
         public void AddObjectAfterTick(GameObject projectile)
@@ -95,7 +104,7 @@ namespace SimpleShooter
         private void InitPlayer()
         {
             _player = _level.Player;
-            _playerCtrl = new PlayerController(this);
+            _playerCtrl = new ShootingController(this);
             _player.Shot += _playerCtrl.Player_Shot;
 
             _tree.Insert(_player);

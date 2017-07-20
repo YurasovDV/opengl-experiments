@@ -19,8 +19,9 @@ namespace SimpleShooter
 
         public MainWindow() : base(1920, 1000, GraphicsMode.Default, "Simple Shooter", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
+
             var initializer = new ObjectInitializer();
-            _engine = new Engine(Width, Height, initializer);
+            _engine = new Engine(Width, Height, initializer, new Audio.SoundManager());
             _watch = new Stopwatch();
             CursorVisible = false;
         }
@@ -43,6 +44,7 @@ namespace SimpleShooter
                 case OpenTK.Input.Key.F4:
                     if (e.Alt)
                     {
+                        _engine.Dispose();
                          Close();
                     }
                     break;

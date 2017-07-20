@@ -1,20 +1,21 @@
 ﻿using System;
+using SimpleShooter.Core;
 using SimpleShooter.Core.Enemies;
 using SimpleShooter.Helpers;
 using SimpleShooter.PlayerControl.Events;
 
 namespace SimpleShooter.PlayerControl
 {
-    class PlayerController
+    class ShootingController
     {
         private Engine _engine;
 
-        public PlayerController(Engine engine)
+        public ShootingController(Engine engine)
         {
             _engine = engine;
         }
 
-        public ActionStatus Player_Shot(object sender, ShotEventArgs args)
+        public ActionStatus Player_Shot(GameObject sender, ShotEventArgs args)
         {
             var res = new ActionStatus()
             {
@@ -27,12 +28,13 @@ namespace SimpleShooter.PlayerControl
                 res.Success = true;
                 var projectile = ProjectilesHelper.CreateProjectile(player);
                 _engine.AddObject(projectile);
+                _engine.SoundManager.Shot(args);
             }
 
             return res;
         }
 
-        public ActionStatus Enemy_Shot(object sender, ShotEventArgs args)
+        public ActionStatus Enemy_Shot(GameObject sender, ShotEventArgs args)
         {
             var res = new ActionStatus()
             {
@@ -45,6 +47,7 @@ namespace SimpleShooter.PlayerControl
                 res.Success = true;
                 var projectile = ProjectilesHelper.CreateProjectile(enemy);
                 _engine.AddObjectAfterTick(projectile);
+                _engine.SoundManager.Shot(args);
             }
 
             return res;

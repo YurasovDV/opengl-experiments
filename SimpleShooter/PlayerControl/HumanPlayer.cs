@@ -51,7 +51,7 @@ namespace SimpleShooter.PlayerControl
 
         protected void TryShoot()
         {
-            OnShot(new ShotEventArgs());
+            OnShot(new ShotEventArgs(Position));
         }
     }
 }

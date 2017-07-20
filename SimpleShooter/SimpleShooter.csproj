@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\SoundManager.cs" />
     <Compile Include="Core\Enemies\Enemy.cs" />
     <Compile Include="Core\Level.cs" />
     <Compile Include="Core\OctreeGameObject.cs" />
@@ -91,7 +93,7 @@
     <Compile Include="PlayerControl\IShooterPlayer.cs" />
     <Compile Include="PlayerControl\MarkController.cs" />
     <Compile Include="PlayerControl\Player.cs" />
-    <Compile Include="PlayerControl\PlayerController.cs" />
+    <Compile Include="PlayerControl\ShootingController.cs" />
     <Compile Include="PlayerControl\PlayerModelUnleashed.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
