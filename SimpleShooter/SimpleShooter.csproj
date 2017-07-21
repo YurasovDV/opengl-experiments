@@ -90,6 +90,7 @@
     <Compile Include="Core\Events\MoveEventArgs.cs" />
     <Compile Include="Core\Events\PlayerActionHandler.cs" />
     <Compile Include="Core\Events\ShotEventArgs.cs" />
+    <Compile Include="Physics\Collisions.cs" />
     <Compile Include="PlayerControl\HumanPlayer.cs" />
     <Compile Include="PlayerControl\HumanPlayerInertial.cs" />
     <Compile Include="PlayerControl\IShooterPlayer.cs" />

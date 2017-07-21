@@ -13,9 +13,9 @@ namespace OctreeTests
         {
             var grammar = new KochGrammar();
 
-            var seq = grammar.GenerateSequence(new GeneratorSettings() { MaxIteration = 1 }).ToArray();
+            SymbolState[] generated = grammar.GenerateSequence(new GeneratorSettings() { MaxIteration = 1 }).ToArray();
 
-            var part = new[]
+            Symbol[] expected = new[]
             {
                     Symbol.FORWARD_DRAW,// F
                     Symbol.TURN_RIGHT, // -
@@ -64,9 +64,9 @@ namespace OctreeTests
                     Symbol.FORWARD_DRAW,// F
             };
 
-            Assert.IsTrue(seq.Length == part.Length, "len");
+            Assert.IsTrue(generated.Length == expected.Length, "len");
 
-            CollectionAssert.AreEquivalent(part, seq, "eq");
+            CollectionAssert.AreEquivalent(expected, generated.Select(state => state.Symbol).ToArray(), "eq");
 
         }
     }

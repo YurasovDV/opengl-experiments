@@ -22,10 +22,10 @@ namespace SimpleShooter
         public GraphicsSystem _graphics;
 
         private List<InputSignal> _eventsQueue;
-        private List<GameObject> _nextGeneration;
+        private List<GameObject> _nextObjectGeneration;
 
         private IShooterPlayer _player;
-        private ShootingController _playerCtrl;
+        private ShootingController _shootingCtrl;
 
         public Level _level;
         private OcTree _tree;
@@ -34,19 +34,22 @@ namespace SimpleShooter
 
         public SoundManager SoundManager { get; set; }
 
-        public Engine(int width, int height, IObjectInitializer initFunc, SoundManager sound)
+        public Engine(int width, int height, IObjectInitializer initFunc)
         {
-            InitObjects(initFunc);
+            _shootingCtrl = new ShootingController(this);
+
             _graphics = new GraphicsSystem(width, height);
 
             _keyHandler = new KeyHandler();
             _keyHandler.KeysToWatch.Add(Keys.Space);
-            _keyHandler.KeyPress += KeyPress;
+            _keyHandler.KeyPress += OnKeyPress;
 
             _eventsQueue = new List<InputSignal>();
-            _nextGeneration = new List<GameObject>();
+            _nextObjectGeneration = new List<GameObject>();
 
-            SoundManager = sound;
+            SoundManager = new SoundManager();
+
+            InitObjects(initFunc);
         }
 
         internal void PostEvent(InputSignal signal)
@@ -61,7 +64,7 @@ namespace SimpleShooter
 
         public void AddObjectAfterTick(GameObject projectile)
         {
-            _nextGeneration.Add(projectile);
+            _nextObjectGeneration.Add(projectile);
         }
 
         private void InitObjects(IObjectInitializer initFunc)
@@ -104,8 +107,7 @@ namespace SimpleShooter
         private void InitPlayer()
         {
             _player = _level.Player;
-            _playerCtrl = new ShootingController(this);
-            _player.Shot += _playerCtrl.Player_Shot;
+            _player.Shot += _shootingCtrl.Player_Shot;
 
             _tree.Insert(_player);
             _player.NeedsRemoval += OctreeItem_Remove;
@@ -134,7 +136,7 @@ namespace SimpleShooter
 
             for (int i = 0; i < _eventsQueue.Count; i++)
             {
-                KeyPress(_eventsQueue[i]);
+                OnKeyPress(_eventsQueue[i]);
             }
             _eventsQueue.Clear();
         }
@@ -162,12 +164,12 @@ namespace SimpleShooter
 
         private void AddNextGeneration()
         {
-            foreach (var obj in _nextGeneration)
+            foreach (var obj in _nextObjectGeneration)
             {
                 AddObject(obj);
             }
 
-            _nextGeneration.Clear();
+            _nextObjectGeneration.Clear();
         }
 
         private void CheckCollisions(List<GameObjectDescriptor> entities, long delta)
@@ -184,7 +186,7 @@ namespace SimpleShooter
 
             for (int i = 0; i < objectsToCheck.Count; i++)
             {
-                if (Object.ReferenceEquals(entity,objectsToCheck[i]))
+                if (object.ReferenceEquals(entity, objectsToCheck[i]))
                 {
                     continue;
                 }
@@ -195,52 +197,26 @@ namespace SimpleShooter
                     {
                         if (objectsToCheck[i] is IMovableObject)
                         {
-                            HandleCollision(entity as IMovableObject, objectsToCheck[i] as IMovableObject);
+                           Collisions.HandleCollision(entity as IMovableObject, objectsToCheck[i] as IMovableObject);
                         }
                         else
                         {
-                            HandleCollision(entity as IMovableObject, objectsToCheck[i]);
+                            Collisions.HandleCollision(entity as IMovableObject, objectsToCheck[i]);
                         }
                     }
                     else
                     {
                         if (objectsToCheck[i] is IMovableObject)
                         {
-                            HandleCollision(entity, objectsToCheck[i] as IMovableObject);
+                            Collisions.HandleCollision(entity, objectsToCheck[i] as IMovableObject);
                         }
                         else
                         {
-                            HandleCollision(entity, objectsToCheck[i]);
+                            Collisions.HandleCollision(entity, objectsToCheck[i]);
                         }
                     }
                 }
             }
-        }
-
-        private void HandleCollision(IMovableObject obj1, IMovableObject obj2)
-        {
-            obj1.MoveAfterCollision(Vector3.Zero);
-            obj2.MoveAfterCollision(Vector3.Zero);
-        }
-
-        private void HandleCollision(IMovableObject obj1, IOctreeItem obj2)
-        {
-            obj1.MoveAfterCollision(Vector3.Zero);
-            // obj2.MoveAfterCollision(Vector3.Zero);
-        }
-
-        private void HandleCollision(IOctreeItem obj1, IMovableObject obj2)
-        {
-            //obj1.MoveAfterCollision(Vector3.Zero);
-            //obj1.BoundingBox.
-            obj2.MoveAfterCollision(Vector3.Zero);
-        }
-
-        private void HandleCollision(IOctreeItem obj1, IOctreeItem obj2)
-        {
-            //obj1.
-            //obj1.MoveAfterCollision(Vector3.Zero);
-            //obj2.MoveAfterCollision(Vector3.Zero);
         }
 
         private static void TickForMovable(List<GameObjectDescriptor> listOfObjects, long delta)
@@ -264,7 +240,7 @@ namespace SimpleShooter
             var enemy = obj as Enemy;
             if (enemy != null)
             {
-                enemy.Shot += _playerCtrl.Enemy_Shot;
+                enemy.Shot += _shootingCtrl.Enemy_Shot;
             }
 
             if (desc.RenderIdentity.ShaderKind != ShadersNeeded.Line)
@@ -280,7 +256,7 @@ namespace SimpleShooter
             }
         }
 
-        private void KeyPress(InputSignal signal)
+        private void OnKeyPress(InputSignal signal)
         {
             _player.Handle(signal);
         }
