@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using OpenTK;
-using SimpleShooter.PlayerControl.Events;
+using SimpleShooter.Core.Events;
 
 namespace SimpleShooter.Core.Enemies
 {

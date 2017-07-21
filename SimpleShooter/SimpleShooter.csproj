@@ -85,11 +85,11 @@
     <Compile Include="LevelLoaders\ObjectInitializer.cs" />
     <Compile Include="ObjectsGrouped.cs" />
     <Compile Include="Physics\AccelerationUpdater.cs" />
-    <Compile Include="PlayerControl\Events\ActionStatus.cs" />
-    <Compile Include="PlayerControl\Events\JumpEventArgs.cs" />
-    <Compile Include="PlayerControl\Events\MoveEventArgs.cs" />
-    <Compile Include="PlayerControl\Events\PlayerActionHandler.cs" />
-    <Compile Include="PlayerControl\Events\ShotEventArgs.cs" />
+    <Compile Include="Core\Events\ActionStatus.cs" />
+    <Compile Include="Core\Events\JumpEventArgs.cs" />
+    <Compile Include="Core\Events\MoveEventArgs.cs" />
+    <Compile Include="Core\Events\PlayerActionHandler.cs" />
+    <Compile Include="Core\Events\ShotEventArgs.cs" />
     <Compile Include="PlayerControl\HumanPlayer.cs" />
     <Compile Include="PlayerControl\HumanPlayerInertial.cs" />
     <Compile Include="PlayerControl\IShooterPlayer.cs" />

@@ -4,7 +4,7 @@ using Common;
 using Common.Geometry;
 using Common.Input;
 using OpenTK;
-using SimpleShooter.PlayerControl.Events;
+using SimpleShooter.Core.Events;
 
 namespace SimpleShooter.PlayerControl
 {

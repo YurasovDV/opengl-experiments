@@ -3,7 +3,7 @@ using Common.Input;
 using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
-using SimpleShooter.PlayerControl.Events;
+using SimpleShooter.Core.Events;
 
 namespace SimpleShooter.PlayerControl
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using SimpleShooter.Core;
 using SimpleShooter.Core.Enemies;
+using SimpleShooter.Core.Events;
 using SimpleShooter.Helpers;
-using SimpleShooter.PlayerControl.Events;
 
 namespace SimpleShooter.PlayerControl
 {

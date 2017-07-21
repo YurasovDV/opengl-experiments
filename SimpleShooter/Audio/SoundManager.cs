@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimpleShooter.PlayerControl.Events;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 using System.Threading;
 using System.Collections.Concurrent;
+using SimpleShooter.Core.Events;
 
 namespace SimpleShooter.Audio
 {
