@@ -191,31 +191,7 @@ namespace SimpleShooter
                     continue;
                 }
 
-                if (entity.BoundingBox.Intersects(objectsToCheck[i].BoundingBox))
-                {
-                    if (entity is IMovableObject)
-                    {
-                        if (objectsToCheck[i] is IMovableObject)
-                        {
-                           Collisions.HandleCollision(entity as IMovableObject, objectsToCheck[i] as IMovableObject);
-                        }
-                        else
-                        {
-                            Collisions.HandleCollision(entity as IMovableObject, objectsToCheck[i]);
-                        }
-                    }
-                    else
-                    {
-                        if (objectsToCheck[i] is IMovableObject)
-                        {
-                            Collisions.HandleCollision(entity, objectsToCheck[i] as IMovableObject);
-                        }
-                        else
-                        {
-                            Collisions.HandleCollision(entity, objectsToCheck[i]);
-                        }
-                    }
-                }
+                Collisions.CheckAndHandle(entity, objectsToCheck[i]);
             }
         }
 

@@ -56,6 +56,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CollisionsTestsCheckContact.cs" />
     <Compile Include="OctreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LSystemsTests.cs" />
@@ -69,9 +70,17 @@
       <Project>{4275eec1-9e04-44ef-9fed-d414db8b103a}</Project>
       <Name>LSystemsPlants</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OctreeLibrary\OctreeLibrary.csproj">
+      <Project>{51395108-FCCB-4511-8294-4163697E74CD}</Project>
+      <Name>OctreeLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OcTreeRevisited\OcTreeRevisited.csproj">
       <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>
       <Name>OcTreeRevisited</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleShooter\SimpleShooter.csproj">
+      <Project>{d526cdca-68a7-442e-9ebc-0405b1a7e670}</Project>
+      <Name>SimpleShooter</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

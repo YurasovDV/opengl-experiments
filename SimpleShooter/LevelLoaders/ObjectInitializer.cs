@@ -12,7 +12,7 @@ using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter.LevelLoaders
 {
-    class ObjectInitializer : IObjectInitializer
+    public class ObjectInitializer : IObjectInitializer
     {
         private Vector3 _lightPos = new Vector3(30, 10, 0);
 
@@ -107,7 +107,7 @@ namespace SimpleShooter.LevelLoaders
             };
         }
 
-        private GameObject CreateWafer()
+        public static GameObject CreateWafer()
         {
             var verticesPlane = new[]
             {
@@ -186,7 +186,7 @@ namespace SimpleShooter.LevelLoaders
             return obj;
         }
 
-        private static GameObject CreateCube(Matrix4 translate, Vector3 color, float size, ShadersNeeded shadersKind)
+        public static GameObject CreateCube(Matrix4 translate, Vector3 color, float size, ShadersNeeded shadersKind)
         {
             var model = new SimpleModel();
             var vertices = GeometryHelper.GetVerticesForCube(size);

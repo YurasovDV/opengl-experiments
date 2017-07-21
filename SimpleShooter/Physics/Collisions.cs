@@ -36,5 +36,38 @@ namespace SimpleShooter.Physics
             //obj1.MoveAfterCollision(Vector3.Zero);
             //obj2.MoveAfterCollision(Vector3.Zero);
         }
+
+        public static bool CheckAndHandle(IOctreeItem entityWorkWith, IOctreeItem possibleCollider)
+        {
+            var result = false;
+            if (entityWorkWith.BoundingBox.Intersects(possibleCollider.BoundingBox))
+            {
+                if (entityWorkWith is IMovableObject)
+                {
+                    if (possibleCollider is IMovableObject)
+                    {
+                        HandleCollision(entityWorkWith as IMovableObject, possibleCollider as IMovableObject);
+                    }
+                    else
+                    {
+                        HandleCollision(entityWorkWith as IMovableObject, possibleCollider);
+                    }
+                }
+                else
+                {
+                    if (possibleCollider is IMovableObject)
+                    {
+                        HandleCollision(entityWorkWith, possibleCollider as IMovableObject);
+                    }
+                    else
+                    {
+                        HandleCollision(entityWorkWith, possibleCollider);
+                    }
+                }
+
+                result = true;
+            }
+            return result;
+        }
     }
 }
