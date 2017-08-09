@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OcTreeLibrary;
 using OpenTK;
 
 namespace SimpleShooter.Core
 {
-    public interface IMovableObject
+    public interface IMovableObject : IOctreeItem
     {
 
         float Mass { get; }

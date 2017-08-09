@@ -9,7 +9,7 @@ namespace OctreeTests
     public class LSystemsTests
     {
         [TestMethod]
-        public void TestKoch()
+        public void Koch()
         {
             var grammar = new KochGrammar();
 

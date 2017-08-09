@@ -159,7 +159,7 @@ namespace SimpleShooter
             CheckCollisions(_objects.GameObjectsTextureLess, delta);
             CheckCollisions(_objects.GameObjectsTextureLessNoLight, delta);
 
-            CheckCollisions(_player, delta);
+            CheckCollisions((GameObject)_player, delta);
         }
 
         private void AddNextGeneration()
@@ -180,7 +180,7 @@ namespace SimpleShooter
             }
         }
 
-        private void CheckCollisions(IOctreeItem entity, long delta)
+        private void CheckCollisions(GameObject entity, long delta)
         {
             var objectsToCheck = _tree.GetPossibleCollisions(entity);
 

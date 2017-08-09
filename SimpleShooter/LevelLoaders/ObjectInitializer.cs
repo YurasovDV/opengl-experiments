@@ -201,7 +201,6 @@ namespace SimpleShooter.LevelLoaders
 
             var obj = new GameObject(model, shadersKind);
             obj.CalcNormals();
-            obj.Id = IdService.GetNext();
             return obj;
         }
     }

@@ -25,9 +25,8 @@ namespace SimpleShooter.Physics
 
         public static void HandleCollision(IOctreeItem obj1, IMovableObject obj2)
         {
-            //obj1.MoveAfterCollision(Vector3.Zero);
-            //obj1.BoundingBox.
-            obj2.MoveAfterCollision(Vector3.Zero);
+            var move = obj1.BoundingBox.GetCollisionResolution(obj2.BoundingBox);
+            obj2.MoveAfterCollision(move);
         }
 
         // no one is movable
@@ -37,7 +36,7 @@ namespace SimpleShooter.Physics
             //obj2.MoveAfterCollision(Vector3.Zero);
         }
 
-        public static bool CheckAndHandle(IOctreeItem entityWorkWith, IOctreeItem possibleCollider)
+        public static bool CheckAndHandle(GameObject entityWorkWith, IOctreeItem possibleCollider)
         {
             var result = false;
             if (entityWorkWith.BoundingBox.Intersects(possibleCollider.BoundingBox))

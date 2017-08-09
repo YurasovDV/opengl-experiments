@@ -56,7 +56,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CollisionsTestsCheckContact.cs" />
+    <Compile Include="CollisionStaticVsDynamic.cs" />
+    <Compile Include="CollisionsTestsStatic.cs" />
     <Compile Include="OctreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LSystemsTests.cs" />

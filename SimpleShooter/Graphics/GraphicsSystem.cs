@@ -20,10 +20,6 @@ namespace SimpleShooter.Graphics
 
         private MarkController _mark;
 
-        private Vector3[] GameObjectsSimpleModelVertices;
-        private Vector3[] GameObjectsSimpleModelColors;
-        private Vector3[] GameObjectsSimpleModelNormals;
-
         private Vector3[] GameObjectsLineVertices;
         private Vector3[] GameObjectsLineColors;
 
