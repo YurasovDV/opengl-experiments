@@ -1,8 +1,8 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace SimpleShadows.Graphics
 {

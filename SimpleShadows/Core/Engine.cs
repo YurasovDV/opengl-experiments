@@ -1,14 +1,14 @@
-﻿using Common.Input;
-using OpenTK;
-using SimpleShadows.Core.Models;
-using SimpleShadows.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using Common.Input;
+using OpenTK;
+using SimpleShadows.Core.Models;
+using SimpleShadows.Graphics;
 
 namespace SimpleShadows.Core
 {

@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Common;
 using OpenTK;
 using Particles.Graphics;
-using Common;
 
 namespace Particles.Classes
 {

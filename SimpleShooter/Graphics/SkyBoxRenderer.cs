@@ -1,9 +1,9 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Common.Utils;
+using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Graphics.ShaderLoad;
 using SimpleShooter.PlayerControl;
 

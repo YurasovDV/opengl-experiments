@@ -1,6 +1,5 @@
 ﻿using System;
 using Common.Geometry;
-using OpenTK;
 
 namespace OcTreeLibrary
 {

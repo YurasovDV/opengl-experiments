@@ -1,5 +1,4 @@
-﻿using System;
-using Common.Input;
+﻿using Common.Input;
 using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;

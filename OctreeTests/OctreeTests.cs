@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OcTreeRevisited;
-using OcTreeRevisited.OcTree;
-using OpenTK;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OctreeTests
 {

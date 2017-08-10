@@ -1,5 +1,4 @@
 ﻿using OcTreeLibrary;
-using OpenTK;
 using SimpleShooter.Core;
 
 namespace SimpleShooter.Physics

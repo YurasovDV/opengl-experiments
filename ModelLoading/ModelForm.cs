@@ -1,11 +1,7 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OpenTK;
+using OpenTK.Graphics;
 using gl4 = OpenTK.Graphics.OpenGL4;
 
 namespace ModelLoading

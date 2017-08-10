@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using SimpleShooter.Core;
 using SimpleShooter.Graphics;
 using SimpleShooter.Graphics.ShaderLoad;
 

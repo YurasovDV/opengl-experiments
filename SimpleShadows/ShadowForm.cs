@@ -1,16 +1,9 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
-
-using gl4 = OpenTK.Graphics.OpenGL4;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SimpleShadows.Core;
+﻿using System;
 using System.Diagnostics;
-using System.Windows.Forms;
+using OpenTK;
+using OpenTK.Graphics;
+using SimpleShadows.Core;
+using gl4 = OpenTK.Graphics.OpenGL4;
 
 namespace SimpleShadows
 {

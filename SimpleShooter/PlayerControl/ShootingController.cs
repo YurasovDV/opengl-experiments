@@ -1,5 +1,4 @@
-﻿using System;
-using SimpleShooter.Core;
+﻿using SimpleShooter.Core;
 using SimpleShooter.Core.Enemies;
 using SimpleShooter.Core.Events;
 using SimpleShooter.Helpers;

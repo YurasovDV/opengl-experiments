@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Common;
 using Common.Geometry;
-using OcTreeRevisited.OcTree;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

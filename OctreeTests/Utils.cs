@@ -1,5 +1,4 @@
-﻿using System;
-using OpenTK;
+﻿using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Graphics;
 using SimpleShooter.LevelLoaders;

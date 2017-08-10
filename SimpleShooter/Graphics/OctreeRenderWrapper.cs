@@ -1,5 +1,4 @@
-﻿using System;
-using Common;
+﻿using Common;
 using OcTreeLibrary;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Core;

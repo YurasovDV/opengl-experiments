@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
-using Common.Geometry;
+﻿using Common;
 using Common.Input;
-using Common.Utils;
-using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Core.Events;

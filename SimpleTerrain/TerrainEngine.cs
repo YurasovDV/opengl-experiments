@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Common;
 using Common.Input;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 
 namespace SimpleTerrain
 {

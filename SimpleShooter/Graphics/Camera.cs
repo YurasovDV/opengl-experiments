@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using OpenTK;
-using SimpleShooter.Graphics;
+﻿using OpenTK;
 using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter.Graphics

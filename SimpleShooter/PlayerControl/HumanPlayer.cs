@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Common;
-using Common.Geometry;
+﻿using Common;
 using Common.Input;
 using OpenTK;
 using SimpleShooter.Core.Events;

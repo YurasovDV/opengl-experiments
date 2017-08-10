@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
 using SimpleShooter.Core;
 using SimpleShooter.PlayerControl;
 using ClearBufferMask = OpenTK.Graphics.OpenGL4.ClearBufferMask;

@@ -1,10 +1,7 @@
-﻿using Common;
+﻿using System;
+using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace OcTreeRevisited
 {

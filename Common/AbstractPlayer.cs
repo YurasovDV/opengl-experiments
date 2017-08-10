@@ -1,11 +1,7 @@
-﻿using Common.Input;
+﻿using System;
+using Common.Input;
 using Common.Utils;
 using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {

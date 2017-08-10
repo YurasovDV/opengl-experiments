@@ -1,9 +1,8 @@
-﻿using Common;
-using OpenTK;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OcTreeLibrary;
+using Common;
+using OpenTK;
 
 namespace OcTreeLibrary
 {

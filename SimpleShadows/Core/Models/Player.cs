@@ -1,13 +1,7 @@
-﻿using Common.Input;
+﻿using System;
+using Common.Input;
 using OpenTK;
 using SimpleShadows.Core.Utils;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleShadows.Core.Models
 {

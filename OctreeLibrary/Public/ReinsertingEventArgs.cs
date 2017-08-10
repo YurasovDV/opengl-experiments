@@ -1,5 +1,4 @@
 ﻿using Common.Geometry;
-using OpenTK;
 
 namespace OcTreeLibrary
 {

@@ -1,7 +1,7 @@
 ﻿
 using Common;
-using OpenTK;
 using Common.Utils;
+using OpenTK;
 
 namespace OcTreeRevisited
 {

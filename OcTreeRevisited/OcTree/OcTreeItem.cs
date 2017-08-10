@@ -1,8 +1,6 @@
-﻿using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Common.Geometry;
+using OpenTK;
 
 namespace OcTreeRevisited.OcTree
 {

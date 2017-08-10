@@ -1,11 +1,6 @@
-﻿using Common;
-using Common.Input;
+﻿using System;
+using Common;
 using OpenTK;
-using SimpleShadows.Core.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ModelLoading
 {

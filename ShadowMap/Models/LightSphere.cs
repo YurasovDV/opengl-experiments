@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK;
+﻿using OpenTK;
 
 namespace ShadowMap
 {
-   public  class LightSphere : GameObject
+    public  class LightSphere : GameObject
     {
         public LightSphere(Vector3 center)
         {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LSystemsPlants.Core.L_Systems
+﻿namespace LSystemsPlants.Core.L_Systems
 {
     public class Constants
     {

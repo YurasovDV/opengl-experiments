@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using Common.Input;
-using OpenTK;
-using SimpleShooter.Core;
-using SimpleShooter.Graphics;
-using SimpleShooter.PlayerControl;
-using SimpleShooter.LevelLoaders;
-using OcTreeLibrary;
-using Common;
 using System.Windows.Forms;
-using SimpleShooter.Physics;
-using SimpleShooter.Core.Enemies;
+using Common.Input;
+using OcTreeLibrary;
+using OpenTK;
 using SimpleShooter.Audio;
+using SimpleShooter.Core;
+using SimpleShooter.Core.Enemies;
+using SimpleShooter.Graphics;
+using SimpleShooter.Physics;
+using SimpleShooter.PlayerControl;
 
 namespace SimpleShooter
 {
@@ -34,7 +31,7 @@ namespace SimpleShooter
 
         public SoundManager SoundManager { get; set; }
 
-        public Engine(int width, int height, IObjectInitializer initFunc)
+        public Engine(int width, int height, Level level)
         {
             _shootingCtrl = new ShootingController(this);
 
@@ -49,7 +46,11 @@ namespace SimpleShooter
 
             SoundManager = new SoundManager();
 
-            InitObjects(initFunc);
+            _objects = new ObjectsGrouped();
+
+            _level = level;
+
+            InitObjects();
         }
 
         internal void PostEvent(InputSignal signal)
@@ -67,11 +68,8 @@ namespace SimpleShooter
             _nextObjectGeneration.Add(projectile);
         }
 
-        private void InitObjects(IObjectInitializer initFunc)
+        private void InitObjects()
         {
-            _objects = new ObjectsGrouped();
-
-            _level = initFunc.CreateLevel();
             _tree = new OcTree(_level.Volume);
 
             InitPlayer();

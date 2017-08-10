@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Common;
+﻿using Common;
 using OpenTK;
 
 namespace FabricSimulation

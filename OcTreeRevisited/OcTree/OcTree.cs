@@ -1,13 +1,9 @@
-﻿using Common;
-using OpenTK;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.IO;
+using Common;
 using Common.Geometry;
+using OpenTK;
 
 namespace OcTreeRevisited.OcTree
 {

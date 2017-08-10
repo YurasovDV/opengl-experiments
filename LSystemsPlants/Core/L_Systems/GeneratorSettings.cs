@@ -1,6 +1,6 @@
 ﻿namespace LSystemsPlants.Core.L_Systems
 {
-   public class GeneratorSettings
+    public class GeneratorSettings
     {
         public static GeneratorSettings Default = new GeneratorSettings()
         {

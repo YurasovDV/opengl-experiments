@@ -1,5 +1,4 @@
 ﻿using System;
-using SimpleShooter.Core;
 
 namespace SimpleShooter.Core.Events
 {
