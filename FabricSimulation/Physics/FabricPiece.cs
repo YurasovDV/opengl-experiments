@@ -8,7 +8,7 @@ namespace FabricSimulation
     {
         public Vector3[] Normals { get; set; }
         public Vector3[] Colors { get; set; }
-        public PointMass[,] Points;
+        public PointMass[,] PointsGrid;
         public Vector3[] vertices;
 
         public FabricPiece(Vector3[,] points)
@@ -22,7 +22,6 @@ namespace FabricSimulation
                 for (int y = 0; y < l2; y++)
                 {
                     bool firstRow = x == 0;
-                    // Debug.WriteLine(points[x, y].ToString());
                     masses[x, y] = new PointMass(points[x, y], firstRow);
 
                     if (x != 0)
@@ -39,7 +38,7 @@ namespace FabricSimulation
                 }
             }
 
-            Points = masses;
+            PointsGrid = masses;
             const int verticesPerPoint = 6;
 
             Normals = new Vector3[l1 * l2 * verticesPerPoint];
@@ -59,8 +58,8 @@ namespace FabricSimulation
 
         public SimpleModel GetAsModel()
         {
-            var l1 = Points.GetLength(0);
-            var l2 = Points.GetLength(1);
+            var l1 = PointsGrid.GetLength(0);
+            var l2 = PointsGrid.GetLength(1);
 
             int k = 0;
 
@@ -68,12 +67,12 @@ namespace FabricSimulation
             {
                 for (int j = 0; j < l2 - 1; j++)
                 {
-                    vertices[k] = (Points[i, j].Location);
+                    vertices[k] = (PointsGrid[i, j].Location);
                     if (i > 0 && j > 0)
                     {
                         var norm = Vector3.Cross(
-                            Points[i, j + 1].Location - Points[i, j - 1].Location,
-                            Points[i + 1, j].Location - Points[i - 1, j].Location);
+                            PointsGrid[i, j + 1].Location - PointsGrid[i, j - 1].Location,
+                            PointsGrid[i + 1, j].Location - PointsGrid[i - 1, j].Location);
                         Normals[k] = norm;
                     }
                     else
@@ -83,12 +82,12 @@ namespace FabricSimulation
 
                     k++;
 
-                    vertices[k] = (Points[i, j + 1].Location);
+                    vertices[k] = (PointsGrid[i, j + 1].Location);
                     if (i > 0 && j + 1 > 0 && j + 2 < l2)
                     {
                         var norm = Vector3.Cross(
-                            Points[i, j + 2].Location - Points[i, j].Location,
-                            Points[i + 1, j].Location - Points[i - 1, j].Location);
+                            PointsGrid[i, j + 2].Location - PointsGrid[i, j].Location,
+                            PointsGrid[i + 1, j].Location - PointsGrid[i - 1, j].Location);
                         Normals[k] = norm;
                     }
                     else
@@ -97,12 +96,12 @@ namespace FabricSimulation
                     }
                     k++;
 
-                    vertices[k] = (Points[i + 1, j].Location);
+                    vertices[k] = (PointsGrid[i + 1, j].Location);
                     if (i + 1 > 0 && j > 0 && i + 2 < l1)
                     {
                         var norm = Vector3.Cross(
-                             Points[i, j + 1].Location - Points[i, j - 1].Location,
-                             Points[i + 2, j].Location - Points[i, j].Location);
+                             PointsGrid[i, j + 1].Location - PointsGrid[i, j - 1].Location,
+                             PointsGrid[i + 2, j].Location - PointsGrid[i, j].Location);
                         Normals[k] = norm;
                     }
                     else
@@ -112,12 +111,12 @@ namespace FabricSimulation
                     k++;
 
 
-                    vertices[k] = (Points[i, j + 1].Location);
+                    vertices[k] = (PointsGrid[i, j + 1].Location);
                     if (i > 0 && j + 1 > 0 && j + 2 < l2)
                     {
                         var norm = Vector3.Cross(
-                            Points[i, j + 2].Location - Points[i, j].Location,
-                            Points[i + 1, j].Location - Points[i - 1, j].Location);
+                            PointsGrid[i, j + 2].Location - PointsGrid[i, j].Location,
+                            PointsGrid[i + 1, j].Location - PointsGrid[i - 1, j].Location);
                         Normals[k] = norm;
                     }
                     else
@@ -127,12 +126,12 @@ namespace FabricSimulation
                     k++;
 
 
-                    vertices[k] = (Points[i + 1, j + 1].Location);
+                    vertices[k] = (PointsGrid[i + 1, j + 1].Location);
                     if (i + 2 < l1 && j + 2 < l2)
                     {
                         var norm = Vector3.Cross(
-                            Points[i+1, j + 2].Location - Points[i + 1, j].Location,
-                            Points[i + 2, j + 1].Location - Points[i, j + 1].Location);
+                            PointsGrid[i+1, j + 2].Location - PointsGrid[i + 1, j].Location,
+                            PointsGrid[i + 2, j + 1].Location - PointsGrid[i, j + 1].Location);
                         Normals[k] = norm;
                     }
                     else
@@ -142,12 +141,12 @@ namespace FabricSimulation
                     k++;
 
 
-                    vertices[k] = (Points[i + 1, j].Location);
+                    vertices[k] = (PointsGrid[i + 1, j].Location);
                     if (i + 1 > 0 && j > 0 && i + 2 < l1)
                     {
                         var norm = Vector3.Cross(
-                             Points[i, j + 1].Location - Points[i, j - 1].Location,
-                             Points[i + 2, j].Location - Points[i, j].Location);
+                             PointsGrid[i, j + 1].Location - PointsGrid[i, j - 1].Location,
+                             PointsGrid[i + 2, j].Location - PointsGrid[i, j].Location);
                         Normals[k] = norm;
                     }
                     else
@@ -171,8 +170,8 @@ namespace FabricSimulation
         internal void Tick(long time)
         {
 
-            var l1 = Points.GetLength(0);
-            var l2 = Points.GetLength(1);
+            var l1 = PointsGrid.GetLength(0);
+            var l2 = PointsGrid.GetLength(1);
 
             for (int k = 0; k < 2; k++)
             {
@@ -180,7 +179,7 @@ namespace FabricSimulation
                 {
                     for (int j = 0; j < l2; j++)
                     {
-                        Points[i, j].SolveConstraints();
+                        PointsGrid[i, j].SolveConstraints();
                     }
                 }
             }
@@ -189,41 +188,14 @@ namespace FabricSimulation
             {
                 for (int j = 0; j < l2; j++)
                 {
-                    PointTick(Points[i, j], time);
+                    PointTick(PointsGrid[i, j], time);
                 }
             }
-
-
-
-            /*
-            Action<PointMass, int, int> solve = (p, i, j) => p.SolveConstraints();
-
-            for (int i = 0; i < 2; i++)
-            {
-                VisitVertices(solve);
-            }
-
-            Action<PointMass, int, int> a = (p, i, j) => PointTick(p, time);
-            VisitVertices(a);*/
         }
 
         private static void PointTick(PointMass point, long elapsed)
         {
             point.UpdatePhysics(elapsed);
         }
-
-        //private void VisitVertices(Action<PointMass, int, int> action, int boundX = 0, int boundY = 0)
-        //{
-        //    var l1 = Points.GetLength(0);
-        //    var l2 = Points.GetLength(1);
-
-        //    for (int i = 0; i < l1 - boundX; i++)
-        //    {
-        //        for (int j = 0; j < l2 - boundY; j++)
-        //        {
-        //            action(Points[i, j], i, j);
-        //        }
-        //    }
-        //}
     }
 }

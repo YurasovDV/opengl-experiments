@@ -53,22 +53,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constraint.cs" />
-    <Compile Include="FabricPiece.cs" />
+    <Compile Include="Physics\Constraint.cs" />
+    <Compile Include="Physics\FabricPiece.cs" />
     <Compile Include="FabricForm.cs" />
-    <Compile Include="FabricSimulationEngine.cs" />
+    <Compile Include="Physics\FabricSimulationEngine.cs" />
     <Compile Include="PinnedPlayer.cs" />
-    <Compile Include="PointMass.cs" />
+    <Compile Include="Physics\PointMass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenderEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="fabricVertex.glsl">
+    <None Include="Shaders\fabricVertex.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="fabricFrag.glsl">
+    <None Include="Shaders\fabricFrag.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

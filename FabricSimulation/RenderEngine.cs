@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -92,7 +88,7 @@ namespace FabricSimulation
 
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
             string text = string.Empty;
-            using (StreamReader rd = new StreamReader("fabricVertex.glsl"))
+            using (StreamReader rd = new StreamReader("Shaders\\fabricVertex.glsl"))
             {
                 text = rd.ReadToEnd();
             }
@@ -116,7 +112,7 @@ namespace FabricSimulation
             var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
 
             text = string.Empty;
-            using (StreamReader rd = new StreamReader("fabricFrag.glsl"))
+            using (StreamReader rd = new StreamReader("Shaders\\fabricFrag.glsl"))
             {
                 text = rd.ReadToEnd();
             }

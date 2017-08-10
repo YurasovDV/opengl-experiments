@@ -88,7 +88,7 @@ namespace FabricSimulation
             var d = new Vector3(point.X, point.Y, point.Z);
             float min = float.MaxValue;
             PointMass closest = null;
-            foreach (var mass in Piece.Points)
+            foreach (var mass in Piece.PointsGrid)
             {
                 var len = (mass.Location - d).LengthSquared;
                 if (len < min)
@@ -104,8 +104,8 @@ namespace FabricSimulation
             Debug.WriteLine(point);
             // Debug.WriteLine(Piece.Points[PieceHeight - 1, PieceWidth - 1].Location);
             //Debug.WriteLine(Piece.Points[PieceHeight / 2, PieceWidth / 2].Location);
-            Debug.WriteLine(Piece.Points[0, 0].Location);
-            Debug.WriteLine(Piece.Points[PieceHeight - 1, PieceWidth - 1].Location);
+            Debug.WriteLine(Piece.PointsGrid[0, 0].Location);
+            Debug.WriteLine(Piece.PointsGrid[PieceHeight - 1, PieceWidth - 1].Location);
 
             Debug.WriteLine("");
 
@@ -113,7 +113,7 @@ namespace FabricSimulation
             {
                 //var force = new Vector3(0, 0, -1000000f) / (1000 / 16.0f);
                 var force = new Vector3(0, 0, -1000000f) / (1000 / 16.0f);
-                Piece.Points[PieceHeight / 2, PieceWidth / 2].AddForce(force);
+                Piece.PointsGrid[PieceHeight / 2, PieceWidth / 2].AddForce(force);
             }
             /*
             

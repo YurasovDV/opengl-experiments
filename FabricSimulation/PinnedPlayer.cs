@@ -14,8 +14,6 @@ namespace FabricSimulation
         public PinnedPlayer()
           : base(intersectionTest: null)
         {
-            //DEFAULT_TARGET = new Vector3(0, 0, 10f);
-            //DEFAULT_POSITION = new Vector3(0.0f, 0f, -40);
             DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(0, 0, -30f);
             DEFAULT_POSITION = new Vector3(0.0f, 0f, 30);
 
@@ -53,10 +51,6 @@ namespace FabricSimulation
 
             var rotation = Matrix4.CreateRotationY(AngleHorizontalRad);
             var deltaFlash = Vector3.Transform(FLASHLIGHT_DIST, rotation);
-
-            // rotation = Matrix4.CreateRotationX(AngleVerticalRad);
-
-            //deltaFlash = Vector3.Transform(deltaFlash, rotation);
 
             FlashlightPosition = new Vector3(Position) + deltaFlash;
 
