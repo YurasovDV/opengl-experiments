@@ -7,7 +7,7 @@ using SimpleShooter.Core.Events;
 
 namespace SimpleShooter.Audio
 {
-    class SoundManager : IDisposable
+    class SoundManager : IDisposable, ISoundManager
     {
         private object _lockObj;
         private bool _stop;
@@ -38,6 +38,19 @@ namespace SimpleShooter.Audio
             //_workThread2.Start();
         }
 
+        public void Shot(ShotEventArgs args)
+        {
+            if (Config.IsSoundOn)
+            {
+                _shotsQueue.Enqueue(args);
+            }
+        }
+
+        public void Dispose()
+        {
+            _stop = true;
+        }
+
         private void Play()
         {
             while (true)
@@ -58,19 +71,7 @@ namespace SimpleShooter.Audio
             }
         }
 
-        public void Shot(ShotEventArgs args)
-        {
-            if (Config.IsSoundOn)
-            {
-                _shotsQueue.Enqueue(args);
-            }
-        }
 
-
-        public void Dispose()
-        {
-            _stop = true;
-        }
 
         private unsafe void PlayShot(ShotEventArgs args)
         {

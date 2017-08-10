@@ -4,6 +4,7 @@ using Common.Input;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
+using SimpleShooter.Audio;
 using SimpleShooter.LevelLoaders;
 using gl4 = OpenTK.Graphics.OpenGL4;
 
@@ -20,7 +21,7 @@ namespace SimpleShooter
         public MainWindow() : base(1920, 1000, GraphicsMode.Default, "Simple Shooter", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
             var initializer = new ObjectInitializer();
-            _engine = new Engine(Width, Height, initializer.CreateLevel());
+            _engine = new Engine(Width, Height, initializer.CreateLevel(), new SoundManager());
             _watch = new Stopwatch();
             CursorVisible = false;
         }
