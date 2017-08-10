@@ -76,14 +76,19 @@ namespace Common.Geometry
             var absDy = Math.Abs(dy);
             var absDz = Math.Abs(dz);
 
-            if (absDz < Math.Min(absDx, absDy))
+            if (absDx <= Math.Min(absDy, absDz))
             {
-                return new Vector3(0, 0, dz);
+                return new Vector3(dx, 0, 0);
             }
-            else if (absDy < Math.Min(absDx, absDz))
+            else if (absDy <= Math.Min(absDx, absDz))
             {
                 return new Vector3(0, dy, 0);
             }
+            else if (absDz < Math.Min(absDx, absDy))
+            {
+                return new Vector3(0, 0, dz);
+            }
+            
             return new Vector3(dx, 0, 0);
         }
 

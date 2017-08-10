@@ -6,8 +6,8 @@
     <ProjectGuid>{29EEBAF2-4DB8-402E-A026-058D8F68057B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OctreeTests</RootNamespace>
-    <AssemblyName>OctreeTests</AssemblyName>
+    <RootNamespace>GLTests</RootNamespace>
+    <AssemblyName>GLTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -56,11 +56,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CollisionDynamicVsDynamic.cs" />
     <Compile Include="CollisionStaticVsDynamic.cs" />
     <Compile Include="CollisionsTestsStatic.cs" />
     <Compile Include="OctreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LSystemsTests.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

@@ -1,45 +1,26 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GLTests;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Graphics;
 using SimpleShooter.LevelLoaders;
 using SimpleShooter.Physics;
 
-namespace OctreeTests
+namespace CollisionTests
 {
     [TestClass]
     public class CollisionsTestsStatic
     {
-        Vector3 _green;
-        ShadersNeeded _shaders;
-
-        public CollisionsTestsStatic()
-        {
-            _green = new Vector3(0, 1, 0);
-            _shaders = ShadersNeeded.TextureLess;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="center"></param>
-        /// <param name="size">actual cube will have dimension = size * 2</param>
-        /// <returns></returns>
-        public GameObject CreateCube(Matrix4 center, float size)
-        {
-            return ObjectInitializer.CreateCube(center, _green, size, _shaders);
-        }
-
         #region check contact static vs static
 
         [TestMethod]
         public void StaticStatic_NoContact()
         {
             Matrix4 centre = Matrix4.CreateTranslation(30, 4, 0);
-            GameObject obj1 = CreateCube(centre, size: 1);
+            GameObject obj1 = Utils.CreateCube(centre, size: 1);
 
             centre = Matrix4.CreateTranslation(0, 0, 0);
-            GameObject obj2 = CreateCube(centre, size: 0.5f);
+            GameObject obj2 = Utils.CreateCube(centre, size: 0.5f);
 
 
             bool isCollided = Collisions.CheckAndHandle(obj1, obj2);
@@ -50,10 +31,10 @@ namespace OctreeTests
         public void StaticStatic_FullyInside_Contact()
         {
             Matrix4 centre = Matrix4.CreateTranslation(30, 4, 0);
-            GameObject obj1 = CreateCube(centre, size: 10);
+            GameObject obj1 = Utils.CreateCube(centre, size: 10);
 
             centre = Matrix4.CreateTranslation(30, 4, 0);
-            GameObject obj2 = CreateCube(centre, size: 0.5f);
+            GameObject obj2 = Utils.CreateCube(centre, size: 0.5f);
 
             bool isCollided = Collisions.CheckAndHandle(obj1, obj2);
             Assert.IsTrue(isCollided);
@@ -63,10 +44,10 @@ namespace OctreeTests
         public void StaticStatic_ExactMatch_Contact()
         {
             Matrix4 centre = Matrix4.CreateTranslation(30, 4, 0);
-            GameObject obj1 = CreateCube(centre, size: 0.5f);
+            GameObject obj1 = Utils.CreateCube(centre, size: 0.5f);
 
             centre = Matrix4.CreateTranslation(30, 4, 0);
-            GameObject obj2 = CreateCube(centre, size: 0.5f);
+            GameObject obj2 = Utils.CreateCube(centre, size: 0.5f);
 
             bool isCollided = Collisions.CheckAndHandle(obj1, obj2);
             Assert.IsTrue(isCollided);
@@ -76,10 +57,10 @@ namespace OctreeTests
         public void StaticStatic_OneVertexInsideXYZ_Contact()
         {
             Matrix4 centre = Matrix4.CreateTranslation(0, 0, 0);
-            GameObject obj1 = CreateCube(centre, size: 10);
+            GameObject obj1 = Utils.CreateCube(centre, size: 10);
 
             centre = Matrix4.CreateTranslation(19, 19, 19);
-            GameObject obj2 = CreateCube(centre, size: 10);
+            GameObject obj2 = Utils.CreateCube(centre, size: 10);
 
             bool isCollided = Collisions.CheckAndHandle(obj1, obj2);
             Assert.IsTrue(isCollided);
@@ -89,10 +70,10 @@ namespace OctreeTests
         public void StaticStatic_OneVertexInsideX_Contact()
         {
             Matrix4 centre = Matrix4.CreateTranslation(0, 0, 0);
-            GameObject obj1 = CreateCube(centre, size: 10);
+            GameObject obj1 = Utils.CreateCube(centre, size: 10);
 
             centre = Matrix4.CreateTranslation(19.5f, 19, 19);
-            GameObject obj2 = CreateCube(centre, size: 10);
+            GameObject obj2 = Utils.CreateCube(centre, size: 10);
 
             bool isCollided = Collisions.CheckAndHandle(obj1, obj2);
             Assert.IsTrue(isCollided);
@@ -103,10 +84,10 @@ namespace OctreeTests
         public void StaticStatic_VertexVsVertex_Contact()
         {
             Matrix4 centre = Matrix4.CreateTranslation(0, 0, 0);
-            GameObject obj1 = CreateCube(centre, size: 10);
+            GameObject obj1 = Utils.CreateCube(centre, size: 10);
 
             centre = Matrix4.CreateTranslation(20, 20, 20);
-            GameObject obj2 = CreateCube(centre, size: 10);
+            GameObject obj2 = Utils.CreateCube(centre, size: 10);
 
             bool isCollided = Collisions.CheckAndHandle(obj1, obj2);
             Assert.IsTrue(isCollided);
@@ -120,10 +101,10 @@ namespace OctreeTests
         public void StaticStatic_ResolveOneVertexInside()
         {
             Matrix4 centre = Matrix4.CreateTranslation(0, 0, 0);
-            GameObject obj1 = CreateCube(centre, size: 10);
+            GameObject obj1 = Utils.CreateCube(centre, size: 10);
 
             centre = Matrix4.CreateTranslation(19.5f, 19, 19);
-            GameObject obj2 = CreateCube(centre, size: 10);
+            GameObject obj2 = Utils.CreateCube(centre, size: 10);
 
             bool isCollided = Collisions.CheckAndHandle(obj1, obj2);
 

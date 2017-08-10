@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OcTreeLibrary;
+﻿using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
 
@@ -13,14 +8,14 @@ namespace SimpleShooter.Physics
     {
         public static void HandleCollision(IMovableObject obj1, IMovableObject obj2)
         {
-            obj1.MoveAfterCollision(Vector3.Zero);
-            obj2.MoveAfterCollision(Vector3.Zero);
+            var move = obj1.BoundingBox.GetCollisionResolution(obj2.BoundingBox);
+            obj2.MoveAfterCollision(move);
+            obj1.MoveAfterCollision(move);
         }
 
         public static void HandleCollision(IMovableObject obj1, IOctreeItem obj2)
         {
-            obj1.MoveAfterCollision(Vector3.Zero);
-            // obj2.MoveAfterCollision(Vector3.Zero);
+            HandleCollision(obj2, obj1);
         }
 
         public static void HandleCollision(IOctreeItem obj1, IMovableObject obj2)
@@ -31,9 +26,7 @@ namespace SimpleShooter.Physics
 
         // no one is movable
         public static void HandleCollision(IOctreeItem obj1, IOctreeItem obj2)
-        {
-            //obj1.MoveAfterCollision(Vector3.Zero);
-            //obj2.MoveAfterCollision(Vector3.Zero);
+        {         
         }
 
         public static bool CheckAndHandle(GameObject entityWorkWith, IOctreeItem possibleCollider)

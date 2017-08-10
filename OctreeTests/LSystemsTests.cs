@@ -3,7 +3,7 @@ using System.Linq;
 using LSystemsPlants.Core.L_Systems;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OctreeTests
+namespace GLTests
 {
     [TestClass]
     public class LSystemsTests
