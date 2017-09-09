@@ -47,67 +47,84 @@ namespace SimpleShooter.Graphics
         public void Bind(Camera camera, Level level)
         {
             GL.UseProgram(_descriptor.ProgramId);
-            BindUniforms(camera, level.LightPosition);
+            BindUniforms(_descriptor, camera, level.LightPosition, _gameObject.Model.TextureId);
             BindBuffers(_gameObject.ShaderKind);
         }
 
-        public void BindUniforms(Camera camera, Vector3 lightPos)
+        public static void BindVertices(ShaderProgramDescriptor descriptor, Vector3[] data)
         {
-            GL.UniformMatrix4(_descriptor.uniformMV, false, ref camera.ModelView);
-            GL.UniformMatrix4(_descriptor.uniformMVP, false, ref camera.ModelViewProjection);
-            GL.UniformMatrix4(_descriptor.uniformProjection, false, ref camera.Projection);
-
-            switch (_gameObject.ShaderKind)
-            {
-                case ShadersNeeded.SimpleModel:
-                    break;
-                case ShadersNeeded.Line:
-                    break;
-                case ShadersNeeded.TextureLess:
-                    GL.Uniform3(_descriptor.uniformLightPos, lightPos);
-
-                    break;
-
-                case ShadersNeeded.TextureLessNoLight:
-
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(_gameObject.ShaderKind), _gameObject.ShaderKind, null);
-            }
-
-        }
-
-        public static void BindVertices(ShaderProgramDescriptor _descriptor, Vector3[] data)
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.verticesBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
                 data, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribVerticesLocation);
+            GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
         }
 
-        public static void BindColors(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        public static void BindColors(ShaderProgramDescriptor descriptor, Vector3[] data)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.colorsBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.colorsBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
                 data, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribColorsLocation);
+            GL.VertexAttribPointer(descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
         }
 
-        public static void BindNormals(ShaderProgramDescriptor _descriptor, Vector3[] data)
+        public static void BindNormals(ShaderProgramDescriptor descriptor, Vector3[] data)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _descriptor.normalsBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.normalsBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector3.SizeInBytes),
                 data, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_descriptor.AttribNormalsLocation);
+            GL.VertexAttribPointer(descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribNormalsLocation);
+        }
+
+
+        public static void BindTextureCoords(ShaderProgramDescriptor descriptor, Vector2[] data)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.textureCoordsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * Vector2.SizeInBytes),
+                data, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribTextureCoordsLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribTextureCoordsLocation);
         }
 
         public ShaderProgramDescriptor GetDescriptor()
         {
             return _descriptor;
+        }
+
+        public static void BindUniforms(ShaderProgramDescriptor descriptor, Camera camera, Vector3 lightPos, int textureId = -1)
+        {
+            GL.UniformMatrix4(descriptor.uniformMV, false, ref camera.ModelView);
+            GL.UniformMatrix4(descriptor.uniformMVP, false, ref camera.ModelViewProjection);
+            GL.UniformMatrix4(descriptor.uniformProjection, false, ref camera.Projection);
+
+            switch (descriptor.ShaderKind)
+            {
+                case ShadersNeeded.SimpleModel:
+                    GL.Uniform3(descriptor.uniformLightPos, lightPos);
+                    if (textureId != -1)
+                    {
+                        GL.ActiveTexture(TextureUnit.Texture0);
+                        GL.Uniform1(descriptor.TextureSampler, 0);
+                        GL.BindTexture(TextureTarget.Texture2D, textureId);
+                    }
+
+                    break;
+                case ShadersNeeded.Line:
+                    break;
+                case ShadersNeeded.TextureLess:
+                    GL.Uniform3(descriptor.uniformLightPos, lightPos);
+
+                    break;
+
+                case ShadersNeeded.TextureLessNoLight:
+
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(descriptor.ShaderKind), descriptor.ShaderKind, null);
+            }
         }
 
         private void BindBuffers(ShadersNeeded gameObjectShaderKind)
@@ -119,6 +136,7 @@ namespace SimpleShooter.Graphics
             {
                 case ShadersNeeded.SimpleModel:
                     BindNormals();
+                    BindTextureCoords();
                     break;
                 case ShadersNeeded.TextureLess:
                     BindNormals();
@@ -129,30 +147,6 @@ namespace SimpleShooter.Graphics
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(gameObjectShaderKind), gameObjectShaderKind, null);
-            }
-        }
-
-        public static void BindUniforms(ShaderProgramDescriptor _descriptor, Camera camera, Vector3 lightPos)
-        {
-            GL.UniformMatrix4(_descriptor.uniformMV, false, ref camera.ModelView);
-            GL.UniformMatrix4(_descriptor.uniformMVP, false, ref camera.ModelViewProjection);
-            GL.UniformMatrix4(_descriptor.uniformProjection, false, ref camera.Projection);
-
-            switch (_descriptor.ShaderKind)
-            {
-                case ShadersNeeded.SimpleModel:
-                    break;
-                case ShadersNeeded.Line:
-                    break;
-                case ShadersNeeded.TextureLess:
-                    GL.Uniform3(_descriptor.uniformLightPos, lightPos);
-
-                    break;
-
-                case ShadersNeeded.TextureLessNoLight:
-
-
-                    break;
             }
         }
 
@@ -169,6 +163,11 @@ namespace SimpleShooter.Graphics
         private void BindNormals()
         {
             BindNormals(_descriptor, _gameObject.Model.Normals);
+        }
+
+        private void BindTextureCoords()
+        {
+            BindTextureCoords(_descriptor, _gameObject.Model.TextureCoordinates);
         }
     }
 }

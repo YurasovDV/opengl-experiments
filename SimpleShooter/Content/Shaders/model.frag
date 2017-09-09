@@ -5,14 +5,14 @@ varying vec3 normal;
 varying vec3 position;
 varying vec3 lightPosition;
 out vec4 outputColor;
+
 //textures
 uniform sampler2D u_Texture;
+
 // The input texture.
 varying vec2 v_TexCoordinate;
-// Interpolated texture coordinate per fragment.
 
-void 
-main()
+void main()
 {
     vec3 toLight = lightPosition - position;
     float distance = length(toLight);

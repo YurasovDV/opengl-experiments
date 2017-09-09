@@ -50,7 +50,6 @@ namespace SimpleShooter.Graphics.ShaderLoad
             result.uniformProjection = GL.GetUniformLocation(textureLessProgId, "uP");
 
             result.ProgramId = textureLessProgId;
-            // result.ShadersKind = ShadersNeeded.TextureLess;
 
             result.AttribVerticesLocation = GL.GetAttribLocation(textureLessProgId, "vPosition");
             result.AttribNormalsLocation = GL.GetAttribLocation(textureLessProgId, "vNormal");

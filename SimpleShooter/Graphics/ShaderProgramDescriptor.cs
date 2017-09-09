@@ -33,8 +33,8 @@
             int notSet = -2;
 
             ProgramId = notSet;
-            AttribVerticesLocation = notSet;
 
+            AttribVerticesLocation = notSet;
             AttribColorsLocation = notSet;
             AttribNormalsLocation = notSet;
             AttribTextureCoordsLocation = notSet;

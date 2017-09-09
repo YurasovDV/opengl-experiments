@@ -28,6 +28,6 @@ main()
     lightPosition = vec3(u_modelview * vec4(vLightPosition, 0.0)); 
     normal = vec3(u_modelview * vec4(vNormal, 0.0));
 
-	v_TexCoordinate = a_TexCoordinate;
+    v_TexCoordinate = a_TexCoordinate;
 
 }

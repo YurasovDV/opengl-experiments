@@ -51,7 +51,7 @@ namespace SimpleShooter.LevelLoaders
             translate = Matrix4.CreateTranslation(_lightPos);
             obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
             var movableObj = new MovableObject(obj.Model, ShadersNeeded.TextureLessNoLight, new Vector3(1, 0, 0), new Vector3());
-             objectList.Add(movableObj);
+            objectList.Add(movableObj);
 
 
             AddEnemies(objectList);
@@ -62,8 +62,9 @@ namespace SimpleShooter.LevelLoaders
         private void AddEnemies(List<GameObject> objectList)
         {
             Matrix4 translate = Matrix4.CreateTranslation(50, 4, 50);
-            var obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
-            var enemy = new Enemy(obj.Model, 0, 10);
+            var obj = new SimpleModel(@"Content\Models\Armor Sphere.obj", @"Content\Models\armour03s.jpg");
+
+            var enemy = new Enemy(obj, 0, 10);
             objectList.Add(enemy);
         }
 

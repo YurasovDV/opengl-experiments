@@ -13,7 +13,7 @@ namespace SimpleShooter.Core.Enemies
 
         public event PlayerActionHandler<ShotEventArgs> Shot;
 
-        public Enemy(SimpleModel model, float mass, float hitPoints) : base(model, Graphics.ShadersNeeded.TextureLessNoLight, Vector3.Zero, Vector3.Zero, mass)
+        public Enemy(SimpleModel model, float mass, float hitPoints) : base(model, Graphics.ShadersNeeded.SimpleModel, Vector3.Zero, Vector3.Zero, mass)
         {
             HitPoints = hitPoints;
         }

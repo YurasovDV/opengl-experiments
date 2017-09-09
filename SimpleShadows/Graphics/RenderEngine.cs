@@ -81,31 +81,6 @@ namespace SimpleShadows.Graphics
 
         private void Draw(SimpleModel model)
         {
-            /*
-             int frameBuffer;
-GL.GenFramebuffers(1, out frameBuffer);
-GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
-
-int frameBufTexture;
-frameBufTexture = GL.GenTexture();
-GL.BindTexture(TextureTarget.Texture2D, frameBufTexture);
-GL.TexImage2D(TextureTarget.Texture2D, level: 0, internalformat: PixelInternalFormat.Rgb,
-width: 1024, height: 768, border: 0, format: PixelFormat.Rgb, type: PixelType.UnsignedByte, pixels:(IntPtr)0);
-
-GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0,
-TextureTarget.Texture2D, frameBufTexture, 0);
-
-var status =GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-if (status != FramebufferErrorCode.FramebufferComplete)
-{
-throw new Exception("буфер не привязан");
-}
-             
-             */
-
             if (model.TextureId != -1)
             {
 
@@ -116,8 +91,6 @@ throw new Exception("буфер не привязан");
 
                 GL.EnableVertexAttribArray(ShaderManager.AttributeTexcoord_Parameter_Address);
 
-
-                // активная текстура - т0
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.Uniform1(ShaderManager.UniformTexture_Parameter_Address, 0);
                 GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
