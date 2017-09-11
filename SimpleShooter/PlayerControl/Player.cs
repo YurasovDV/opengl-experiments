@@ -1,8 +1,10 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Common.Input;
 using OpenTK;
 using SimpleShooter.Core;
 using SimpleShooter.Core.Events;
+using SimpleShooter.Core.Weapons;
 
 namespace SimpleShooter.PlayerControl
 {
@@ -30,11 +32,14 @@ namespace SimpleShooter.PlayerControl
 
         public Vector3 Position { get; set; }
         public Vector3 Target { get; set; }
+
+        public BaseWeapon Weapon
+        {
+            get; set;                                    
+        }
+
         public float AngleHorizontalRadians = 0;
         public float AngleVerticalRadians = 0;
-
-        protected long shotCoolDown = 0;
-        protected long shotCoolDownDefault = 100;
 
         #endregion
 
@@ -49,10 +54,11 @@ namespace SimpleShooter.PlayerControl
                 Success = true
             };
 
-            if (Shot != null && shotCoolDown <= 0)
+            if (Shot != null && Weapon.IsReady)
             {
-                shotCoolDown = shotCoolDownDefault;
+                Weapon.Shot(args);
                 result = Shot(this, args);
+                Weapon.AfterShot();
             }
 
             return result;
@@ -86,7 +92,7 @@ namespace SimpleShooter.PlayerControl
                 delta = 1;
             }
 
-            shotCoolDown -= delta;
+            Weapon.Tick(delta);
 
             var path = base.Tick(delta);
 

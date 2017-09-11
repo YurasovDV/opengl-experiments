@@ -2,6 +2,7 @@
 using Common.Input;
 using OpenTK;
 using SimpleShooter.Core.Events;
+using SimpleShooter.Core.Weapons;
 
 namespace SimpleShooter.PlayerControl
 {
@@ -12,6 +13,7 @@ namespace SimpleShooter.PlayerControl
         {
             Position = position;
             Target = target;
+            Weapon = new BaseWeapon(100);
         }
 
         public override void Handle(InputSignal signal)

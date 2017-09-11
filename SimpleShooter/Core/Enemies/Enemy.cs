@@ -1,15 +1,16 @@
 ﻿using Common;
+using Common.Geometry;
 using OpenTK;
 using SimpleShooter.Core.Events;
+using SimpleShooter.Core.Weapons;
 
 namespace SimpleShooter.Core.Enemies
 {
     class Enemy : MovableObject
     {
-        protected long shotCoolDown = 0;
-        protected long shotCoolDownDefault = 1000;
-
         public float HitPoints { get; set; }
+
+        public BaseWeapon Weapon { get; set; }
 
         public event PlayerActionHandler<ShotEventArgs> Shot;
 
@@ -22,9 +23,16 @@ namespace SimpleShooter.Core.Enemies
         {
             var b = base.Tick(delta);
 
+            Weapon.Tick(delta);
+
             OnShot(new ShotEventArgs(BoundingBox.Centre));
 
             return b;
+        }
+
+        protected override void Move(Vector3 path, BoundingVolume updatedPosition)
+        {
+            base.Move(path, updatedPosition);
         }
 
         protected virtual ActionStatus OnShot(ShotEventArgs args)
@@ -34,10 +42,14 @@ namespace SimpleShooter.Core.Enemies
                 Success = true
             };
 
-            if (Shot != null && shotCoolDown <= 0)
+            if (Shot != null && Weapon.IsReady)
             {
-                shotCoolDown = shotCoolDownDefault;
+                Weapon.Shot(args);
                 result = Shot(this, args);
+                if (result.Success)
+                {
+                    Weapon.AfterShot();
+                }
             }
 
             return result;

@@ -46,7 +46,7 @@ namespace SimpleShooter.Core
             return path;
         }
 
-        protected void Move(Vector3 path, BoundingVolume updatedPosition)
+        protected virtual void Move(Vector3 path, BoundingVolume updatedPosition)
         {
             bool outsideOfSegment = TreeSegment == null || !TreeSegment.Contains(updatedPosition);
             if (ReInsertImmediately || outsideOfSegment)

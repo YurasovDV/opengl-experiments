@@ -61,10 +61,17 @@ namespace SimpleShooter.LevelLoaders
 
         private void AddEnemies(List<GameObject> objectList)
         {
-            Matrix4 translate = Matrix4.CreateTranslation(50, 4, 50);
+            // Matrix4 translate = Matrix4.CreateTranslation(50, 4, 50);
             var obj = new SimpleModel(@"Content\Models\Armor Sphere.obj", @"Content\Models\armour03s.jpg");
 
+            var farX = obj.Vertices.Max(v => v.X) * -1;
+
+            Matrix4 translate1 = Matrix4.CreateTranslation(farX, 0, 0);
+
+            obj.Vertices = obj.Vertices.Select(v => Vector3.Transform(v, translate1)).ToArray();
+
             var enemy = new Enemy(obj, 0, 10);
+            enemy.Weapon = new Core.Weapons.BaseWeapon();
             objectList.Add(enemy);
         }
 
