@@ -1,5 +1,4 @@
 ﻿using Common;
-using Common.Geometry;
 using OpenTK;
 using SimpleShooter.Core.Events;
 using SimpleShooter.Core.Weapons;
@@ -11,12 +10,14 @@ namespace SimpleShooter.Core.Enemies
         public float HitPoints { get; set; }
 
         public BaseWeapon Weapon { get; set; }
+        public Vector3 Target { get; set; }
 
         public event PlayerActionHandler<ShotEventArgs> Shot;
 
         public Enemy(SimpleModel model, float mass, float hitPoints) : base(model, Graphics.ShadersNeeded.SimpleModel, Vector3.Zero, Vector3.Zero, mass)
         {
             HitPoints = hitPoints;
+            Target = BoundingBox.Centre + Vector3.UnitX;
         }
 
         public override Vector3 Tick(long delta)
@@ -28,11 +29,6 @@ namespace SimpleShooter.Core.Enemies
             OnShot(new ShotEventArgs(BoundingBox.Centre));
 
             return b;
-        }
-
-        protected override void Move(Vector3 path, BoundingVolume updatedPosition)
-        {
-            base.Move(path, updatedPosition);
         }
 
         protected virtual ActionStatus OnShot(ShotEventArgs args)

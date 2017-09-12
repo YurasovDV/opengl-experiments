@@ -22,7 +22,7 @@ namespace SimpleShooter.Helpers
         public static GameObject CreateProjectile(Enemy enemy)
         {
             var point = enemy.BoundingBox.Centre;
-            var speed = Vector3.UnitX;
+            var speed = Vector3.Normalize(enemy.Target - point) * 20;
 
             return CreateProjectile(point, speed);
         }
