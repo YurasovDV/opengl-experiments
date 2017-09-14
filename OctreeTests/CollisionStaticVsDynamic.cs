@@ -21,7 +21,7 @@ namespace CollisionTests
 
             centre = Matrix4.CreateTranslation(19, 19, 19);
             GameObject obj2 = Utils.CreateCube(centre, size: 10f);
-            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero, 0);
+            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero);
 
             bool isCollided = Collisions.CheckAndHandle(@static, movable);
 
@@ -42,7 +42,7 @@ namespace CollisionTests
 
             centre = Matrix4.CreateTranslation(19.1f, 19, 19);
             GameObject obj2 = Utils.CreateCube(centre, size: 10f);
-            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero, 0);
+            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero);
 
             bool isCollided = Collisions.CheckAndHandle(@static, movable);
 
@@ -63,7 +63,7 @@ namespace CollisionTests
 
             centre = Matrix4.CreateTranslation(19f, 19.1f, 19);
             GameObject obj2 = Utils.CreateCube(centre, size: 10f);
-            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero, 0);
+            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero);
 
             bool isCollided = Collisions.CheckAndHandle(@static, movable);
 
@@ -84,7 +84,7 @@ namespace CollisionTests
 
             centre = Matrix4.CreateTranslation(19f, 19f, 19.1f);
             GameObject obj2 = Utils.CreateCube(centre, size: 10f);
-            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero, 0);
+            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero);
 
             bool isCollided = Collisions.CheckAndHandle(@static, movable);
 
@@ -105,7 +105,7 @@ namespace CollisionTests
 
             centre = Matrix4.CreateTranslation(19f, 19.1f, 19.1f);
             GameObject obj2 = Utils.CreateCube(centre, size: 10f);
-            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero, 0);
+            MovableObject movable = new MovableObject(obj2.Model, obj2.ShaderKind, Vector3.Zero, Vector3.Zero);
 
             bool isCollided = Collisions.CheckAndHandle(@static, movable);
 

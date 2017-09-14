@@ -76,7 +76,7 @@ namespace Common
                             var data = vertexDesc.Split('/');
 
                             var vertexIndex = int.Parse(data[0]) - 1;
-                            var textureIndex = int.Parse(data[1]) - 1;
+                            var textureIndex = !string.IsNullOrEmpty(data[1]) ? int.Parse(data[1]) - 1 : 1;
                             var normalIndex = int.Parse(data[2]) - 1;
 
                             vertResult.Add(verts[vertexIndex]);

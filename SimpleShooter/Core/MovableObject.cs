@@ -3,6 +3,7 @@ using Common.Geometry;
 using Common.Utils;
 using OpenTK;
 using SimpleShooter.Graphics;
+using SimpleShooter.Physics;
 
 namespace SimpleShooter.Core
 {
@@ -12,12 +13,15 @@ namespace SimpleShooter.Core
         public Vector3 Speed { get; set; }
         protected BoundingVolume _updatedBox;
 
+        public float Rigidness { get { return _rigidness; } }
         public float Mass { get { return _mass; } }
 
         protected float _mass;
+        protected float _rigidness;
 
-        public MovableObject(SimpleModel model, ShadersNeeded shadersNeeded, Vector3 speed, Vector3 acceleration, float mass = 0) : base(model, shadersNeeded)
+        public MovableObject(SimpleModel model, ShadersNeeded shadersNeeded, Vector3 speed, Vector3 acceleration, float mass = 0.1f, float rigidness = 0.5f) : base(model, shadersNeeded)
         {
+            _rigidness = rigidness;
             _mass = mass;
             Speed = speed;
             Acceleration = acceleration;
@@ -43,6 +47,8 @@ namespace SimpleShooter.Core
             _updatedBox.MoveBox(path);
             Move(path, _updatedBox);
             Acceleration = Vector3.Zero;
+
+            AccelerationUpdater.Friction(this);
             return path;
         }
 

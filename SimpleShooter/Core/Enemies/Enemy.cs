@@ -17,7 +17,7 @@ namespace SimpleShooter.Core.Enemies
         public Enemy(SimpleModel model, float mass, float hitPoints) : base(model, Graphics.ShadersNeeded.SimpleModel, Vector3.Zero, Vector3.Zero, mass)
         {
             HitPoints = hitPoints;
-            Target = BoundingBox.Centre + Vector3.UnitX;
+            Target = BoundingBox.Centre + Vector3.UnitX*10;
         }
 
         public override Vector3 Tick(long delta)

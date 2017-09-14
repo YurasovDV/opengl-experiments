@@ -1,4 +1,6 @@
-﻿using OcTreeLibrary;
+﻿using System;
+using OcTreeLibrary;
+using OpenTK;
 using SimpleShooter.Core;
 
 namespace SimpleShooter.Physics
@@ -7,9 +9,10 @@ namespace SimpleShooter.Physics
     {
         public static void HandleCollision(IMovableObject obj1, IMovableObject obj2)
         {
-            var move = obj1.BoundingBox.GetCollisionResolution(obj2.BoundingBox);
+            Vector3 move = obj1.BoundingBox.GetCollisionResolution(obj2.BoundingBox);
             obj2.MoveAfterCollision(move);
-            obj1.MoveAfterCollision(move);
+            obj1.MoveAfterCollision(move * -1);
+            AccelerationUpdater.UpdateSpeed(move, obj1, obj2);
         }
 
         public static void HandleCollision(IMovableObject obj1, IOctreeItem obj2)
@@ -20,6 +23,9 @@ namespace SimpleShooter.Physics
         public static void HandleCollision(IOctreeItem obj1, IMovableObject obj2)
         {
             var move = obj1.BoundingBox.GetCollisionResolution(obj2.BoundingBox);
+
+            AccelerationUpdater.UpdateSpeed(move, obj1, obj2);
+
             obj2.MoveAfterCollision(move);
         }
 

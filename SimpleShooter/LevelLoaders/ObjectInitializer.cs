@@ -13,11 +13,11 @@ namespace SimpleShooter.LevelLoaders
 {
     public class ObjectInitializer : IObjectInitializer
     {
-        private Vector3 _lightPos = new Vector3(30, 10, 0);
+        private Vector3 _lightPos = new Vector3(30, 20, 0);
 
         public static float Edge = 200;
 
-        public static float TapeWidth = 0.05f;
+        public static float TapeWidth = 0.15f;
 
         public Level CreateLevel()
         {
@@ -33,14 +33,18 @@ namespace SimpleShooter.LevelLoaders
 
         protected virtual void InitObjects(Level level)
         {
+            var green = Vector3.UnitY;
+            var red = Vector3.UnitX;
+            var white = new Vector3(100, 100, 100);
+
             var objectList = new List<GameObject>();
             Matrix4 translate = Matrix4.CreateTranslation(30, 4, 0);
-            var green = new Vector3(0, 1, 0);
+
             GameObject obj = CreateCube(translate, green, 1, ShadersNeeded.TextureLess);
             objectList.Add(obj);
 
             translate = Matrix4.CreateTranslation(_lightPos);
-            obj = CreateCube(translate, new Vector3(100, 100, 100), 0.5f, ShadersNeeded.TextureLessNoLight);
+            obj = CreateCube(translate, white, 0.5f, ShadersNeeded.TextureLessNoLight);
             objectList.Add(obj);
 
 
@@ -48,8 +52,8 @@ namespace SimpleShooter.LevelLoaders
             objectList.Add(obj);
 
 
-            translate = Matrix4.CreateTranslation(_lightPos);
-            obj = CreateCube(translate, new Vector3(1, 0, 0), 2f, ShadersNeeded.TextureLessNoLight);
+            translate = Matrix4.CreateTranslation(new Vector3(20, 10, 0));
+            obj = CreateCube(translate, red, 1f, ShadersNeeded.TextureLessNoLight);
             var movableObj = new MovableObject(obj.Model, ShadersNeeded.TextureLessNoLight, new Vector3(1, 0, 0), new Vector3());
             objectList.Add(movableObj);
 
@@ -61,16 +65,15 @@ namespace SimpleShooter.LevelLoaders
 
         private void AddEnemies(List<GameObject> objectList)
         {
-            // Matrix4 translate = Matrix4.CreateTranslation(50, 4, 50);
             var obj = new SimpleModel(@"Content\Models\Armor Sphere.obj", @"Content\Models\armour03s.jpg");
 
             var farX = obj.Vertices.Max(v => v.X) * -1;
 
-            Matrix4 translate1 = Matrix4.CreateTranslation(farX, 0, 0);
+            Matrix4 translate1 = Matrix4.CreateTranslation(farX + 10, 10, 10);
 
             obj.Vertices = obj.Vertices.Select(v => Vector3.Transform(v, translate1)).ToArray();
 
-            var enemy = new Enemy(obj, 0, 10);
+            var enemy = new Enemy(obj, 1, 10);
             enemy.Weapon = new Core.Weapons.BaseWeapon();
             objectList.Add(enemy);
         }
@@ -93,8 +96,7 @@ namespace SimpleShooter.LevelLoaders
                 Colors = new Vector3[0]
             };
 
-            var player = new HumanPlayer(model, position, new Vector3(100, 0.5f, 0), mass:1); // new HumanPlayerInertial(model, position, new Vector3(100, 0.5f, 0));
-            // new PlayerModelUnleashed(new Vector3(0, 0.5f, 0), new Vector3(100, 0.5f, 0));
+            var player = new HumanPlayer(model, position, new Vector3(100, 0.5f, 0), mass:1); 
 
             level.Player = player;
 
@@ -187,9 +189,10 @@ namespace SimpleShooter.LevelLoaders
             var model = new SimpleModel()
             {
                 Vertices = verticesCombined.ToArray(),
-                Colors = colorsCombined
+                Colors = colorsCombined,
+                Normals = Enumerable.Repeat(Vector3.UnitY, verticesCombined.Count).ToArray()
             };
-            var obj = new GameObject(model, ShadersNeeded.TextureLessNoLight);
+            var obj = new GameObject(model, ShadersNeeded.TextureLess);
             return obj;
         }
 
