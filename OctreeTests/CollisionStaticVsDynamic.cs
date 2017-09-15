@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using GLTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenTK;
 using SimpleShooter.Core;
+using SimpleShooter.LevelLoaders;
 using SimpleShooter.Physics;
 
 namespace CollisionTests
@@ -116,6 +118,15 @@ namespace CollisionTests
             Assert.AreEqual(19, movable.BoundingBox.Centre.X, "x should not be used for resolving");
             Assert.AreEqual(20, movable.BoundingBox.Centre.Y, "y should be used for resolving");
             Assert.AreEqual(19.1, Math.Round(movable.BoundingBox.Centre.Z, 1, MidpointRounding.ToEven), "z should not be used for resolving");
+        }
+
+        [TestMethod]
+        public void PlayerVsWafer()
+        {
+            var level = new Level();
+            var objectList = new List<GameObject>();
+            objectList.Add(ObjectInitializer.CreateWafer());
+
         }
 
     }

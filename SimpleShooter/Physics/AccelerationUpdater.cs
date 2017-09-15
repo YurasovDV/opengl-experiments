@@ -47,17 +47,20 @@ namespace SimpleShooter.Physics
 
             move.NormalizeFast();
 
-            obj1.Acceleration += move / momentumFirst / massFirst;
-            obj2.Acceleration += move / -momentumSecond / massSecond;
+            obj1.Acceleration += move * -momentumFirst;
+            obj2.Acceleration += move * momentumSecond;
         }
 
         internal static void UpdateSpeed(Vector3 move, IOctreeItem obj1, IMovableObject obj2)
         {
-            var m2 = obj2.Mass > 0 ? obj2.Mass : 1;
+            var massSecond = obj2.Mass > 0 ? obj2.Mass : 1;
+            var energySecond = massSecond * 0.5f * obj2.Speed.LengthSquared * obj2.Rigidness;
+
+            var momentumSecond = energySecond;
 
             obj2.Speed = Vector3.Zero;
             move.NormalizeFast();
-            obj2.Acceleration += move / m2;
+            obj2.Acceleration += move * momentumSecond;
         }
 
         internal static void Friction(MovableObject movableObject)

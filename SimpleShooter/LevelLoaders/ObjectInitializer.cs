@@ -80,7 +80,7 @@ namespace SimpleShooter.LevelLoaders
 
         protected virtual void InitPlayer(Level level)
         {
-            var position = new Vector3(0, 0.5f, 0);
+            var position = new Vector3(0, 1f, 0);
             Matrix4 translate = Matrix4.CreateTranslation(position);
 
             var vertices = GeometryHelper.GetVerticesForCube(1);
@@ -100,7 +100,7 @@ namespace SimpleShooter.LevelLoaders
 
             level.Player = player;
 
-            vertices = new Vector3[]
+            /*vertices = new Vector3[]
             {
                 new Vector3(100, 1f, 0),
                 new Vector3(100, 0.0f, 0),
@@ -113,7 +113,7 @@ namespace SimpleShooter.LevelLoaders
             {
                 Vertices = vertices,
                 Colors = Enumerable.Repeat(new Vector3(1, 0, 0), vertices.Length).ToArray()
-            };
+            };*/
         }
 
         public static GameObject CreateWafer()

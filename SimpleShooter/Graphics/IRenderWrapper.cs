@@ -3,7 +3,7 @@ using SimpleShooter.Core;
 
 namespace SimpleShooter.Graphics
 {
-    interface IRenderWrapper
+    public interface IRenderWrapper
     {
         ShadersNeeded ShaderKind { get; }
 

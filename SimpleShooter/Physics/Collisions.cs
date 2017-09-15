@@ -1,5 +1,4 @@
-﻿using System;
-using OcTreeLibrary;
+﻿using OcTreeLibrary;
 using OpenTK;
 using SimpleShooter.Core;
 
@@ -7,30 +6,28 @@ namespace SimpleShooter.Physics
 {
     public static class Collisions
     {
-        public static void HandleCollision(IMovableObject obj1, IMovableObject obj2)
+        public static void HandleCollision(IMovableObject movable, IMovableObject movable2)
         {
-            Vector3 move = obj1.BoundingBox.GetCollisionResolution(obj2.BoundingBox);
-            obj2.MoveAfterCollision(move);
-            obj1.MoveAfterCollision(move * -1);
-            AccelerationUpdater.UpdateSpeed(move, obj1, obj2);
+            Vector3 rollback = movable.BoundingBox.GetCollisionResolution(movable2.BoundingBox);
+            movable.MoveAfterCollision(rollback * -1);
+            movable2.MoveAfterCollision(rollback);
+            AccelerationUpdater.UpdateSpeed(rollback, movable, movable2);
         }
 
-        public static void HandleCollision(IMovableObject obj1, IOctreeItem obj2)
+        public static void HandleCollision(IMovableObject movable, IOctreeItem @static)
         {
-            HandleCollision(obj2, obj1);
+            HandleCollision(@static, movable);
         }
 
-        public static void HandleCollision(IOctreeItem obj1, IMovableObject obj2)
+        public static void HandleCollision(IOctreeItem @static, IMovableObject movable)
         {
-            var move = obj1.BoundingBox.GetCollisionResolution(obj2.BoundingBox);
-
-            AccelerationUpdater.UpdateSpeed(move, obj1, obj2);
-
-            obj2.MoveAfterCollision(move);
+            Vector3 rollback = @static.BoundingBox.GetCollisionResolution(movable.BoundingBox);
+            AccelerationUpdater.UpdateSpeed(rollback, @static, movable);
+            movable.MoveAfterCollision(rollback);
         }
 
         // no one is movable
-        public static void HandleCollision(IOctreeItem obj1, IOctreeItem obj2)
+        public static void HandleCollision(IOctreeItem static1, IOctreeItem static2)
         {         
         }
 

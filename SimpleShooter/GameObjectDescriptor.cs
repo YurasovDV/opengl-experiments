@@ -4,7 +4,7 @@ using SimpleShooter.Graphics;
 
 namespace SimpleShooter
 {
-    class GameObjectDescriptor : IRenderWrapper
+    public class GameObjectDescriptor : IRenderWrapper
     {
         public GameObjectDescriptor(GameObject o)
         {

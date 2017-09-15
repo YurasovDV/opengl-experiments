@@ -11,7 +11,7 @@ namespace SimpleShooter.PlayerControl
     public abstract class Player : MovableObject, IShooterPlayer
     {
 
-        public Player(SimpleModel model, float mass) : base(model, Graphics.ShadersNeeded.Line, Vector3.Zero, Vector3.Zero, mass)
+        public Player(SimpleModel model, float mass) : base(model, Graphics.ShadersNeeded.Line, Vector3.Zero, Vector3.Zero, mass, rigidness:0.2f)
         {
 
         }

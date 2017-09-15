@@ -57,6 +57,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Core\Enemies\Enemy.cs" />
     <Compile Include="Core\Level.cs" />
+    <Compile Include="Core\ObjectsEnumerator.cs" />
     <Compile Include="Core\OctreeGameObject.cs" />
     <Compile Include="Core\Weapons\BaseWeapon.cs" />
     <Compile Include="GameObjectDescriptor.cs" />

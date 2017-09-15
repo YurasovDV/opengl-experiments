@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using SimpleShooter.Graphics;
+using System.Linq;
+using SimpleShooter.Core;
 
 namespace SimpleShooter
 {
-    class ObjectsGrouped
+    public class ObjectsGrouped : IEnumerable<GameObjectDescriptor>
     {
         public List<GameObjectDescriptor> GameObjectsSimpleModel { get; }
         public List<GameObjectDescriptor> GameObjectsLine { get; }
@@ -30,10 +34,17 @@ namespace SimpleShooter
             listToInsert.Remove(desc);
         }
 
-        private List<GameObjectDescriptor> GetList(GameObjectDescriptor desc)
+        public List<GameObjectDescriptor> GetList(GameObjectDescriptor desc)
+        {
+            var shadersKind = desc.ShaderKind;
+            var result = GetList(shadersKind);
+            return result;
+        }
+
+        public List<GameObjectDescriptor> GetList(ShadersNeeded shadersKind)
         {
             List<GameObjectDescriptor> listToInsert = null;
-            switch (desc.ShaderKind)
+            switch (shadersKind)
             {
                 case ShadersNeeded.SimpleModel:
                     listToInsert = GameObjectsSimpleModel;
@@ -54,5 +65,14 @@ namespace SimpleShooter
             return listToInsert;
         }
 
+        public IEnumerator<GameObjectDescriptor> GetEnumerator()
+        {
+            return new ObjectsEnumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new ObjectsEnumerator(this);
+        }
     }
 }

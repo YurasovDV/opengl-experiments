@@ -11,5 +11,13 @@ namespace SimpleShooter
                 return ConfigurationManager.AppSettings["enableSound"] == bool.TrueString;
             }
         }
+
+        public static bool ShowBoundingBox
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["showBox"] == bool.TrueString;
+            }
+        }
     }
 }

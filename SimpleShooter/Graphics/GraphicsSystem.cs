@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
 using SimpleShooter.Core;
+using SimpleShooter.Graphics.ShaderLoad;
 using SimpleShooter.PlayerControl;
 using ClearBufferMask = OpenTK.Graphics.OpenGL4.ClearBufferMask;
-using GL = OpenTK.Graphics.OpenGL4.GL;
+using GL4Graphics = OpenTK.Graphics.OpenGL4;
+using GL4 = OpenTK.Graphics.OpenGL4.GL;
+
 
 namespace SimpleShooter.Graphics
 {
@@ -34,8 +38,8 @@ namespace SimpleShooter.Graphics
 
         private void InitGraphics(int width, int height)
         {
-            float aspect = (float) width / height;
-            GL.Viewport(0, 0, width, height);
+            float aspect = (float)width / height;
+            GL4.Viewport(0, 0, width, height);
             var projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 200);
             Camera = new Camera(projection);
 
@@ -47,23 +51,23 @@ namespace SimpleShooter.Graphics
         {
             Camera.RebuildMatrices(level.Player);
 
-            GL.ClearColor(0, 0, 0.0f, 1);
+            GL4.ClearColor(0, 0, 0.0f, 1);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL4.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.Disable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
+            GL4.Disable(GL4Graphics.EnableCap.DepthTest);
 
             _skybox.Render(level.Player, Camera);
 
-            GL.Enable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
+            GL4.Enable(GL4Graphics.EnableCap.DepthTest);
 
             RenderByTypes(objects, level);
 
-           // GL.Disable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
+            // GL.Disable(OpenTK.Graphics.OpenGL4.EnableCap.DepthTest);
 
             RenderMark(level);
 
-            GL.Flush();
+            GL4.Flush();
         }
 
         private void RenderMark(Level level)
@@ -77,6 +81,8 @@ namespace SimpleShooter.Graphics
             RenderTextureless(objects.GameObjectsTextureLess, level);
             RenderTexturelessNoLight(objects.GameObjectsTextureLessNoLight, level);
             RenderModels(objects.GameObjectsSimpleModel, level);
+
+            RenderBoundingBox(objects);
         }
 
         private void RenderModels(List<GameObjectDescriptor> simpleModels, Level level)
@@ -84,7 +90,7 @@ namespace SimpleShooter.Graphics
             foreach (var obj in simpleModels)
             {
                 obj.Bind(Camera, level);
-                GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
+                GL4.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
             }
         }
 
@@ -110,7 +116,7 @@ namespace SimpleShooter.Graphics
             var descriptor = objects.FirstOrDefault()?.GetDescriptor();
             if (descriptor != null)
             {
-                GL.UseProgram(descriptor.ProgramId);
+                GL4.UseProgram(descriptor.ProgramId);
 
                 int vCount = GetVerticesCount(objects);
 
@@ -138,7 +144,7 @@ namespace SimpleShooter.Graphics
                 RenderWrapper.BindVertices(descriptor, verticesMember);
                 RenderWrapper.BindColors(descriptor, colorsMember);
 
-                GL.DrawArrays(objects[0].RenderType, 0, vCount);
+                GL4.DrawArrays(objects[0].RenderType, 0, vCount);
             }
         }
 
@@ -147,7 +153,7 @@ namespace SimpleShooter.Graphics
             var descriptor = objects.FirstOrDefault()?.GetDescriptor();
             if (descriptor != null)
             {
-                GL.UseProgram(descriptor.ProgramId);
+                GL4.UseProgram(descriptor.ProgramId);
 
                 int vCount = objects.Aggregate(0, (acc, d) => d.VerticesCount + acc);
 
@@ -179,7 +185,7 @@ namespace SimpleShooter.Graphics
                 RenderWrapper.BindColors(descriptor, colorsMember);
                 RenderWrapper.BindNormals(descriptor, normalsMember);
 
-                GL.DrawArrays(objects[0].RenderType, 0, vCount);
+                GL4.DrawArrays(objects[0].RenderType, 0, vCount);
             }
         }
 
@@ -187,7 +193,7 @@ namespace SimpleShooter.Graphics
         internal void Render(IRenderWrapper obj, Level level)
         {
             obj.Bind(Camera, level);
-            GL.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
+            GL4.DrawArrays(obj.RenderType, 0, obj.VerticesCount);
         }
 
         private static int GetVerticesCount(List<GameObjectDescriptor> objects)
@@ -199,6 +205,30 @@ namespace SimpleShooter.Graphics
                 res += objects[i].VerticesCount;
             }
             return res;
+        }
+
+        private void RenderBoundingBox(ObjectsGrouped objects)
+        {
+            if (Config.ShowBoundingBox)
+            {
+                var verticesCount = objects.Sum(o => o.VerticesCount);
+                var vertices = new List<Vector3>(verticesCount);
+                foreach (GameObjectDescriptor desc in objects)
+                {
+                    vertices.AddRange(desc.GameIdentity.BoundingBox.GetLines());
+                }
+                var colors = Enumerable.Repeat(new Vector3(100), verticesCount).ToArray();
+
+                ShaderProgramDescriptor descriptor;
+                ShaderLoader.TryGet(ShadersNeeded.Line, out descriptor);
+                GL4.UseProgram(descriptor.ProgramId);
+
+                RenderWrapper.BindUniforms(descriptor, Camera, Vector3.Zero);
+                RenderWrapper.BindVertices(descriptor, vertices.ToArray());
+                RenderWrapper.BindColors(descriptor, colors);
+
+                GL4.DrawArrays(GL4Graphics.PrimitiveType.Lines, 0, verticesCount);
+            }
         }
     }
 }
