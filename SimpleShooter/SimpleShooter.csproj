@@ -35,13 +35,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
-      <HintPath>C:\Users\1\Documents\Visual Studio 2012\Projects\TkShader\OpenTKBin\OpenTK.dll</HintPath>
+      <HintPath>..\OpenTKBin\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.Compatibility">
-      <HintPath>C:\Users\1\Documents\Visual Studio 2012\Projects\TkShader\OpenTKBin\OpenTK.Compatibility.dll</HintPath>
+      <HintPath>..\OpenTKBin\OpenTK.Compatibility.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl">
-      <HintPath>C:\Users\1\Documents\Visual Studio 2012\Projects\TkShader\OpenTKBin\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\OpenTKBin\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
