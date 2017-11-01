@@ -32,10 +32,7 @@ namespace SimpleShooter.Core
 
         public void RaiseInsert()
         {
-            if (NeedsInsert != null)
-            {
-                NeedsInsert(this, new ReinsertingEventArgs());
-            }
+            NeedsInsert?.Invoke(this, new ReinsertingEventArgs());
         }
     }
 }

@@ -25,13 +25,11 @@ namespace LSystemsPlants.Core.Graphics
             Width = width;
             Height = height;
 
-            GL.Viewport(0, 0, (int)width, (int)height);
+            GL.Viewport(0, 0, width, height);
             float aspect = width / height;
 
-            //Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, zFar);
             Projection = Matrix4.CreateOrthographic(Width, Height, 0.2f, zFar);
 
-            //ModelView = Matrix4.LookAt(Player.Position, Player.Target, Vector3.UnitY);
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
 
             _shaders = new ShaderManager();

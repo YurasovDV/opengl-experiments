@@ -32,7 +32,7 @@ namespace OcTreeRevisited
             BoundingBox = InitBoundingBox(points);
         }
 
-        public event Action<object, ReinsertingEventArgs> NeedReinsert;
+        public event EventHandler<ReinsertingEventArgs> NeedReinsert;
 
         public Vector3 Speed { get; set; }
 
@@ -51,10 +51,7 @@ namespace OcTreeRevisited
 
             BoundingVolume newBox = InitBoundingBox(Points);
 
-            if (NeedReinsert != null)
-            {
-                NeedReinsert(this, new ReinsertingEventArgs() { NewBox = newBox });
-            }
+            NeedReinsert?.Invoke(this, new ReinsertingEventArgs() { NewBox = newBox });
         }
 
         public SimpleModel GetAsModel()

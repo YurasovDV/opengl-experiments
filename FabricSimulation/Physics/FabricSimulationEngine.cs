@@ -34,7 +34,7 @@ namespace FabricSimulation
             KeyHandler = new KeyHandler();
             KeyHandler.KeyPress += Player.OnSignal;
 
-            // то, что не использовали на прошлом шаге симуляции
+            // did not use at previous step
             LeftOverTime = 0;
 
             var iShift = (int)(PieceHeight / 0.5f);
@@ -76,13 +76,10 @@ namespace FabricSimulation
 
 
             point.W = 1.0f / point.W;
-          
+
             point.X *= point.W;
             point.Y *= point.W;
             point.Z *= point.W;
-
-
-            // point = new Vector3(point.X * RenderEngine.Width * 0.05f, point.Y * RenderEngine.Height * 0.05f, point.Z);
 
 
             var d = new Vector3(point.X, point.Y, point.Z);
@@ -98,12 +95,8 @@ namespace FabricSimulation
                 }
             }
 
-            //var maxX = PieceWidth* NormalDistance * 0.5;
-
-            //Debug.WriteLine(upPos);
             Debug.WriteLine(point);
-            // Debug.WriteLine(Piece.Points[PieceHeight - 1, PieceWidth - 1].Location);
-            //Debug.WriteLine(Piece.Points[PieceHeight / 2, PieceWidth / 2].Location);
+
             Debug.WriteLine(Piece.PointsGrid[0, 0].Location);
             Debug.WriteLine(Piece.PointsGrid[PieceHeight - 1, PieceWidth - 1].Location);
 
@@ -111,22 +104,9 @@ namespace FabricSimulation
 
             if (closest != null)
             {
-                //var force = new Vector3(0, 0, -1000000f) / (1000 / 16.0f);
                 var force = new Vector3(0, 0, -1000000f) / (1000 / 16.0f);
                 Piece.PointsGrid[PieceHeight / 2, PieceWidth / 2].AddForce(force);
             }
-            /*
-            
-            
-            (0,1935055; 0,1963296;  0
-                                    
-            (-0,1908401; 0,1883856; 0
-                                    
-            (-0,1908401; -0,1498006 0
-                                    
-            (0,1892409; -0,15434;  0
-            
-            */
 
             Player.OnSignal(InputSignal.MOUSE_CLICK);
         }
@@ -143,15 +123,11 @@ namespace FabricSimulation
                 Piece.Tick(16);
             }
 
-            // Debug.WriteLine(time);
-
             LeftOverTime = time - chunks * 16;
 
             var model = Piece.GetAsModel();
 
             RenderEngine.Render(new[] { model });
         }
-
-
     }
 }

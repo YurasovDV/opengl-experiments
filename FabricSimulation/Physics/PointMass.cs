@@ -5,7 +5,6 @@ namespace FabricSimulation
 {
     public class PointMass
     {
-        //public static float gravity = 10000f;
         public const float gravity = 10000f;
 
         public Vector3 Location { get; set; }

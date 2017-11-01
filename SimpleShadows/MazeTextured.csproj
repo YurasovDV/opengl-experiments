@@ -87,7 +87,7 @@
     <Compile Include="ShadowForm.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\66dc48ca-95dc-11e5-8121-54271e1fe558.xml">
+    <Content Include="Assets\Maze2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\brick.jpg">

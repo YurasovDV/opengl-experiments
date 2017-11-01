@@ -40,7 +40,7 @@ namespace Maze3D
 
             engine = new Engine(refresh, portraitControl.Width, portraitControl.Height, portraitControl, objLock);
 
-            using (StreamReader rd = new StreamReader("66dc48ca-95dc-11e5-8121-54271e1fe558.xml"))
+            using (StreamReader rd = new StreamReader("Maze.xml"))
             {
                 engine.Maze = (Maze)sr.Deserialize(rd);
             }

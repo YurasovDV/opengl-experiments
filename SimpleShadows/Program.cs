@@ -1,7 +1,10 @@
-﻿namespace SimpleShadows
+﻿using System;
+
+namespace SimpleShadows
 {
     class Program
     {
+       [STAThread]
        public static void Main()
         {
            /* Application.EnableVisualStyles();

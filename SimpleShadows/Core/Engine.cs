@@ -99,7 +99,7 @@ namespace SimpleShadows.Core
         {
             Maze result = null;
             XmlSerializer sr = new XmlSerializer(typeof(Maze));
-            using (StreamReader rd = new StreamReader(@"Assets\66dc48ca-95dc-11e5-8121-54271e1fe558.xml"))
+            using (StreamReader rd = new StreamReader(@"Assets\Maze2.xml"))
             {
                 result = (Maze)sr.Deserialize(rd);
             }

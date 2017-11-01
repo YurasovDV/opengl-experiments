@@ -39,8 +39,7 @@ namespace SimpleShadows
                 case OpenTK.Input.Key.F4:
                     if (e.Alt)
                     {
-                        //Application.Exit();
-                        System.Threading.Thread.CurrentThread.Abort();
+                        Exit();
                     }
                     break;
                 default:

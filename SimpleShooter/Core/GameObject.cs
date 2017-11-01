@@ -72,18 +72,12 @@ namespace SimpleShooter.Core
 
         public void RaiseRemove()
         {
-            if (NeedsRemoval != null)
-            {
-                NeedsRemoval(this, new ReinsertingEventArgs());
-            }
+            NeedsRemoval?.Invoke(this, new ReinsertingEventArgs());
         }
 
         public void RaiseInsert()
         {
-            if (NeedsInsert != null)
-            {
-                NeedsInsert(this, new ReinsertingEventArgs());
-            }
+            NeedsInsert?.Invoke(this, new ReinsertingEventArgs());
         }
 
         #endregion

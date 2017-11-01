@@ -50,9 +50,7 @@ namespace ModelLoading
             KeyHandler.CheckKeys();
 
             Player.Tick(delta, mouseDxDy);
-            //var model = World.GetAsModel(Player.Position);
 
-            // MarkPlayerCell(model);
             renderEngine.Render(Models); 
         }
     }

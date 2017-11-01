@@ -23,13 +23,7 @@ namespace ShadowMap
             float previousHeight;
             bool prevInside = Map.TryGetValue(previousClosestX, previousClosestZ, out previousHeight);
 
-            if (inside && prevInside)
-            {
-                /*var y = 3.0f;
-                y += height * 0.75f + previousHeight * 0.25f;
-                updated.Y = y;*/
-            }
-            else
+            if (!inside || !prevInside)
             {
                 updated = oldPosition;
             }

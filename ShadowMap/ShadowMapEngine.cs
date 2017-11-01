@@ -176,7 +176,6 @@ namespace ShadowMap
 
             AllObjects = new List<GameObject>()
             {
-                  //obj,
                   towObj,
                   bulb,
 
