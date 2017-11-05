@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "007_ShadowMap", "007_Shadow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "008_LSystemsPlants", "008_LSystemsPlants\008_LSystemsPlants.csproj", "{4275EEC1-9E04-44EF-9FED-D414DB8B103A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleShooter_010", "SimpleShooter\SimpleShooter_010.csproj", "{D526CDCA-68A7-442E-9EBC-0405B1A7E670}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "009_SimpleShooter", "009_SimpleShooter\009_SimpleShooter.csproj", "{D526CDCA-68A7-442E-9EBC-0405B1A7E670}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctreeLibrary_005", "OctreeLibrary\OctreeLibrary_005.csproj", "{51395108-FCCB-4511-8294-4163697E74CD}"
 EndProject

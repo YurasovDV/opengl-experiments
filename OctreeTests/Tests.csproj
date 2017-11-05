@@ -82,7 +82,7 @@
       <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>
       <Name>004_OcTreeRevisited</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SimpleShooter\SimpleShooter_010.csproj">
+    <ProjectReference Include="..\009_SimpleShooter\009_SimpleShooter.csproj">
       <Project>{d526cdca-68a7-442e-9ebc-0405b1a7e670}</Project>
       <Name>SimpleShooter_010</Name>
     </ProjectReference>
