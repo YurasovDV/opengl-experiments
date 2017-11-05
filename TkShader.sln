@@ -19,11 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "OctreeTests\Tests.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "004_OcTreeRevisited", "004_OcTreeRevisited\004_OcTreeRevisited.csproj", "{7FC4BB35-66F2-4D97-9060-BBF6ED8F6EF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabricSimulation_006", "FabricSimulation\FabricSimulation_006.csproj", "{3F2EB64A-63BC-4309-857C-3E5251D8C253}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "006_FabricSimulation", "006_FabricSimulation\006_FabricSimulation.csproj", "{3F2EB64A-63BC-4309-857C-3E5251D8C253}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTerrain", "SimpleTerrain\SimpleTerrain.csproj", "{E75140A5-9328-4A86-9A2D-019CCDFFDA59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowMap_007", "ShadowMap\ShadowMap_007.csproj", "{CD1231AA-BD48-4EEF-9E23-9245F8509F70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "007_ShadowMap", "007_ShadowMap\007_ShadowMap.csproj", "{CD1231AA-BD48-4EEF-9E23-9245F8509F70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LSystemsPlants_008", "LSystemsPlants\LSystemsPlants_008.csproj", "{4275EEC1-9E04-44EF-9FED-D414DB8B103A}"
 EndProject
