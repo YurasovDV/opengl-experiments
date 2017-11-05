@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "000_Particles", "000_Partic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "001_Maze3D", "001_Maze3D\001_Maze3D.csproj", "{17744E39-A466-495E-9D3C-FDC917F87E92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MazeTextured_003", "SimpleShadows\MazeTextured_003.csproj", "{DB7F7F86-6524-43C9-AD2E-91A731A79AF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MazeTextured_003", "003_MazeTextured\MazeTextured_003.csproj", "{DB7F7F86-6524-43C9-AD2E-91A731A79AF3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "002_ModelLoading_002", "002_ModelLoading\002_ModelLoading.csproj", "{650C268D-1636-4704-BA5A-D4F61E2A8FC3}"
 EndProject

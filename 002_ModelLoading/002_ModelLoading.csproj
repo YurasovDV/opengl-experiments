@@ -87,7 +87,7 @@
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SimpleShadows\MazeTextured_003.csproj">
+    <ProjectReference Include="..\003_MazeTextured\MazeTextured_003.csproj">
       <Project>{db7f7f86-6524-43c9-ad2e-91a731a79af3}</Project>
       <Name>MazeTextured_003</Name>
     </ProjectReference>
