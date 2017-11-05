@@ -15,10 +15,10 @@ namespace Common
 
         protected List<SimpleModel> Models { get; set; }
 
-        public AbstractEngine(int Width, int Height)
+        public AbstractEngine(int width, int height)
         {
-            this.Width = Width;
-            this.Height = Height;
+            Width = width;
+            Height = height;
             KeyHandler = new KeyHandler();
             Models = new List<SimpleModel>();
         }

@@ -70,21 +70,21 @@
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LSystemsPlants\LSystemsPlants.csproj">
+    <ProjectReference Include="..\LSystemsPlants\LSystemsPlants_008.csproj">
       <Project>{4275eec1-9e04-44ef-9fed-d414db8b103a}</Project>
-      <Name>LSystemsPlants</Name>
+      <Name>LSystemsPlants_008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OctreeLibrary\OctreeLibrary.csproj">
+    <ProjectReference Include="..\OctreeLibrary\OctreeLibrary_005.csproj">
       <Project>{51395108-FCCB-4511-8294-4163697E74CD}</Project>
-      <Name>OctreeLibrary</Name>
+      <Name>OctreeLibrary_005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OcTreeRevisited\OcTreeRevisited.csproj">
+    <ProjectReference Include="..\OcTreeRevisited\OcTreeRevisited_004.csproj">
       <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>
-      <Name>OcTreeRevisited</Name>
+      <Name>OcTreeRevisited_004</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SimpleShooter\SimpleShooter.csproj">
+    <ProjectReference Include="..\SimpleShooter\SimpleShooter_010.csproj">
       <Project>{d526cdca-68a7-442e-9ebc-0405b1a7e670}</Project>
-      <Name>SimpleShooter</Name>
+      <Name>SimpleShooter_010</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

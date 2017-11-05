@@ -36,6 +36,8 @@
 /Particles/bin
 /OctreeLibrary/obj
 /OctreeLibrary/bin
+/DeferredRender/obj
+/DeferredRender/bin
 /.vs/TkShader/v14/.suo
 /.idea
 *.iml
