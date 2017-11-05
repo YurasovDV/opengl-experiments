@@ -74,7 +74,7 @@
       <Project>{4275eec1-9e04-44ef-9fed-d414db8b103a}</Project>
       <Name>LSystemsPlants_008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OctreeLibrary\OctreeLibrary_005.csproj">
+    <ProjectReference Include="..\005_OctreeLibrary\005_OctreeLibrary.csproj">
       <Project>{51395108-FCCB-4511-8294-4163697E74CD}</Project>
       <Name>OctreeLibrary_005</Name>
     </ProjectReference>

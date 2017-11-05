@@ -164,7 +164,7 @@
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OctreeLibrary\OctreeLibrary_005.csproj">
+    <ProjectReference Include="..\005_OctreeLibrary\005_OctreeLibrary.csproj">
       <Project>{51395108-fccb-4511-8294-4163697e74cd}</Project>
       <Name>OctreeLibrary_005</Name>
     </ProjectReference>

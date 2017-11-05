@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "003_MazeTextured", "003_Maz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "004_OcTreeRevisited", "004_OcTreeRevisited\004_OcTreeRevisited.csproj", "{7FC4BB35-66F2-4D97-9060-BBF6ED8F6EF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctreeLibrary_005", "OctreeLibrary\OctreeLibrary_005.csproj", "{51395108-FCCB-4511-8294-4163697E74CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "005_OctreeLibrary", "005_OctreeLibrary\005_OctreeLibrary.csproj", "{51395108-FCCB-4511-8294-4163697E74CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "006_FabricSimulation", "006_FabricSimulation\006_FabricSimulation.csproj", "{3F2EB64A-63BC-4309-857C-3E5251D8C253}"
 EndProject
