@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTerrain", "SimpleTerr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "007_ShadowMap", "007_ShadowMap\007_ShadowMap.csproj", "{CD1231AA-BD48-4EEF-9E23-9245F8509F70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LSystemsPlants_008", "LSystemsPlants\LSystemsPlants_008.csproj", "{4275EEC1-9E04-44EF-9FED-D414DB8B103A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "008_LSystemsPlants", "008_LSystemsPlants\008_LSystemsPlants.csproj", "{4275EEC1-9E04-44EF-9FED-D414DB8B103A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleShooter_010", "SimpleShooter\SimpleShooter_010.csproj", "{D526CDCA-68A7-442E-9EBC-0405B1A7E670}"
 EndProject

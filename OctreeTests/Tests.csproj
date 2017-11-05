@@ -70,7 +70,7 @@
       <Project>{f2c3fe29-6887-42da-b0e6-cedb144421d6}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LSystemsPlants\LSystemsPlants_008.csproj">
+    <ProjectReference Include="..\008_LSystemsPlants\008_LSystemsPlants.csproj">
       <Project>{4275eec1-9e04-44ef-9fed-d414db8b103a}</Project>
       <Name>LSystemsPlants_008</Name>
     </ProjectReference>
