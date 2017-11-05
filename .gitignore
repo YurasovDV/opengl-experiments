@@ -45,3 +45,5 @@
 *.db
 /000_Particles/obj
 /000_Particles/bin
+/001_Maze3D/bin
+/001_Maze3D/obj
