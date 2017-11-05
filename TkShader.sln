@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "OctreeTests\Tests.csproj", "{29EEBAF2-4DB8-402E-A026-058D8F68057B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcTreeRevisited_004", "OcTreeRevisited\OcTreeRevisited_004.csproj", "{7FC4BB35-66F2-4D97-9060-BBF6ED8F6EF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "004_OcTreeRevisited", "004_OcTreeRevisited\004_OcTreeRevisited.csproj", "{7FC4BB35-66F2-4D97-9060-BBF6ED8F6EF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabricSimulation_006", "FabricSimulation\FabricSimulation_006.csproj", "{3F2EB64A-63BC-4309-857C-3E5251D8C253}"
 EndProject

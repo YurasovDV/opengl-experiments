@@ -78,9 +78,9 @@
       <Project>{51395108-FCCB-4511-8294-4163697E74CD}</Project>
       <Name>OctreeLibrary_005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OcTreeRevisited\OcTreeRevisited_004.csproj">
+    <ProjectReference Include="..\004_OcTreeRevisited\004_OcTreeRevisited.csproj">
       <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>
-      <Name>OcTreeRevisited_004</Name>
+      <Name>004_OcTreeRevisited</Name>
     </ProjectReference>
     <ProjectReference Include="..\SimpleShooter\SimpleShooter_010.csproj">
       <Project>{d526cdca-68a7-442e-9ebc-0405b1a7e670}</Project>
