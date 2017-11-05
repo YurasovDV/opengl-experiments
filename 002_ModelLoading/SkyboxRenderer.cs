@@ -25,7 +25,6 @@ namespace ModelLoading
         {
             GL.UseProgram(shader.ProgramIdForSky);
 
-            // активная текстура - т0
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(shader.UniformSkySampler, 0);
             GL.BindTexture(TextureTarget.TextureCubeMap, SkyboxTextureId);
