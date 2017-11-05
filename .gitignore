@@ -43,3 +43,5 @@
 *.iml
 *.user
 *.db
+/000_Particles/obj
+/000_Particles/bin

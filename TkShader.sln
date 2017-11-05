@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkShader", "TkShader\TkShader.csproj", "{E4AD3251-F967-4914-8728-CA24AB7C28C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Particles_000", "Particles\Particles_000.csproj", "{0BA9D5B7-EEC3-464F-B28B-BE2F92589C98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Particles_000", "000_Particles\Particles_000.csproj", "{0BA9D5B7-EEC3-464F-B28B-BE2F92589C98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maze3D_001", "Maze3D\Maze3D_001.csproj", "{17744E39-A466-495E-9D3C-FDC917F87E92}"
 EndProject
