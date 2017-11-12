@@ -83,7 +83,7 @@
     <Compile Include="Graphics\RenderEngine.cs" />
     <Compile Include="Graphics\ShaderManager.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ShadowForm.cs" />
+    <Compile Include="MazeForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Maze2.xml">

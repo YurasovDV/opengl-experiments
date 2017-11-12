@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace SimpleShadows.Core.Models
+namespace MazeTextured.Core.Models
 {
     [XmlType(TypeName="line")]
     public class Line

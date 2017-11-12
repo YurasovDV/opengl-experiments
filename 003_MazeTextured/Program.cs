@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleShadows
+namespace MazeTextured
 {
     class Program
     {
@@ -11,7 +11,7 @@ namespace SimpleShadows
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new ShadowForm());*/
 
-            using (var f = new ShadowForm())
+            using (var f = new MazeForm())
             {
                 f.Run(80);
             }

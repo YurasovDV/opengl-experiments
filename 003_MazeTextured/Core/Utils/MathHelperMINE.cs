@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace SimpleShadows.Core.Utils
+namespace MazeTextured.Core.Utils
 {
     public class MathHelperMINE
     {

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace SimpleShadows.Core.Models
+namespace MazeTextured.Core.Models
 {
     [XmlType("cell")]
     public class Cell

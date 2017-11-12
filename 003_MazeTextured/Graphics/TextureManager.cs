@@ -5,7 +5,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 
-namespace SimpleShadows.Graphics
+namespace MazeTextured.Graphics
 {
     public class TextureManager
     {

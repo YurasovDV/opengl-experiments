@@ -3,9 +3,9 @@ using System.IO;
 using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using SimpleShadows.Core.Models;
+using MazeTextured.Core.Models;
 
-namespace SimpleShadows.Graphics
+namespace MazeTextured.Graphics
 {
     class ShaderManager
     {

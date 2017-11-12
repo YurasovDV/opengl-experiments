@@ -6,10 +6,10 @@ using System.Linq;
 using System.Xml.Serialization;
 using Common;
 using OpenTK;
-using SimpleShadows.Core.Utils;
-using SimpleShadows.Graphics;
+using MazeTextured.Core.Utils;
+using MazeTextured.Graphics;
 
-namespace SimpleShadows.Core.Models
+namespace MazeTextured.Core.Models
 {
     [XmlType(TypeName = "maze")]
     public class Maze

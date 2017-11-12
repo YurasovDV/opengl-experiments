@@ -1,9 +1,9 @@
 ﻿using System;
 using Common.Input;
 using OpenTK;
-using SimpleShadows.Core.Utils;
+using MazeTextured.Core.Utils;
 
-namespace SimpleShadows.Core.Models
+namespace MazeTextured.Core.Models
 {
     public class Player
     {

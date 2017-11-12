@@ -2,18 +2,18 @@
 using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics;
-using SimpleShadows.Core;
+using MazeTextured.Core;
 using gl4 = OpenTK.Graphics.OpenGL4;
 
-namespace SimpleShadows
+namespace MazeTextured
 {
-    class ShadowForm : GameWindow
+    class MazeForm : GameWindow
     {
         private Engine engine;
         private Stopwatch watch;
         private long start = 0;
 
-        public ShadowForm()
+        public MazeForm()
             : base(1920, 900, GraphicsMode.Default, "Shadows", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
             engine = new Engine(Width, Height);
@@ -75,8 +75,8 @@ namespace SimpleShadows
 
             Vector2 res = new Vector2()
             {
-                X = ((this.Location.X + Width / 2) - mouseState.X) * SimpleShadows.Core.Models.Player.MOUSE_SPEED,
-                Y = ((this.Location.Y + Height / 2) - mouseState.Y) * SimpleShadows.Core.Models.Player.MOUSE_SPEED
+                X = ((this.Location.X + Width / 2) - mouseState.X) * MazeTextured.Core.Models.Player.MOUSE_SPEED,
+                Y = ((this.Location.Y + Height / 2) - mouseState.Y) * MazeTextured.Core.Models.Player.MOUSE_SPEED
             };
 
             return res;

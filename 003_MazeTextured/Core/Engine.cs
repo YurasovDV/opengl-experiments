@@ -8,10 +8,10 @@ using System.Xml.Serialization;
 using Common;
 using Common.Input;
 using OpenTK;
-using SimpleShadows.Core.Models;
-using SimpleShadows.Graphics;
+using MazeTextured.Core.Models;
+using MazeTextured.Graphics;
 
-namespace SimpleShadows.Core
+namespace MazeTextured.Core
 {
     class Engine
     {
