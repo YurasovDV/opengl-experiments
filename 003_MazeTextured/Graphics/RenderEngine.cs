@@ -1,4 +1,5 @@
 ﻿using System;
+using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShadows.Core.Models;
@@ -11,7 +12,6 @@ namespace SimpleShadows.Graphics
 
         public SkyboxRenderer Skybox { get; set; }
 
-
         public float Height { get; set; }
 
         public float Width { get; set; }
@@ -21,7 +21,7 @@ namespace SimpleShadows.Graphics
         public Matrix4 ModelViewProjection = Matrix4.Identity;
 
         /// <summary>
-        /// треугольников в стене
+        /// number of trinagles in one wall
         /// </summary>
         public const int TRIANGLES_IN_WALL = 30;
 
@@ -54,12 +54,7 @@ namespace SimpleShadows.Graphics
             BindBuffers(model);
             Draw(model);
 
-
             DrawLight();
-
-
-            
-
             GL.Flush();
         }
 

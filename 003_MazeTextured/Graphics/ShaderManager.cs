@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using SimpleShadows.Core.Models;
@@ -241,8 +242,8 @@ namespace SimpleShadows.Graphics
                 if (firstDraw || refreshColors)
                 {
                     GL.BindBuffer(BufferTarget.ArrayBuffer, color_buffer_address);
-                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(model.Color.Length * Vector3.SizeInBytes),
-                        model.Color, BufferUsageHint.StaticDraw);
+                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(model.Colors.Length * Vector3.SizeInBytes),
+                        model.Colors, BufferUsageHint.StaticDraw);
                     GL.VertexAttribPointer(ColorAttribLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
                 }
 

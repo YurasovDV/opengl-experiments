@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using Common;
 using OpenTK;
 using SimpleShadows.Core.Utils;
 using SimpleShadows.Graphics;
@@ -37,20 +38,16 @@ namespace SimpleShadows.Core.Models
         {
             if (cachedModel == null && Cells != null)
             {
-                // GetData(Cells);
                 cachedModel = GenerateModel(Cells);
-
-                // StoreAsObj(cachedModel);
-
             }
             if (cachedModel == null)
             {
-                throw new Exception("ассет с лабиринтом где?");
+                throw new Exception("maze asset is not found");
             }
 
             Vector3 red = new Vector3(1, 0, 0);
-            var colors = Enumerable.Repeat<Vector3>(red, cachedModel.Vertices.Length).ToArray();
-            cachedModel.Color = colors;
+            var colors = Enumerable.Repeat(red, cachedModel.Vertices.Length).ToArray();
+            cachedModel.Colors = colors;
             return cachedModel;
         }
 
@@ -142,10 +139,10 @@ namespace SimpleShadows.Core.Models
             var colors = Enumerable.Repeat<Vector3>(red, vertices.Count).ToArray();
 
             result.Vertices = vertices.ToArray();
-            result.Color = colors.ToArray();
+            result.Colors = colors.ToArray();
             result.Normals = normals.ToArray();
 
-            var mgr = new TextureManager();
+            var mgr = new Graphics.TextureManager();
             result.TextureId = mgr.LoadTexture(@"Assets\Textures\brick.jpg", 1024, 1024);
             result.TextureCoordinates = mgr.GetTextureCoordinates(result.Vertices);
             return result;
@@ -270,13 +267,10 @@ namespace SimpleShadows.Core.Models
 
 
             Vector3 normalFront = new Vector3(lineDirection);
-            //normalFront = Vector3.Transform(normalFront, matrClockWise);
             for (int i = 0; i < 6; i++)
             {
                 normals.Add(normalFront);
             }
-
-
 
             // торец 2
             v0 = new Vector3(line.X1, height, line.Y0 - wallWidth);
@@ -304,7 +298,6 @@ namespace SimpleShadows.Core.Models
             {
                 normals.Add(normalBack);
             }
-
 
             // верх                               
             v0 = new Vector3(line.X0, height, line.Y0 + wallWidth);
@@ -410,7 +403,6 @@ namespace SimpleShadows.Core.Models
             vertices.Add(v2);
 
             Vector3 normalFront = new Vector3(lineDirection);
-            //normalFront = Vector3.Transform(normalFront, matrClockWise);
             for (int i = 0; i < 6; i++)
             {
                 normals.Add(normalFront);
@@ -467,30 +459,5 @@ namespace SimpleShadows.Core.Models
                 normals.Add(Vector3.UnitY);
             }
         }
-
-        /*    private static Vector3 GetNormal(Line line, Vector3 playerLookDirection, Matrix4 matrLeft, Matrix4 matrRight)
-            {
-                Vector3 lineDirection = new Vector3(line.X0 - line.X1, 0, line.Y0 - line.Y1);
-
-                Vector3 normalLeft = new Vector3(lineDirection);
-                Vector3 normalRight = new Vector3(lineDirection);
-
-                normalLeft = Vector3.TransformVector(normalLeft, matrLeft);
-                normalRight = Vector3.TransformVector(normalRight, matrRight);
-
-                var left = Vector3.Dot(playerLookDirection, normalLeft);
-                var right = Vector3.Dot(playerLookDirection, normalRight);
-                Vector3 normal;
-                if (left < right)
-                {
-                    normal = normalLeft;
-                }
-                else
-                {
-                    normal = normalRight;
-                }
-                normal.Normalize();
-                return normal;
-            }*/
     }
 }

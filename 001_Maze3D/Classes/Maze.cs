@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Common;
 using Maze3D.Classes.Graphics;
 using OpenTK;
 
@@ -123,7 +124,7 @@ namespace Maze3D.Classes
 
 
             result.Vertices = vertices.ToArray();
-            result.Color = colors.ToArray();
+            result.Colors = colors.ToArray();
             result.Normals = normals.ToArray();
 
             return result;
@@ -145,7 +146,7 @@ namespace Maze3D.Classes
                 new Vector3(0, 10, 0),
             };
 
-            model.Color = new Vector3[]
+            model.Colors = new Vector3[]
             {
                 new Vector3(100, 0, 0),
                 new Vector3(100, 0, 0),

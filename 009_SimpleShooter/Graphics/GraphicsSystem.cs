@@ -101,9 +101,7 @@ namespace SimpleShooter.Graphics
 
         private void RenderTextureless(List<GameObjectDescriptor> textureLess, Level level)
         {
-
             BindColorsAndVerticesAndNormals(textureLess, level, ref GameObjectsTextureLessVertices, ref GameObjectsTextureLessColors, ref GameObjectsTextureLessNormals);
-
         }
 
         private void RenderLines(List<GameObjectDescriptor> lines, Level level)

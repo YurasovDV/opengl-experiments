@@ -1,4 +1,5 @@
 ﻿using System;
+using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -111,8 +112,8 @@ namespace Maze3D.Classes.Graphics
                 if (firstDraw || refreshColors)
                 {
                     GL.BindBuffer(BufferTarget.ArrayBuffer, color_buffer_address);
-                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(model.Color.Length * Vector3.SizeInBytes),
-                        model.Color, BufferUsageHint.StaticDraw);
+                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(model.Colors.Length * Vector3.SizeInBytes),
+                        model.Colors, BufferUsageHint.StaticDraw);
                     GL.VertexAttribPointer(ColorAttribLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
                 }
 
@@ -183,52 +184,6 @@ main()
     outputColor = color * diffuse;
 }";
 
-
-
-
-//        private static string vertexShaderText = @" 
-//#version 330
-//
-//attribute vec3 vPosition;
-//attribute vec3 vColor;
-//attribute vec3 vNormal;
-//
-//uniform mat4 u_modelview;
-//uniform mat4 u_modelViewprojection;
-//uniform mat4 u_projection;
-//
-//
-//out vec4 out_color;
-//out vec3 out_position;
-//out vec3 out_normal;
-//
-//
-//void main()
-//{
-//    gl_Position = u_modelViewprojection * vec4(vPosition, 1.0);
-//
-//    out_color = vec4(vColor, 1.0);
-//    out_position = vec3(u_modelview * vec4(vPosition, 1.0));
-//    out_normal =  vec3(u_modelview * vec4(vNormal, 1.0));
-//}
-//";
-
-
-//        private static string fragmentShaderText = @" #version 330
-//
-//varying vec4 out_color;
-//varying vec3 out_normal;
-//varying vec3 out_position;
-//
-//out vec4 outputColor;
-//
-//void main()
-//{
-//    
-//    outputColor = out_color;
-//}
-//
-//";
 
     }
 }

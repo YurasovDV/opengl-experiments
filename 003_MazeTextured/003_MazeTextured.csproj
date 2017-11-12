@@ -80,7 +80,6 @@
     <Compile Include="Core\Models\Line.cs" />
     <Compile Include="Core\Models\Maze.cs" />
     <Compile Include="Core\Models\Player.cs" />
-    <Compile Include="Core\Models\SimpleModel.cs" />
     <Compile Include="Graphics\RenderEngine.cs" />
     <Compile Include="Graphics\ShaderManager.cs" />
     <Compile Include="Program.cs" />

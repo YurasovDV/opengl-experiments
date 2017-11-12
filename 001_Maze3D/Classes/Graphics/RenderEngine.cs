@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using Common;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Maze3D.Classes.Graphics
@@ -12,9 +13,6 @@ namespace Maze3D.Classes.Graphics
         public float Height { get; set; }
 
         public float Width { get; set; }
-
-        //private int green = 0;
-       // private int greenCount = 0;
 
         public Matrix4 ModelView = Matrix4.Identity;
         public Matrix4 Projection = Matrix4.Identity;
@@ -45,18 +43,12 @@ namespace Maze3D.Classes.Graphics
 
         private void Draw()
         {
-            //GL.ClearColor(0, green, 0, 100);
             GL.ClearColor(0, 0f, 0.5f, 100);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.Enable(EnableCap.DepthTest);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
-            /*greenCount++;
-            if (greenCount % 50 == 0)
-            {
-                green++;
-            }*/
             GL.Flush();
         }
 

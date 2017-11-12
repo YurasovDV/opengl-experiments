@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using Common;
 using Common.Input;
 using OpenTK;
 using SimpleShadows.Core.Models;
@@ -19,7 +20,7 @@ namespace SimpleShadows.Core
 
         public Player Player { get; set; }
 
-        private Graphics.RenderEngine renderEngine;
+        private RenderEngine renderEngine;
 
         public KeyHandler KeyHandler { get; set; }
 
@@ -89,7 +90,7 @@ namespace SimpleShadows.Core
                     wallsCount *= RenderEngine.TRIANGLES_IN_WALL;
                     for (int i = 0; i < RenderEngine.TRIANGLES_IN_WALL * cell.Lines.Length; i++)
                     {
-                        model.Color[wallsCount + i] = new Vector3(0, 1, 0);
+                        model.Colors[wallsCount + i] = new Vector3(0, 1, 0);
                     }
                 }
             }

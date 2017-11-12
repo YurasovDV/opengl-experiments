@@ -58,7 +58,6 @@
     <Compile Include="Classes\Engine.cs" />
     <Compile Include="Classes\Graphics\RenderEngine.cs" />
     <Compile Include="Classes\Graphics\ShaderManager.cs" />
-    <Compile Include="Classes\Graphics\SimpleModel.cs" />
     <Compile Include="Classes\Line.cs" />
     <Compile Include="Classes\Maze.cs" />
     <Compile Include="Classes\Player.cs" />
@@ -99,6 +98,12 @@
     <Content Include="Maze.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{F2C3FE29-6887-42DA-B0E6-CEDB144421D6}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

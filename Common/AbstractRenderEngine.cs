@@ -47,8 +47,6 @@ namespace Common
 
         public virtual void Render(IEnumerable<SimpleModel> models)
         {
-
-
             SetupVieport();
             PreRender();
            
@@ -58,8 +56,6 @@ namespace Common
                 BindBuffers(model);
                 Draw(model);
             }
-
-            //DrawLight();
 
             PostRender();
 
