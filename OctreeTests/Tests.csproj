@@ -72,11 +72,11 @@
     </ProjectReference>
     <ProjectReference Include="..\008_LSystemsPlants\008_LSystemsPlants.csproj">
       <Project>{4275eec1-9e04-44ef-9fed-d414db8b103a}</Project>
-      <Name>LSystemsPlants_008</Name>
+      <Name>008_LSystemsPlants</Name>
     </ProjectReference>
     <ProjectReference Include="..\005_OctreeLibrary\005_OctreeLibrary.csproj">
       <Project>{51395108-FCCB-4511-8294-4163697E74CD}</Project>
-      <Name>OctreeLibrary_005</Name>
+      <Name>005_OctreeLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\004_OcTreeRevisited\004_OcTreeRevisited.csproj">
       <Project>{7fc4bb35-66f2-4d97-9060-bbf6ed8f6ef5}</Project>
@@ -84,7 +84,7 @@
     </ProjectReference>
     <ProjectReference Include="..\009_SimpleShooter\009_SimpleShooter.csproj">
       <Project>{d526cdca-68a7-442e-9ebc-0405b1a7e670}</Project>
-      <Name>SimpleShooter_010</Name>
+      <Name>009_SimpleShooter</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

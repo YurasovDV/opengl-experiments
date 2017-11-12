@@ -166,7 +166,7 @@
     </ProjectReference>
     <ProjectReference Include="..\005_OctreeLibrary\005_OctreeLibrary.csproj">
       <Project>{51395108-fccb-4511-8294-4163697e74cd}</Project>
-      <Name>OctreeLibrary_005</Name>
+      <Name>005_OctreeLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
