@@ -45,8 +45,8 @@ namespace DeferredRender
             var verticesPlane = new[]
             {
                 new Vector3(waferSize, 0, -waferSize),
-                new Vector3(-waferSize, 0, waferSize),
                 new Vector3(-waferSize, 0, -waferSize),
+                new Vector3(-waferSize, 0, waferSize),
 
                 new Vector3(waferSize, 0, -waferSize),
                 new Vector3(waferSize, 0, waferSize),
@@ -107,16 +107,21 @@ namespace DeferredRender
 
             var verticesCombined = new List<Vector3>();
             verticesCombined.AddRange(verticesPlane);
-            verticesCombined.AddRange(verticesOx);
-            verticesCombined.AddRange(verticesOZ);
+            //verticesCombined.AddRange(verticesOx);
+            //verticesCombined.AddRange(verticesOZ);
+
+            var textManager = new TextureManager();
+            int textureId = textManager.LoadTexture(@"Assets\Textures\Chess.png");
 
             var model = new SimpleModel()
             {
                 Vertices = verticesCombined.ToArray(),
                 Colors = colorsCombined,
-                Normals = Enumerable.Repeat(Vector3.UnitY, verticesCombined.Count).ToArray()
+                Normals = Enumerable.Repeat(Vector3.UnitY, verticesCombined.Count).ToArray(),
+                TextureId = textureId,
             };
 
+            model.TextureCoordinates = textManager.GetTextureCoordinates(model.Vertices);
 
             _model = model;
         }

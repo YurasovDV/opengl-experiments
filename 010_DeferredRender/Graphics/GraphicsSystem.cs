@@ -27,9 +27,10 @@ namespace DeferredRender.Graphics
         {
             float aspect = (float)_width / _height;
             GL.Viewport(0, 0, _width, _height);
-            Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 200);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 400);
 
             Shaders.InitTexturelessNoLight();
+            Shaders.InitTexturedNoLight();
         }
 
         internal void Render(SimpleModel model)
@@ -40,7 +41,7 @@ namespace DeferredRender.Graphics
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Shaders.BindTexturelessNoLight(model, ModelView, ModelViewProjection, Projection);
+            model.Bind(ModelView, ModelViewProjection, Projection);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
 

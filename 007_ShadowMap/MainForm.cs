@@ -11,7 +11,7 @@ namespace ShadowMap
         public Stopwatch Watch { get; private set; }
         public long Start { get; private set; }
 
-        public MainForm() : base(1920, 900, GraphicsMode.Default, "terrain", GameWindowFlags.Default,
+        public MainForm() : base(1920, 900, GraphicsMode.Default, "Shadow Map", GameWindowFlags.Default,
             DisplayDevice.Default, major: 4, minor: 0, flags: GraphicsContextFlags.ForwardCompatible)
         {
             CursorVisible = false;

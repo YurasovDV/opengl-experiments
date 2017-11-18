@@ -14,7 +14,7 @@ namespace MazeTextured
         private long start = 0;
 
         public MazeForm()
-            : base(1920, 900, GraphicsMode.Default, "Shadows", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
+            : base(1920, 900, GraphicsMode.Default, "Textured maze", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
             engine = new Engine(Width, Height);
             watch = new Stopwatch();

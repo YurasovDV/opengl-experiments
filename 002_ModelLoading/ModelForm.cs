@@ -15,7 +15,7 @@ namespace ModelLoading
 
 
         public ModelForm()
-            : base(1920, 900, GraphicsMode.Default, "Shadows", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
+            : base(1920, 900, GraphicsMode.Default, "Model Loading", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
             engine = new Engine(Width, Height);
             watch = new Stopwatch();

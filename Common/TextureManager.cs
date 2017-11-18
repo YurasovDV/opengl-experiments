@@ -34,6 +34,7 @@ namespace Common
             catch (Exception)
             {
                 TextureId = -1;
+                throw;
             }
 
             return TextureId;

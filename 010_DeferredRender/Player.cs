@@ -53,6 +53,14 @@ namespace DeferredRender
                 case InputSignal.LEFT:
                     StepXZ(StepLeft);
                     break;
+
+                case InputSignal.DOWN_PARALLEL:
+                    StepYZ(StepDown);
+                    break;
+                case InputSignal.UP_PARALLEL:
+                    StepYZ(StepUp);
+                    break;
+
                 default:
                     break;
             }
