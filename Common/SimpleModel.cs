@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Common.Graphics;
 using OpenTK;
 
 namespace Common

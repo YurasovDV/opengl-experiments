@@ -5,17 +5,14 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 
-namespace Common
+namespace Common.Graphics
 {
     public class TextureManager
     {
-
         public TextureManager()
         {
 
         }
-
-
 
         public int LoadTexture(string path, int width = -1, int height = -1)
         {
@@ -28,7 +25,6 @@ namespace Common
                 Bitmap png;
                 var bitmap_data = GetBitmapData(path, TextureTarget.Texture2D, ref width, ref height, out png);
                 LoadToOpenGL(width, height, png, bitmap_data);
-
                 GL.BindTexture(TextureTarget.Texture2D, 0);
             }
             catch (Exception)
@@ -39,8 +35,6 @@ namespace Common
 
             return TextureId;
         }
-
-
 
         private BitmapData GetBitmapData(string path, TextureTarget kind, ref int width, ref int height, out Bitmap png)
         {

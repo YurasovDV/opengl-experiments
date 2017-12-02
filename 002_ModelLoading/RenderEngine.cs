@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Common;
+using Common.Graphics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

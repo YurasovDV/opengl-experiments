@@ -13,34 +13,20 @@ namespace Particles.Classes
 
         private Dictionary<int, Vector3> colorsDict = new Dictionary<int, Vector3>()
         {
-            
-            //{0, new Vector3(0.5f, 0, 0.5f)},
-            //{1, new Vector3(1, 0, 0)},
-            //{2, new Vector3(0, 0, 1)},
-              
-
-             {0, new Vector3(0.5f, 0, 0.5f)},
+            {0, new Vector3(0.5f, 0, 0.5f)},
             {1, new Vector3(0.5f, 0, 0)},
             {2, new Vector3(0, 0, 0.5f)},
-
-              
-           /* {0, new Vector3(0, 0, 1)},
-            {1, new Vector3(0, 0, 1)},
-            {2, new Vector3(0, 0, 1)},*/
         };
 
         public bool IsFirstDraw { get; set; }
 
-        /// <summary>
-        /// размер частицы
-        /// </summary>
-        public const float PARTICLE_SIZE = 0.5f;
+        public const float ParticleSize = 0.5f;
 
-        public const int PATRICLE_COUNT = 300;
+        public const int PatricleCount = 300;
 
         public RenderEngine renderEngine { get; set; }
 
-        public PhysicsModel(int size = PATRICLE_COUNT)
+        public PhysicsModel(int size = PatricleCount)
         {
             particles = new Particle[size];
             rand = new Random();
@@ -89,7 +75,7 @@ namespace Particles.Classes
             if (IsFirstDraw)
             {
                 IsFirstDraw = false;
-                
+
                 renderEngine.TextureCoordinates = new Particles.Graphics.TextureManager().GetTextureCoordinates(points);
             }
             renderEngine.Draw();
@@ -122,25 +108,25 @@ namespace Particles.Classes
             {
 
                 v = new Vector3(particles[i].Place);
-                v.X += PARTICLE_SIZE;
-                v.Y -= PARTICLE_SIZE;
+                v.X += ParticleSize;
+                v.Y -= ParticleSize;
                 res.Add(v);
 
 
                 v = new Vector3(particles[i].Place);
-                v.X += PARTICLE_SIZE;
-                v.Y += PARTICLE_SIZE;
+                v.X += ParticleSize;
+                v.Y += ParticleSize;
                 res.Add(v);
 
                 v = new Vector3(particles[i].Place);
-                v.X -= PARTICLE_SIZE;
-                v.Y += PARTICLE_SIZE;
+                v.X -= ParticleSize;
+                v.Y += ParticleSize;
                 res.Add(v);
 
 
                 v = new Vector3(particles[i].Place);
-                v.X -= PARTICLE_SIZE;
-                v.Y -= PARTICLE_SIZE;
+                v.X -= ParticleSize;
+                v.Y -= ParticleSize;
                 res.Add(v);
             }
             return res.ToArray();

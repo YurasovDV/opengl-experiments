@@ -2,7 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Common
+namespace Common.Graphics
 {
     public class AbstractRenderEngine 
     {

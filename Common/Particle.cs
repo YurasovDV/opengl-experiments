@@ -1,6 +1,4 @@
-﻿
-using OpenTK;
-
+﻿using OpenTK;
 
 namespace Common
 {

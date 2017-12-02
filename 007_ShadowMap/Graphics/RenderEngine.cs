@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Graphics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -61,14 +62,6 @@ namespace ShadowMap
             GL.DrawArrays(RenderMode, 0, model.Vertices.Length);
             Shaders.Release();
         }
-
-        /*public void Draw(SimpleModel model, Vector3 light, Vector3 lightDirection, int? depthMapBuf = null)
-        {
-            Matrix4 lightSpaceMVP = Matrix4.Identity;
-            Shaders.BindBuffers(model, light, lightDirection, lightSpaceMVP, depthMapBuf);
-            GL.DrawArrays(RenderMode, 0, model.Vertices.Length);
-            Shaders.Release();
-        }*/
 
         public new void PostRender()
         {

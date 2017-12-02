@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Common;
 using Common.Geometry;
+using Common.Graphics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -62,10 +63,6 @@ namespace OcTreeRevisited
                 gameObj.Tick(timeSlice);
                 LineRender.Render(gameObj.GetAsModel());
             }
-
-            // SkyRend.Render(Player.Position, MainRender.ModelView, MainRender.Projection);
-
-
             GL.Flush();
         }
 

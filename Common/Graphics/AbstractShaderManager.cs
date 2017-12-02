@@ -3,7 +3,7 @@ using System.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Common
+namespace Common.Graphics
 {
     public abstract class AbstractShaderManager
     {

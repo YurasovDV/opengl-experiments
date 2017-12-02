@@ -53,8 +53,8 @@
   <ItemGroup>
     <Compile Include="AbstractEngine.cs" />
     <Compile Include="AbstractPlayer.cs" />
-    <Compile Include="AbstractRenderEngine.cs" />
-    <Compile Include="AbstractShaderManager.cs" />
+    <Compile Include="Graphics\AbstractRenderEngine.cs" />
+    <Compile Include="Graphics\AbstractShaderManager.cs" />
     <Compile Include="Geometry\BoundingVolume.Collisions.cs" />
     <Compile Include="Geometry\BoundingVolume.cs" />
     <Compile Include="Geometry\BoundingVolume.Translations.cs" />
@@ -65,7 +65,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefreshKind.cs" />
     <Compile Include="SimpleModel.cs" />
-    <Compile Include="TextureManager.cs" />
+    <Compile Include="Graphics\TextureManager.cs" />
     <Compile Include="Utils\GeometryHelper.cs" />
     <Compile Include="Utils\MathHelperMINE.cs" />
   </ItemGroup>

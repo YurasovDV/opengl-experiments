@@ -6,7 +6,7 @@ namespace ShadowMap
 {
     public class FrameBufferManager
     {
-        #region основной фреймбуфер
+        #region main framebuffer
         public int MainDepthMapBufferObject { get; set; }
         public int MainDepthMapBufferTextureId { get; set; }
         public int MainRenderBufferObject { get; set; }
@@ -22,7 +22,7 @@ namespace ShadowMap
 
         #endregion
 
-        #region вспомогательный фреймбуфер
+        #region auxillary framebuffer
         public int SecondDepthMapBufferObject { get; set; }
         public int SecondDepthMapBufferTextureId { get; set; }
         public int SecondRenderBufferObject { get; set; }
@@ -101,35 +101,7 @@ namespace ShadowMap
         public void FlushAuxillaryFrameBuffer()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            /*GL.Disable(EnableCap.DepthTest);
-            GL.ClearColor(1, 0f, 0f, 0);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-
-            GL.UseProgram(SecondFrameBufferProgramId);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferForFrameSecondAddress);
-            var points = GetFrameBufferVertices();
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), points, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(AttrVertexFrameSecondLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(AttrVertexFrameSecondLocation);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, texCoordsForFrameSecondAddress);
-            var texCoords = GetFrameBufferTextureCoords();
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), texCoords, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(AttrTexcoordFrameSecondLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.EnableVertexAttribArray(AttrTexcoordFrameSecondLocation);
-
-
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.Uniform1(UniformTextureFrame, 0);
-            GL.BindTexture(TextureTarget.Texture2D, SecondDepthMapBufferTextureId);
-
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-            GL.BindVertexArray(0);*/
         }
-
-
 
         public void EnableMainFrameBuffer()
         {

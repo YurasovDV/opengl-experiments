@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Common;
+using Common.Graphics;
 using Common.Input;
 using DeferredRender.Graphics;
 using OpenTK;
