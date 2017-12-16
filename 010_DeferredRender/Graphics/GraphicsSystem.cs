@@ -42,13 +42,13 @@ namespace DeferredRender.Graphics
         internal void Render(SimpleModel model)
         {
             FrameBuf.EnableMainFrameBuffer();
-            Render2(model);
-            FrameBuf.FlushMainFrameBuffer();
+            RenderToCurrentTarget(model);
+            FrameBuf.DisableMainFrameBuffer();
             DrawFrameBufferFinal();
         }
 
 
-        private void Render2(SimpleModel model)
+        private void RenderToCurrentTarget(SimpleModel model)
         {
             RebuildMatrices();
 

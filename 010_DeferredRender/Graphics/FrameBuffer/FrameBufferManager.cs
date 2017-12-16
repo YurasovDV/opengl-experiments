@@ -34,7 +34,7 @@ namespace DeferredRender.Graphics.FrameBuffer
             GL.Viewport(0, 0, Width, Height);
         }
 
-        public void FlushMainFrameBuffer()
+        public void DisableMainFrameBuffer()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
