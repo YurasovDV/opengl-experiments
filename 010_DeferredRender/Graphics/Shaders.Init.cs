@@ -11,39 +11,11 @@ namespace DeferredRender.Graphics
     {
         private static TexturelessNoLight _texturelessNoLightDescriptor;
         private static TexturedNoLight _texturedNoLightDescriptor;
+        private static OneQuadProgram _oneQuadProgramDescriptor;
 
-        class TexturelessNoLight
-        {
-            public int uniformMVP = 0;
-            public int uniformMV = 0;
-            public int uniformProjection = 0;
-            public int ProgramId = 0;
-            public int AttribVerticesLocation = 0;
-            public int AttribNormalsLocation = 0;
-            public int AttribColorsLocation = 0;
-            public int verticesBuffer = 0;
-            public int colorsBuffer = 0;
-            public int normalsBuffer = 0;
-        }
+        
 
-        class TexturedNoLight
-        {
-            public int uniformMVP = 0;
-            public int uniformMV = 0;
-            public int uniformProjection = 0;
-            public int ProgramId = 0;
-            public int AttribVerticesLocation = 0;
-            public int AttribNormalsLocation = 0;
-            public int AttribColorsLocation = 0;
-            public int TexCoordsLocation = 0;
-            public int verticesBuffer = 0;
-            public int colorsBuffer = 0;
-            public int normalsBuffer = 0;
-            public int texCoordsBuffer = 0;
-            public int uniformTexture1 = 0;
-        }
-
-        public static void InitTexturelessNoLight()
+        internal static TexturelessNoLight InitTexturelessNoLight()
         {
             var textureLessProgId = GL.CreateProgram();
 
@@ -93,9 +65,11 @@ namespace DeferredRender.Graphics
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.verticesBuffer);
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.colorsBuffer);
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.normalsBuffer);
+
+            return _texturelessNoLightDescriptor;
         }
 
-        public static void InitTexturedNoLight()
+        public static TexturedNoLight InitTexturedNoLight()
         {
             var texturedProgId = GL.CreateProgram();
 
@@ -141,8 +115,8 @@ namespace DeferredRender.Graphics
 
             _texturedNoLightDescriptor.ProgramId = texturedProgId;
 
-           _texturedNoLightDescriptor.AttribVerticesLocation = GL.GetAttribLocation(texturedProgId, "vPosition");
-           _texturedNoLightDescriptor.AttribNormalsLocation = GL.GetAttribLocation(texturedProgId, "vNormal");
+            _texturedNoLightDescriptor.AttribVerticesLocation = GL.GetAttribLocation(texturedProgId, "vPosition");
+            _texturedNoLightDescriptor.AttribNormalsLocation = GL.GetAttribLocation(texturedProgId, "vNormal");
             _texturedNoLightDescriptor.AttribColorsLocation = GL.GetAttribLocation(texturedProgId, "vColor");
             _texturedNoLightDescriptor.TexCoordsLocation = GL.GetAttribLocation(texturedProgId, "a_TexCoordinate");
 
@@ -150,11 +124,68 @@ namespace DeferredRender.Graphics
             GL.GenBuffers(1, out _texturedNoLightDescriptor.colorsBuffer);
             GL.GenBuffers(1, out _texturedNoLightDescriptor.normalsBuffer);
             GL.GenBuffers(1, out _texturedNoLightDescriptor.texCoordsBuffer);
+
+            return _texturedNoLightDescriptor;
         }
 
+        public static OneQuadProgram InitOneQuadProgram()
+        {
+            var vertexPath = @"Assets\Shaders\frameBufferVertex.glsl";
+            var fragmentPath = @"Assets\Shaders\farameBufferFragment.glsl";
+
+            var programId = GL.CreateProgram();
+
+            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
+            using (var rd = new StreamReader(vertexPath))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(vertexShader, text);
+            }
+            GL.CompileShader(vertexShader);
+            GL.AttachShader(programId, vertexShader);
+
+            int statusCode;
+
+            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(vertexShader, out info);
+                throw new Exception("vertex shader" + info);
+            }
+
+            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+            using (var rd = new StreamReader(fragmentPath))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(fragmentShader, text);
+            }
+            GL.CompileShader(fragmentShader);
+            GL.AttachShader(programId, fragmentShader);
+
+            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(fragmentShader, out info);
+                throw new Exception("fragment shader: " + info);
+            }
+
+            GL.LinkProgram(programId);
+
+            GL.UseProgram(programId);
+            _oneQuadProgramDescriptor = new OneQuadProgram();
+            _oneQuadProgramDescriptor.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
+            _oneQuadProgramDescriptor.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
+            _oneQuadProgramDescriptor.uniformTexture1 = GL.GetUniformLocation(programId, "uTexture");
+
+            GL.GenBuffers(1, out _oneQuadProgramDescriptor.texCoordsBuffer);
+            GL.GenBuffers(1, out _oneQuadProgramDescriptor.verticesBuffer);
 
 
-
+            _oneQuadProgramDescriptor.ProgramId = programId;
+            return _oneQuadProgramDescriptor;
+        }
 
     }
 }

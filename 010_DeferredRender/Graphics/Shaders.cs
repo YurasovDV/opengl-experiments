@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Common;
+using DeferredRender.Graphics.FrameBuffer;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -71,5 +72,39 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
         }
 
+        public static void BindOneQuadScreen(FrameBufferManager frameBufferManager)
+        {
+            var FrameBufferProgramId = _oneQuadProgramDescriptor.ProgramId;
+            FrameBufferDesc bufferHandle = frameBufferManager.FrameBufDesc;
+            GL.UseProgram(FrameBufferProgramId);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _oneQuadProgramDescriptor.verticesBuffer);
+            var points = frameBufferManager.GetFrameBufferVertices();
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), points, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_oneQuadProgramDescriptor.AttribVerticesLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_oneQuadProgramDescriptor.AttribVerticesLocation);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _oneQuadProgramDescriptor.texCoordsBuffer);
+            var texCoords = frameBufferManager.GetFrameBufferTextureCoords();
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), texCoords, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_oneQuadProgramDescriptor.TexCoordsLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_oneQuadProgramDescriptor.TexCoordsLocation);
+
+
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(_oneQuadProgramDescriptor.uniformTexture1, 0);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.TextureId);
+
+
+
+            /*
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(descriptor.uniformTexture1, 0);
+            GL.BindTexture(TextureTarget.Texture2D, model.TextureId);*/
+
+
+
+
+        }
     }
 }

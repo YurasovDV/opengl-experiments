@@ -58,6 +58,8 @@
     <Compile Include="Geometry\BoundingVolume.Collisions.cs" />
     <Compile Include="Geometry\BoundingVolume.cs" />
     <Compile Include="Geometry\BoundingVolume.Translations.cs" />
+    <Compile Include="Graphics\FrameBuffer\FrameBufferDesc.cs" />
+    <Compile Include="Graphics\FrameBuffer\FrameBufferManager.cs" />
     <Compile Include="Input\InputSignal.cs" />
     <Compile Include="Input\KeyHandler.cs" />
     <Compile Include="IPlayer.cs" />

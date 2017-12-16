@@ -1,8 +1,9 @@
 ﻿using System;
+using System.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace ShadowMap
+namespace Common.Graphics.FrameBuffer
 {
     public class FrameBufferManager
     {
@@ -38,29 +39,26 @@ namespace ShadowMap
 
         #endregion
 
-
-
         public int Width { get; set; }
         public int Height { get; set; }
 
         public bool DebugDepth { get; set; }
+        public int FrameBufferProgramId { get; private set; }
 
-        public FrameBufferManager(RenderEngine mainRender)
+        public FrameBufferManager(int width, int height)
         {
-            Width = mainRender.Width;
-            Height = mainRender.Height;
-            var textureMgr = new TextureManager();
-
-            CreateMainFrameBuffer(mainRender, textureMgr);
-            CreateSecondFrameBuffer(mainRender, textureMgr);
-
+            Width = width;
+            Height = height;
+            CreateFrameBufferProgram();
+            CreateMainFrameBuffer();
+            CreateSecondFrameBuffer();
         }
-
-        private void CreateMainFrameBuffer(RenderEngine mainRender, TextureManager textureMgr)
+        
+        private void CreateMainFrameBuffer()
         {
-            MainFrameBufferProgramId = mainRender.Shaders.FrameBufferProgramId;
+            MainFrameBufferProgramId = FrameBufferProgramId;
 
-            var frameBufDesc = textureMgr.GetMainFrameBuffer(Width, Height);
+            var frameBufDesc = FrameBufferDesc.GetMainFrameBuffer(Width, Height);
             MainDepthMapBufferObject = frameBufDesc.FramBufferObject;
             MainDepthMapBufferTextureId = frameBufDesc.TextureId;
             MainRenderBufferObject = frameBufDesc.RenderBufferObject;
@@ -73,14 +71,14 @@ namespace ShadowMap
             GL.GenBuffers(1, out texCoordsForFrameAddress);
             GL.GenBuffers(1, out vertexBufferForFrameAddress);
         }
-
-        private FrameBufferDesc CreateSecondFrameBuffer(RenderEngine mainRender, TextureManager textureMgr)
+        
+        private FrameBufferDesc CreateSecondFrameBuffer()
         {
-            FrameBufferDesc frameBufDesc = textureMgr.GetFrameBuffer(Width, Height);
+            FrameBufferDesc frameBufDesc = FrameBufferDesc.GetFrameBuffer(Width, Height);
             SecondDepthMapBufferObject = frameBufDesc.FramBufferObject;
             SecondDepthMapBufferTextureId = frameBufDesc.TextureId;
 
-            SecondFrameBufferProgramId = mainRender.Shaders.CreateFrameBufferProgram();
+            CreateFrameBufferProgram();
 
             GL.UseProgram(SecondFrameBufferProgramId);
             AttrVertexFrameLocation = GL.GetAttribLocation(SecondFrameBufferProgramId, "vPosition");
@@ -112,10 +110,6 @@ namespace ShadowMap
         public void FlushMainFrameBuffer()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-        }
-
-       public void DrawFinal()
-        {
             GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(1, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -147,13 +141,60 @@ namespace ShadowMap
             {
                 GL.BindTexture(TextureTarget.Texture2D, MainDepthMapBufferTextureId);
             }
-
+            
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
             GL.BindVertexArray(0);
 
             GL.Flush();
         }
+
+
+        public void CreateFrameBufferProgram()
+        {
+            var programId = GL.CreateProgram();
+
+            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
+            using (var rd = new StreamReader(@"Assets\Shaders\frameBufferVertex.glsl"))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(vertexShader, text);
+            }
+            GL.CompileShader(vertexShader);
+            GL.AttachShader(programId, vertexShader);
+
+            int statusCode;
+
+            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(vertexShader, out info);
+                throw new Exception("vertex shader" + info);
+            }
+
+            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+            using (var rd = new StreamReader(@"Assets\Shaders\farameBufferFragment.glsl"))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(fragmentShader, text);
+            }
+            GL.CompileShader(fragmentShader);
+            GL.AttachShader(programId, fragmentShader);
+
+            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(fragmentShader, out info);
+                throw new Exception("fragment shader: " + info);
+            }
+
+            GL.LinkProgram(programId);
+
+            FrameBufferProgramId = programId;
+        }
+
 
         private Vector2[] GetFrameBufferVertices()
         {

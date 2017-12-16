@@ -91,11 +91,12 @@ namespace ShadowMap
 
             FrameBuf.FlushAuxillaryFrameBuffer();
             PopModelViewAndProjection();
-            MainRender.FormShadowMap = false;
 
+            MainRender.FormShadowMap = false;
             FrameBuf.EnableMainFrameBuffer();
             DrawUsingShadowMap(bulb.Center, lightMVP, model);
             FrameBuf.FlushMainFrameBuffer();
+            FrameBuf.DrawFinal();
         }
 
         private void DrawToShadowMap(Vector3 light, SimpleModel model)
@@ -158,7 +159,6 @@ namespace ShadowMap
                     FrameBuf.DebugDepth = CameraChange;
                 }
             }
-
         }
 
         private SimpleModel GetMapAsModel()

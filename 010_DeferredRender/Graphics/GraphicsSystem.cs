@@ -1,5 +1,6 @@
 ﻿using System;
 using Common;
+using DeferredRender.Graphics.FrameBuffer;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -14,6 +15,8 @@ namespace DeferredRender.Graphics
         public Matrix4 Projection;
         public Matrix4 ModelView;
         public Matrix4 ModelViewProjection;
+
+        public FrameBufferManager FrameBuf { get; set; }
 
         public GraphicsSystem(int width, int height, Player player)
         {
@@ -31,9 +34,21 @@ namespace DeferredRender.Graphics
 
             Shaders.InitTexturelessNoLight();
             Shaders.InitTexturedNoLight();
+            Shaders.InitOneQuadProgram();
+
+            FrameBuf = new FrameBufferManager(_width, _height);
         }
 
         internal void Render(SimpleModel model)
+        {
+            FrameBuf.EnableMainFrameBuffer();
+            Render2(model);
+            FrameBuf.FlushMainFrameBuffer();
+            DrawFrameBufferFinal();
+        }
+
+
+        private void Render2(SimpleModel model)
         {
             RebuildMatrices();
 
@@ -46,7 +61,24 @@ namespace DeferredRender.Graphics
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
 
             GL.Flush();
+
         }
+
+
+        public void DrawFrameBufferFinal()
+        {
+            GL.Disable(EnableCap.DepthTest);
+            GL.ClearColor(1, 0f, 0f, 0);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            Shaders.BindOneQuadScreen(FrameBuf);
+
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+            GL.BindVertexArray(0);
+
+            GL.Flush();
+        }
+
 
         private void RebuildMatrices()
         {
