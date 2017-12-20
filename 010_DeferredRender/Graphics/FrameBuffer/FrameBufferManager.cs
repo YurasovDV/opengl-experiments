@@ -9,7 +9,7 @@ namespace DeferredRender.Graphics.FrameBuffer
     {
         #region main framebuffer
 
-        public FrameBufferDesc FrameBufDesc { get; set; }
+        public FrameBufferDesc GBuferDescriptor { get; set; }
 
         #endregion
 
@@ -25,12 +25,12 @@ namespace DeferredRender.Graphics.FrameBuffer
             Height = height;
             var init = new FrameBufferInit();
 
-            FrameBufDesc = init.CreateMainFrameBuffer(width, height);
+            GBuferDescriptor = init.CreateGBuffer(width, height);
         }
         
         public void EnableMainFrameBuffer()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, FrameBufDesc.FramBufferObject);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, GBuferDescriptor.FramBufferObject);
             GL.Viewport(0, 0, Width, Height);
         }
 

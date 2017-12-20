@@ -11,9 +11,7 @@ namespace DeferredRender.Graphics
     {
         private static TexturelessNoLight _texturelessNoLightDescriptor;
         private static TexturedNoLight _texturedNoLightDescriptor;
-        private static OneQuadProgram _oneQuadProgramDescriptor;
-
-        
+        private static GBufferSecondPass _secondGBufferPassDescriptor;
 
         internal static TexturelessNoLight InitTexturelessNoLight()
         {
@@ -128,7 +126,7 @@ namespace DeferredRender.Graphics
             return _texturedNoLightDescriptor;
         }
 
-        public static OneQuadProgram InitOneQuadProgram()
+        public static GBufferSecondPass InitSecondGBufferPassProgram()
         {
             var vertexPath = @"Assets\Shaders\frameBufferVertex.glsl";
             var fragmentPath = @"Assets\Shaders\farameBufferFragment.glsl";
@@ -174,17 +172,17 @@ namespace DeferredRender.Graphics
             GL.LinkProgram(programId);
 
             GL.UseProgram(programId);
-            _oneQuadProgramDescriptor = new OneQuadProgram();
-            _oneQuadProgramDescriptor.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
-            _oneQuadProgramDescriptor.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
-            _oneQuadProgramDescriptor.uniformTexture1 = GL.GetUniformLocation(programId, "uTexture");
+            _secondGBufferPassDescriptor = new GBufferSecondPass();
+            _secondGBufferPassDescriptor.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
+            _secondGBufferPassDescriptor.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
+            _secondGBufferPassDescriptor.uniformTexture1 = GL.GetUniformLocation(programId, "uTexture");
 
-            GL.GenBuffers(1, out _oneQuadProgramDescriptor.texCoordsBuffer);
-            GL.GenBuffers(1, out _oneQuadProgramDescriptor.verticesBuffer);
+            GL.GenBuffers(1, out _secondGBufferPassDescriptor.texCoordsBuffer);
+            GL.GenBuffers(1, out _secondGBufferPassDescriptor.verticesBuffer);
 
 
-            _oneQuadProgramDescriptor.ProgramId = programId;
-            return _oneQuadProgramDescriptor;
+            _secondGBufferPassDescriptor.ProgramId = programId;
+            return _secondGBufferPassDescriptor;
         }
 
     }

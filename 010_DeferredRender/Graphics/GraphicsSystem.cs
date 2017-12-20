@@ -34,7 +34,7 @@ namespace DeferredRender.Graphics
 
             Shaders.InitTexturelessNoLight();
             Shaders.InitTexturedNoLight();
-            Shaders.InitOneQuadProgram();
+            Shaders.InitSecondGBufferPassProgram();
 
             FrameBuf = new FrameBufferManager(_width, _height);
         }
@@ -44,7 +44,7 @@ namespace DeferredRender.Graphics
             FrameBuf.EnableMainFrameBuffer();
             RenderToCurrentTarget(model);
             FrameBuf.DisableMainFrameBuffer();
-            DrawFrameBufferFinal();
+            DrawUsingGBuffer();
         }
 
 
@@ -65,7 +65,7 @@ namespace DeferredRender.Graphics
         }
 
 
-        public void DrawFrameBufferFinal()
+        public void DrawUsingGBuffer()
         {
             GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(1, 0f, 0f, 0);
