@@ -73,8 +73,7 @@ namespace DeferredRender.Graphics
 
             Shaders.BindOneQuadScreen(FrameBuf);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-            GL.BindVertexArray(0);
+
 
             GL.Flush();
         }

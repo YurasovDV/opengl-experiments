@@ -41,7 +41,33 @@ namespace DeferredRender.Graphics.FrameBuffer
 
         public Vector2[] GetFrameBufferVertices()
         {
-            return QuadVertices;
+            return QuadVerticesFullScreen;
+        }
+
+        public Vector2[] GetFrameBufferVertices(FramebufferAttachment? kind)
+        {
+            if (kind != null)
+            {
+                switch (kind)
+                {
+                    case FramebufferAttachment.ColorAttachment0:
+                        return QuadVerticesColor0;
+
+                    case FramebufferAttachment.ColorAttachment1:
+                        return QuadVerticesColor1;
+
+                    case FramebufferAttachment.ColorAttachment2:
+                        return QuadVerticesColor2;
+
+                    case FramebufferAttachment.DepthAttachment:
+                        return QuadVerticesDepth;
+
+                    default:
+                        break;
+                }
+            }
+
+            return QuadVerticesFullScreen;
         }
 
         public Vector2[] GetFrameBufferTextureCoords()
@@ -59,8 +85,8 @@ namespace DeferredRender.Graphics.FrameBuffer
               new Vector2(1.0f, 1.0f)
         };
 
-        private readonly Vector2[] QuadVertices = new[] {
-        // Positions  
+
+        private readonly Vector2[] QuadVerticesFullScreen = new[] {
         new Vector2(-1.0f,  1.0f),
         new Vector2(-1.0f, -1.0f),
         new Vector2(1.0f, -1.0f),
@@ -69,6 +95,48 @@ namespace DeferredRender.Graphics.FrameBuffer
         new Vector2( 1.0f, -1.0f),
         new Vector2(1.0f,  1.0f),
         };
+
+        private readonly Vector2[] QuadVerticesColor0 = new[] {
+        new Vector2(-1.0f,  1.0f),
+        new Vector2(-1.0f, -1.0f),
+        new Vector2(1.0f, -1.0f),
+
+        new Vector2(-1.0f,  1.0f),
+        new Vector2( 1.0f, -1.0f),
+        new Vector2(1.0f,  1.0f),
+        };
+
+        private readonly Vector2[] QuadVerticesColor1 = new[] {
+        new Vector2(-1.0f,  1.0f),
+        new Vector2(-1.0f, -1.0f),
+        new Vector2(1.0f, -1.0f),
+
+        new Vector2(-1.0f,  1.0f),
+        new Vector2( 1.0f, -1.0f),
+        new Vector2(1.0f,  1.0f),
+        };
+
+        private readonly Vector2[] QuadVerticesColor2 = new[] {
+        new Vector2(-1.0f,  1.0f),
+        new Vector2(-1.0f, -1.0f),
+        new Vector2(1.0f, -1.0f),
+
+        new Vector2(-1.0f,  1.0f),
+        new Vector2( 1.0f, -1.0f),
+        new Vector2(1.0f,  1.0f),
+        };
+
+        private readonly Vector2[] QuadVerticesDepth = new[] {
+        new Vector2(-1.0f,  1.0f),
+        new Vector2(-1.0f, -1.0f),
+        new Vector2(1.0f, -1.0f),
+
+        new Vector2(-1.0f,  1.0f),
+        new Vector2( 1.0f, -1.0f),
+        new Vector2(1.0f,  1.0f),
+        };
+
+
 
     }
 }

@@ -61,6 +61,14 @@ namespace DeferredRender.Graphics
             GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
 
 
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.normalsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Normals.Length * Vector3.SizeInBytes),
+                model.Colors, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribNormalsLocation);
+
+
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.texCoordsBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.TextureCoordinates.Length * Vector2.SizeInBytes),
               model.TextureCoordinates, BufferUsageHint.DynamicDraw);
@@ -74,28 +82,20 @@ namespace DeferredRender.Graphics
 
         public static void BindOneQuadScreen(FrameBufferManager frameBufferManager)
         {
-            var FrameBufferProgramId = _secondGBufferPassDescriptor.ProgramId;
             FrameBufferDesc bufferHandle = frameBufferManager.GBuferDescriptor;
-            GL.UseProgram(FrameBufferProgramId);
+            GL.UseProgram(_secondGBufferPassDescriptor.ProgramId);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _secondGBufferPassDescriptor.verticesBuffer);
             var points = frameBufferManager.GetFrameBufferVertices();
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), points, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_secondGBufferPassDescriptor.AttribVerticesLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_secondGBufferPassDescriptor.AttribVerticesLocation);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _secondGBufferPassDescriptor.texCoordsBuffer);
             var texCoords = frameBufferManager.GetFrameBufferTextureCoords();
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), texCoords, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_secondGBufferPassDescriptor.TexCoordsLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_secondGBufferPassDescriptor.TexCoordsLocation);
 
+            BindGBufferPart(points, texCoords);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(_secondGBufferPassDescriptor.uniformTexture1, 0);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.PositionTextureId);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
 
-
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+            GL.BindVertexArray(0);
 
             /*
             GL.ActiveTexture(TextureUnit.Texture0);
@@ -105,6 +105,19 @@ namespace DeferredRender.Graphics
 
 
 
+        }
+
+        private static void BindGBufferPart(Vector2[] points, Vector2[] texCoords)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _secondGBufferPassDescriptor.verticesBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), points, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_secondGBufferPassDescriptor.AttribVerticesLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_secondGBufferPassDescriptor.AttribVerticesLocation);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _secondGBufferPassDescriptor.texCoordsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), texCoords, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(_secondGBufferPassDescriptor.TexCoordsLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_secondGBufferPassDescriptor.TexCoordsLocation);
         }
     }
 }

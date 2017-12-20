@@ -66,9 +66,5 @@
         public int uniformTexture1 = 0;
     }
 
-    /// <summary>
-    /// now 
-    /// </summary>
-
 
 }
