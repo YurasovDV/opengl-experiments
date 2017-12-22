@@ -15,7 +15,7 @@ namespace Common
 
         public Vector2[] TextureCoordinates { get; set; }
 
-        private int textureId = -1;
+        private int textureId;
 
         public int TextureId
         {
@@ -25,10 +25,10 @@ namespace Common
 
         public SimpleModel()
         {
-
+            textureId = -1;
         }
 
-        public SimpleModel(string pathModel, string texturePath)
+        public SimpleModel(string pathModel, string texturePath) : this()
         {
             List<Vector3> verts = new List<Vector3>();
             List<Vector2> textureUV = new List<Vector2>();
@@ -43,6 +43,7 @@ namespace Common
             using (StreamReader rd = new StreamReader(pathModel))
             {
                 string row = null;
+                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
                 while ((row = rd.ReadLine()) != null)
                 {
                     var parts = row.Split(' ');
@@ -50,8 +51,6 @@ namespace Common
                     {
                         continue;
                     }
-
-                    Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
                     var type = parts[0];
 

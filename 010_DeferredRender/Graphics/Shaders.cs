@@ -33,6 +33,13 @@ namespace DeferredRender.Graphics
                 model.Colors, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
+
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.normalsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Normals.Length * Vector3.SizeInBytes),
+                model.Colors, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribNormalsLocation);
         }
 
 
