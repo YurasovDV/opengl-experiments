@@ -1,10 +1,17 @@
 #version 330
 
 varying vec4 color;
+varying vec3 normal;
+varying vec3 position;
 
-out vec4 outputColor;
+layout (location = 0) out vec3 gPosition;
+layout (location = 1) out vec3 gNormal;
+layout (location = 2) out vec4 gAlbedoSpec;
 
 void main()
 {
-    outputColor = color;
+    gPosition = position;
+	gNormal = normal;
+	gAlbedoSpec.rgb = color.rgb;
+	gAlbedoSpec.a = 1;   
 }

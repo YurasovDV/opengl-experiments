@@ -19,7 +19,7 @@ namespace DeferredRender
         private Player _player;
         private GraphicsSystem _graphics;
 
-        private SimpleModel _model;
+        private List<SimpleModel> _models;
 
         public SimulationEngine(int width, int height, Stopwatch watch)
         {
@@ -33,7 +33,7 @@ namespace DeferredRender
 
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += OnKeyPress;
-
+            _models = new List<SimpleModel>();
             InitObjects();
 
         }
@@ -123,8 +123,24 @@ namespace DeferredRender
             };
 
             model.TextureCoordinates = textManager.GetTextureCoordinates(model.Vertices);
+            if (_models == null)
+            {
+                _models = new List<SimpleModel>();
+            }
+            _models.Add(model);
 
-            _model = model;
+            SimpleModel tree = new SimpleModel(@"Assets\tree.obj", null);
+            Vector3 green = new Vector3(0, 1, 0);
+            var colors = Enumerable.Repeat<Vector3>(green, tree.Vertices.Length).ToArray();
+            tree.Colors = colors;
+            Matrix4 move = Matrix4.CreateScale(5) * Matrix4.CreateTranslation(10, 0, 0);
+            for (int i = 0; i < tree.Vertices.Length; i++)
+            {
+                var v = tree.Vertices[i];
+                tree.Vertices[i] = Vector3.Transform(v, move);
+            }
+
+            _models.Add(tree);
         }
 
 
@@ -142,7 +158,7 @@ namespace DeferredRender
 
         private void FullRender()
         {
-            _graphics.Render(_model);
+            _graphics.Render(_models);
         }
     }
 }

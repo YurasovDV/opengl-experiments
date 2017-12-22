@@ -56,7 +56,7 @@ namespace DeferredRender.Graphics.FrameBuffer
 
             GL.DrawBuffers(enabledBuffers.Length, enabledBuffers);
 
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+            // GL.BindTexture(TextureTarget.Texture2D, 0);
 
             int depthBuffer = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, depthBuffer);

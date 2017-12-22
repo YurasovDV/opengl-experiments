@@ -96,46 +96,52 @@ namespace DeferredRender.Graphics.FrameBuffer
         new Vector2(1.0f,  1.0f),
         };
 
-        private readonly Vector2[] QuadVerticesColor0 = new[] {
-        new Vector2(-1.0f,  1.0f),
-        new Vector2(-1.0f, -1.0f),
-        new Vector2(1.0f, -1.0f),
 
-        new Vector2(-1.0f,  1.0f),
-        new Vector2( 1.0f, -1.0f),
-        new Vector2(1.0f,  1.0f),
+
+        #region bottom panel for buffer parts
+
+
+        private readonly Vector2[] QuadVerticesColor0 = new[] {
+        new Vector2(-1.0f,  -0.5f),
+        new Vector2(-1.0f, -0.9f),
+        new Vector2(-0.5f, -0.9f),
+
+        new Vector2(-1.0f,  -0.5f),
+        new Vector2(-0.5f, -0.9f),
+        new Vector2(-0.5f,  -0.5f),
         };
 
         private readonly Vector2[] QuadVerticesColor1 = new[] {
-        new Vector2(-1.0f,  1.0f),
-        new Vector2(-1.0f, -1.0f),
-        new Vector2(1.0f, -1.0f),
+         new Vector2(-0.49f,  -0.5f),
+        new Vector2(-0.49f, -0.9f),
+        new Vector2(-0.01f, -0.9f),
 
-        new Vector2(-1.0f,  1.0f),
-        new Vector2( 1.0f, -1.0f),
-        new Vector2(1.0f,  1.0f),
+        new Vector2(-0.49f,  -0.5f),
+        new Vector2(-0.01f, -0.9f),
+        new Vector2(-0.01f,  -0.5f),
         };
 
         private readonly Vector2[] QuadVerticesColor2 = new[] {
-        new Vector2(-1.0f,  1.0f),
-        new Vector2(-1.0f, -1.0f),
-        new Vector2(1.0f, -1.0f),
+         new Vector2(0f,  -0.5f),
+        new Vector2(0.0f, -0.9f),
+        new Vector2(0.5f, -0.9f),
 
-        new Vector2(-1.0f,  1.0f),
-        new Vector2( 1.0f, -1.0f),
-        new Vector2(1.0f,  1.0f),
+        new Vector2(0f,  -0.5f),
+        new Vector2(0.5f, -0.9f),
+        new Vector2(0.5f,  -0.5f),
         };
 
         private readonly Vector2[] QuadVerticesDepth = new[] {
-        new Vector2(-1.0f,  1.0f),
-        new Vector2(-1.0f, -1.0f),
-        new Vector2(1.0f, -1.0f),
+         new Vector2(0.51f,  -0.5f),
+        new Vector2(0.51f, -0.9f),
+        new Vector2(1f, -0.9f),
 
-        new Vector2(-1.0f,  1.0f),
-        new Vector2( 1.0f, -1.0f),
-        new Vector2(1.0f,  1.0f),
+        new Vector2(0.51f,  -0.5f),
+        new Vector2(1f, -0.9f),
+        new Vector2(1f,  -0.5f),
         };
 
+        #endregion
 
 
     }

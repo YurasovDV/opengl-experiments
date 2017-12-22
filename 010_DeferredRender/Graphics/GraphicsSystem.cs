@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Common;
 using DeferredRender.Graphics.FrameBuffer;
 using OpenTK;
@@ -39,26 +40,28 @@ namespace DeferredRender.Graphics
             FrameBuf = new FrameBufferManager(_width, _height);
         }
 
-        internal void Render(SimpleModel model)
+        internal void Render(List<SimpleModel> models)
         {
             FrameBuf.EnableMainFrameBuffer();
-            RenderToCurrentTarget(model);
+            RenderToCurrentTarget(models);
             FrameBuf.DisableMainFrameBuffer();
             DrawUsingGBuffer();
         }
 
 
-        private void RenderToCurrentTarget(SimpleModel model)
+        private void RenderToCurrentTarget(List<SimpleModel> models)
         {
             RebuildMatrices();
 
-            GL.ClearColor(0, 0, 0.0f, 1);
+            GL.ClearColor(0, 0f, 0.1f, 1f);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            foreach (var model in models)
+            {
+                model.Bind(ModelView, ModelViewProjection, Projection);
 
-            model.Bind(ModelView, ModelViewProjection, Projection);
-
-            GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
+                GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
+            }
 
             GL.Flush();
 
@@ -68,12 +71,10 @@ namespace DeferredRender.Graphics
         public void DrawUsingGBuffer()
         {
             GL.Disable(EnableCap.DepthTest);
-            GL.ClearColor(1, 0f, 0f, 0);
+            GL.ClearColor(0, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            Shaders.BindOneQuadScreen(FrameBuf);
-
-
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf);
 
             GL.Flush();
         }

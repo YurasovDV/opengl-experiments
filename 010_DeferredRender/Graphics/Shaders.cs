@@ -80,7 +80,7 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
         }
 
-        public static void BindOneQuadScreen(FrameBufferManager frameBufferManager)
+        public static void BindOneQuadScreenAndDraw(FrameBufferManager frameBufferManager)
         {
             FrameBufferDesc bufferHandle = frameBufferManager.GBuferDescriptor;
             GL.UseProgram(_secondGBufferPassDescriptor.ProgramId);
@@ -95,7 +95,41 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-            GL.BindVertexArray(0);
+
+
+            points = frameBufferManager.GetFrameBufferVertices(FramebufferAttachment.ColorAttachment0);
+            BindGBufferPart(points, texCoords);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(_secondGBufferPassDescriptor.uniformTexture1, 0);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.PositionTextureId);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+
+
+            points = frameBufferManager.GetFrameBufferVertices(FramebufferAttachment.ColorAttachment1);
+            // texCoords = frameBufferManager.GetFrameBufferTextureCoords();
+            BindGBufferPart(points, texCoords);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(_secondGBufferPassDescriptor.uniformTexture1, 0);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.NormalTextureId);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+
+
+            points = frameBufferManager.GetFrameBufferVertices(FramebufferAttachment.ColorAttachment2);
+            // texCoords = frameBufferManager.GetFrameBufferTextureCoords();
+            BindGBufferPart(points, texCoords);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(_secondGBufferPassDescriptor.uniformTexture1, 0);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+
+
+            points = frameBufferManager.GetFrameBufferVertices(FramebufferAttachment.DepthAttachment);
+            // texCoords = frameBufferManager.GetFrameBufferTextureCoords();
+            BindGBufferPart(points, texCoords);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(_secondGBufferPassDescriptor.uniformTexture1, 0);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.DepthTextureId);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
             /*
             GL.ActiveTexture(TextureUnit.Texture0);
