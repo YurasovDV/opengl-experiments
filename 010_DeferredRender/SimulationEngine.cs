@@ -108,8 +108,8 @@ namespace DeferredRender
 
             var verticesCombined = new List<Vector3>();
             verticesCombined.AddRange(verticesPlane);
-            //verticesCombined.AddRange(verticesOx);
-            //verticesCombined.AddRange(verticesOZ);
+            verticesCombined.AddRange(verticesOx);
+            verticesCombined.AddRange(verticesOZ);
 
             var textManager = new TextureManager();
             int textureId = textManager.LoadTexture(@"Assets\Textures\Chess.png");
@@ -133,7 +133,7 @@ namespace DeferredRender
             Vector3 green = new Vector3(0, 1, 0);
             var colors = Enumerable.Repeat<Vector3>(green, tree.Vertices.Length).ToArray();
             tree.Colors = colors;
-            Matrix4 move = Matrix4.CreateScale(5) * Matrix4.CreateTranslation(10, 0, 0);
+            Matrix4 move = Matrix4.CreateScale(1) * Matrix4.CreateTranslation(15, 0, 0);
             for (int i = 0; i < tree.Vertices.Length; i++)
             {
                 var v = tree.Vertices[i];

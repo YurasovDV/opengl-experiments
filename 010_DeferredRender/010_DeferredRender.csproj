@@ -70,6 +70,9 @@
     <Compile Include="SimulationEngine.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shaders\oneQuadShader.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Assets\Textures\Chess.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -89,7 +92,7 @@
     <None Include="Assets\tree.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Shaders\farameBufferFragment.glsl">
+    <None Include="Assets\Shaders\frameBufferFragment.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Shaders\frameBufferVertex.glsl">

@@ -40,9 +40,30 @@
         public int ProgramId = 0;
         public int AttribVerticesLocation = 0;
         public int TexCoordsLocation = 0;
+
         public int verticesBuffer = 0;
         public int texCoordsBuffer = 0;
-        public int uniformTexture1 = 0;
+
+        public int uniformTexturePos = 0;
+        public int uniformTextureNormal = 0;
+        public int uniformTextureColor = 0;
+
+
+        public int UniformLightLocation { get; set; }
+        public int UniformCameraPosition { get; set; }
+
+    }
+
+    class OneQuadProgram
+    {
+        public int ProgramId = 0;
+        public int AttribVerticesLocation = 0;
+        public int TexCoordsLocation = 0;
+
+        public int verticesBuffer = 0;
+        public int texCoordsBuffer = 0;
+
+        public int uniformTexture0 = 0;
     }
 
 

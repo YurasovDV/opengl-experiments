@@ -12,6 +12,7 @@ namespace DeferredRender.Graphics
         private static TexturelessNoLight _texturelessNoLightDescriptor;
         private static TexturedNoLight _texturedNoLightDescriptor;
         private static GBufferSecondPass _secondGBufferPassDescriptor;
+        private static OneQuadProgram _auxillaryProgram;
 
         internal static TexturelessNoLight InitTexturelessNoLight()
         {
@@ -129,7 +130,7 @@ namespace DeferredRender.Graphics
         public static GBufferSecondPass InitSecondGBufferPassProgram()
         {
             var vertexPath = @"Assets\Shaders\frameBufferVertex.glsl";
-            var fragmentPath = @"Assets\Shaders\farameBufferFragment.glsl";
+            var fragmentPath = @"Assets\Shaders\frameBufferFragment.glsl";
 
             var programId = GL.CreateProgram();
 
@@ -175,7 +176,13 @@ namespace DeferredRender.Graphics
             _secondGBufferPassDescriptor = new GBufferSecondPass();
             _secondGBufferPassDescriptor.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
             _secondGBufferPassDescriptor.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
-            _secondGBufferPassDescriptor.uniformTexture1 = GL.GetUniformLocation(programId, "uTexture");
+
+            _secondGBufferPassDescriptor.uniformTexturePos = GL.GetUniformLocation(programId, "gPositionSampler");
+            _secondGBufferPassDescriptor.uniformTextureNormal = GL.GetUniformLocation(programId, "gNormalSampler");
+            _secondGBufferPassDescriptor.uniformTextureColor = GL.GetUniformLocation(programId, "gAlbedoSpecSampler");
+
+            _secondGBufferPassDescriptor.UniformLightLocation = GL.GetUniformLocation(programId, "uLightPos");
+            _secondGBufferPassDescriptor.UniformCameraPosition = GL.GetUniformLocation(programId, "uCameraPos");
 
             GL.GenBuffers(1, out _secondGBufferPassDescriptor.texCoordsBuffer);
             GL.GenBuffers(1, out _secondGBufferPassDescriptor.verticesBuffer);
@@ -184,6 +191,72 @@ namespace DeferredRender.Graphics
             _secondGBufferPassDescriptor.ProgramId = programId;
             return _secondGBufferPassDescriptor;
         }
+
+
+
+        public static OneQuadProgram InitOneQuadProgramProgram()
+        {
+            var vertexPath = @"Assets\Shaders\frameBufferVertex.glsl";
+            var fragmentPath = @"Assets\Shaders\oneQuadShader.frag";
+
+            var programId = GL.CreateProgram();
+
+            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
+            using (var rd = new StreamReader(vertexPath))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(vertexShader, text);
+            }
+            GL.CompileShader(vertexShader);
+            GL.AttachShader(programId, vertexShader);
+
+            int statusCode;
+
+            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(vertexShader, out info);
+                throw new Exception("vertex shader" + info);
+            }
+
+            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+            using (var rd = new StreamReader(fragmentPath))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(fragmentShader, text);
+            }
+            GL.CompileShader(fragmentShader);
+            GL.AttachShader(programId, fragmentShader);
+
+            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(fragmentShader, out info);
+                throw new Exception("fragment shader: " + info);
+            }
+
+            GL.LinkProgram(programId);
+
+            GL.UseProgram(programId);
+            _auxillaryProgram = new OneQuadProgram();
+            _auxillaryProgram.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
+            _auxillaryProgram.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
+
+            _auxillaryProgram.uniformTexture0 = GL.GetUniformLocation(programId, "uTexture");
+
+
+            GL.GenBuffers(1, out _auxillaryProgram.texCoordsBuffer);
+            GL.GenBuffers(1, out _auxillaryProgram.verticesBuffer);
+
+
+            _auxillaryProgram.ProgramId = programId;
+            return _auxillaryProgram;
+        }
+
+
+
 
     }
 }

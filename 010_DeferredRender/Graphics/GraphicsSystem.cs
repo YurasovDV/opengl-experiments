@@ -36,6 +36,7 @@ namespace DeferredRender.Graphics
             Shaders.InitTexturelessNoLight();
             Shaders.InitTexturedNoLight();
             Shaders.InitSecondGBufferPassProgram();
+            Shaders.InitOneQuadProgramProgram();
 
             FrameBuf = new FrameBufferManager(_width, _height);
         }
@@ -75,7 +76,7 @@ namespace DeferredRender.Graphics
             GL.ClearColor(0, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf);
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
 
             GL.Flush();
         }
