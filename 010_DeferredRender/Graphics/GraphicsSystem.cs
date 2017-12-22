@@ -42,6 +42,7 @@ namespace DeferredRender.Graphics
 
         internal void Render(List<SimpleModel> models)
         {
+            GL.Enable(EnableCap.DepthTest);
             FrameBuf.EnableMainFrameBuffer();
             RenderToCurrentTarget(models);
             FrameBuf.DisableMainFrameBuffer();
