@@ -41,17 +41,22 @@ namespace DeferredRender.Graphics
             FrameBuf = new FrameBufferManager(_width, _height);
         }
 
-        internal void Render(List<SimpleModel> models)
+        internal void Render(List<SimpleModel> models, List<SimpleModel> lights)
         {
             GL.Enable(EnableCap.DepthTest);
             FrameBuf.EnableMainFrameBuffer();
-            RenderToCurrentTarget(models);
+            RenderToCurrentTarget(models, lights);
             FrameBuf.DisableMainFrameBuffer();
-            DrawUsingGBuffer();
+            DrawUsingGBuffer(lights);
         }
 
 
-        private void RenderToCurrentTarget(List<SimpleModel> models)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="models"></param>
+        /// <param name="lights">is not used</param>
+        private void RenderToCurrentTarget(List<SimpleModel> models, List<SimpleModel> lights)
         {
             RebuildMatrices();
 
@@ -70,13 +75,13 @@ namespace DeferredRender.Graphics
         }
 
 
-        public void DrawUsingGBuffer()
+        public void DrawUsingGBuffer(List<SimpleModel> lights)
         {
             GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(0, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, lights);
 
             GL.Flush();
         }

@@ -20,6 +20,7 @@ namespace DeferredRender
         private GraphicsSystem _graphics;
 
         private List<SimpleModel> _models;
+        private List<SimpleModel> _lights;
 
         public SimulationEngine(int width, int height, Stopwatch watch)
         {
@@ -108,8 +109,8 @@ namespace DeferredRender
 
             var verticesCombined = new List<Vector3>();
             verticesCombined.AddRange(verticesPlane);
-            verticesCombined.AddRange(verticesOx);
-            verticesCombined.AddRange(verticesOZ);
+            //verticesCombined.AddRange(verticesOx);
+            //verticesCombined.AddRange(verticesOZ);
 
             var textManager = new TextureManager();
             int textureId = textManager.LoadTexture(@"Assets\Textures\Chess.png");
@@ -141,6 +142,25 @@ namespace DeferredRender
             }
 
             _models.Add(tree);
+
+            _lights = new List<SimpleModel>();
+
+            var rand = new Random();
+
+            for (int i = 0; i < 10; i++)
+            {
+                SimpleModel light = new SimpleModel();
+
+                light.Vertices = new[] { new Vector3(rand.Next(50), 5, rand.Next(50)) };
+
+                //light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
+                light.Colors = new[] { new Vector3(250, 0, 0) };
+
+                // radius
+                light.Normals = new[] { new Vector3(1250, 0, 0) };
+
+                _lights.Add(light);
+            }
         }
 
 
@@ -158,7 +178,7 @@ namespace DeferredRender
 
         private void FullRender()
         {
-            _graphics.Render(_models);
+            _graphics.Render(_models, _lights);
         }
     }
 }

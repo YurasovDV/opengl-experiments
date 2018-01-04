@@ -48,8 +48,6 @@
         public int uniformTextureNormal = 0;
         public int uniformTextureColor = 0;
 
-
-        public int UniformLightLocation { get; set; }
         public int UniformCameraPosition { get; set; }
 
     }

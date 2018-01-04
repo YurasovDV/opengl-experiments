@@ -10,7 +10,7 @@ namespace DeferredRender.Graphics
 {
     partial class Shaders
     {
-       public static void BindTexturelessNoLight(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
+        public static void BindTexturelessNoLight(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
         {
             var descriptor = _texturelessNoLightDescriptor;
 
@@ -75,7 +75,6 @@ namespace DeferredRender.Graphics
             GL.EnableVertexAttribArray(descriptor.AttribNormalsLocation);
 
 
-
             GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.texCoordsBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.TextureCoordinates.Length * Vector2.SizeInBytes),
               model.TextureCoordinates, BufferUsageHint.DynamicDraw);
@@ -87,7 +86,8 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
         }
 
-        public static void BindOneQuadScreenAndDraw(FrameBufferManager frameBufferManager, Vector3 playerPos)
+
+        public static void BindOneQuadScreenAndDraw(FrameBufferManager frameBufferManager, Vector3 playerPos, List<SimpleModel> lights)
         {
             FrameBufferDesc bufferHandle = frameBufferManager.GBufferDescriptor;
             GL.UseProgram(_secondGBufferPassDescriptor.ProgramId);
@@ -109,14 +109,24 @@ namespace DeferredRender.Graphics
             GL.Uniform1(_secondGBufferPassDescriptor.uniformTextureColor, 2);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
 
-            GL.Uniform3(_secondGBufferPassDescriptor.UniformLightLocation, new Vector3(15, 50, 0));
             GL.Uniform3(_secondGBufferPassDescriptor.UniformCameraPosition, playerPos);
+
+            for (int i = 0; i < lights.Count; i++)
+            {
+                var location = GL.GetUniformLocation(_secondGBufferPassDescriptor.ProgramId, "lights[" + i + "].pos");
+                GL.Uniform3(location, lights[i].Vertices[0]);
+
+                location = GL.GetUniformLocation(_secondGBufferPassDescriptor.ProgramId, "lights[" + i + "].color");
+                GL.Uniform3(location, lights[i].Colors[0]);
+
+                location = GL.GetUniformLocation(_secondGBufferPassDescriptor.ProgramId, "lights[" + i + "].radius");
+                GL.Uniform1(location, lights[i].Normals[0].X);
+            }
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
-
             GL.UseProgram(_auxillaryProgram.ProgramId);
-            
+
             points = frameBufferManager.GetFrameBufferVertices(FramebufferAttachment.ColorAttachment0);
             BindGBufferPart(points, texCoords);
             GL.ActiveTexture(TextureUnit.Texture0);
@@ -150,8 +160,6 @@ namespace DeferredRender.Graphics
             GL.Uniform1(_auxillaryProgram.uniformTexture0, 0);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.DepthTextureId);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-
-
 
 
         }

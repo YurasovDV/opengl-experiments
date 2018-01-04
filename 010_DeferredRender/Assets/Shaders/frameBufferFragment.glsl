@@ -7,11 +7,18 @@ uniform sampler2D gPositionSampler;
 uniform sampler2D gNormalSampler;
 uniform sampler2D gAlbedoSpecSampler;
 
-uniform vec3 uLightPos;
-
 uniform vec3 uCameraPos;
 
 in vec2 texCoords;
+
+struct LightPoint{
+	vec3 pos;
+	vec3 color;
+
+	float radius;
+};
+
+uniform LightPoint lights[10];
 
 void main()
 {	
@@ -22,11 +29,21 @@ void main()
 
 	vec3 viewDir = normalize(uCameraPos - posExtracted);
 
-	vec3 lightDirection = normalize(uLightPos - posExtracted);
-	vec3 diffuse = max(dot(normalExtracted, lightDirection), 0.0) * colorExtracted;
-    colorExtracted += diffuse;
+	for(int i = 0; i < 10; i++)
+	{
+		float dist = length(lights[i].pos - posExtracted);
+		if(dist < lights[i].radius)
+		{
+			vec3 lightDirection = normalize(lights[i].pos - posExtracted);
+			vec3 diffuse = max(dot(normalExtracted, lightDirection), 0.0) * colorExtracted * lights[i].color;
+
+			// diffuse = 400 * diffuse * (1.0f / (1 +  0.25 * dist * dist));
+
+			colorExtracted += diffuse;
+		}
+	}
+
+
 
 	outputColor = vec4(colorExtracted, 1.0);
-
-	// outputColor = texture2D(gAlbedoSpecSampler,  texCoords);
 }
