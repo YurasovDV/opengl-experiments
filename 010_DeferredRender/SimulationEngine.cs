@@ -151,13 +151,12 @@ namespace DeferredRender
             {
                 SimpleModel light = new SimpleModel();
 
-                light.Vertices = new[] { new Vector3(rand.Next(50), 5, rand.Next(50)) };
+                light.Vertices = new[] { new Vector3(rand.Next(200) - 100, 10, rand.Next(200) - 100) };
 
-                //light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
-                light.Colors = new[] { new Vector3(250, 0, 0) };
+                light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
 
                 // radius
-                light.Normals = new[] { new Vector3(1250, 0, 0) };
+                light.Normals = new[] { new Vector3(50, 0, 0) };
 
                 _lights.Add(light);
             }

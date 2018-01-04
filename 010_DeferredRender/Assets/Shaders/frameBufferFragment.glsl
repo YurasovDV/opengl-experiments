@@ -37,13 +37,11 @@ void main()
 			vec3 lightDirection = normalize(lights[i].pos - posExtracted);
 			vec3 diffuse = max(dot(normalExtracted, lightDirection), 0.0) * colorExtracted * lights[i].color;
 
-			// diffuse = 400 * diffuse * (1.0f / (1 +  0.25 * dist * dist));
+			diffuse = 1 * diffuse * (1.0f / (1 +  0.25 * dist * dist));
 
 			colorExtracted += diffuse;
 		}
 	}
-
-
 
 	outputColor = vec4(colorExtracted, 1.0);
 }

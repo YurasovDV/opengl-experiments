@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Common;
 using DeferredRender.Graphics.FrameBuffer;
@@ -81,7 +82,15 @@ namespace DeferredRender.Graphics
             GL.ClearColor(0, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, lights);
+            var modelsTemp = lights.Select(l => new SimpleModel()
+            {
+                Colors = l.Colors,
+                Normals = l.Normals,
+                Vertices = new[] { Vector3.Transform(l.Vertices[0], ModelView) },
+            })
+            .ToList();
+
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, modelsTemp);
 
             GL.Flush();
         }
