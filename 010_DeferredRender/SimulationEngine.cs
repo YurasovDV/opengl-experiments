@@ -131,7 +131,7 @@ namespace DeferredRender
             _models.Add(model);
 
             SimpleModel tree = new SimpleModel(@"Assets\tree.obj", null);
-            Vector3 green = new Vector3(0, 1, 0);
+            Vector3 green = Vector3.UnitY;
             var colors = Enumerable.Repeat<Vector3>(green, tree.Vertices.Length).ToArray();
             tree.Colors = colors;
             Matrix4 move = Matrix4.CreateScale(1) * Matrix4.CreateTranslation(15, 0, 0);
@@ -141,7 +141,7 @@ namespace DeferredRender
                 tree.Vertices[i] = Vector3.Transform(v, move);
             }
 
-            _models.Add(tree);
+           // _models.Add(tree);
 
             _lights = new List<SimpleModel>();
 

@@ -71,7 +71,7 @@ namespace DeferredRender.Graphics
                 GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
             }
 
-            GL.Flush();
+           // GL.Flush();
 
         }
 
@@ -90,7 +90,7 @@ namespace DeferredRender.Graphics
             })
             .ToList();
 
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, modelsTemp);
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, lights);
 
             GL.Flush();
         }
