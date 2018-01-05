@@ -109,7 +109,7 @@ namespace DeferredRender.Graphics
             GL.Uniform1(_secondGBufferPassDescriptor.uniformTextureColor, 2);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
 
-            GL.Uniform3(_secondGBufferPassDescriptor.UniformCameraPosition, playerPos);
+           // GL.Uniform3(_secondGBufferPassDescriptor.UniformCameraPosition, playerPos);
 
             for (int i = 0; i < lights.Count; i++)
             {
@@ -124,7 +124,7 @@ namespace DeferredRender.Graphics
             }
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-
+            
             GL.UseProgram(_auxillaryProgram.ProgramId);
 
             points = frameBufferManager.GetFrameBufferVertices(FramebufferAttachment.ColorAttachment0);
@@ -160,7 +160,7 @@ namespace DeferredRender.Graphics
             GL.Uniform1(_auxillaryProgram.uniformTexture0, 0);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.DepthTextureId);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-
+            
 
         }
 

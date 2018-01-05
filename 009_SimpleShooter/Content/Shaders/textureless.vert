@@ -19,7 +19,7 @@ void main()
 {
    gl_Position = uMVP * vec4(vPosition, 1.0);
    color = vec4(vColor, 1.0);
-
+   // probably, 1
    position = vec3(uMV * vec4(vPosition, 0.0));
    normal = vec3(uMV * vec4(vNormal, 0.0));
    lightPosition = vec3(uMV *  vec4(uLightPos, 0.0));

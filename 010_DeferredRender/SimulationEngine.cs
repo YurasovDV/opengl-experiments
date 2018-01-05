@@ -28,7 +28,7 @@ namespace DeferredRender
             _player = new Player();
 
             _player.Position = new Vector3(0, 0.5f, 0);
-            _player.Target = new Vector3(100, 0.5f, 0);
+            _player.Target = _player.Position + _player.DefaultTarget;
 
             _graphics = new GraphicsSystem(width, height, _player);
 
@@ -134,26 +134,31 @@ namespace DeferredRender
             Vector3 green = Vector3.UnitY;
             var colors = Enumerable.Repeat<Vector3>(green, tree.Vertices.Length).ToArray();
             tree.Colors = colors;
-            Matrix4 move = Matrix4.CreateScale(1) * Matrix4.CreateTranslation(15, 0, 0);
+            Matrix4 move = Matrix4.CreateScale(4) * Matrix4.CreateTranslation(15, 0, 0);
             for (int i = 0; i < tree.Vertices.Length; i++)
             {
                 var v = tree.Vertices[i];
                 tree.Vertices[i] = Vector3.Transform(v, move);
             }
 
-           // _models.Add(tree);
+             //_models.Add(tree);
 
+            GenerateRandomLights();
+        }
+
+        private void GenerateLights()
+        {
             _lights = new List<SimpleModel>();
 
             var rand = new Random();
 
             for (int i = 0; i < 10; i++)
             {
-                SimpleModel light = new SimpleModel();
+                var light = new SimpleModel();
 
-                light.Vertices = new[] { new Vector3(rand.Next(200) - 100, 10, rand.Next(200) - 100) };
+                light.Vertices = new[] { new Vector3(0, 1f, 0) };
 
-                light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
+                light.Colors = new[] { new Vector3(0, 100, 0) };
 
                 // radius
                 light.Normals = new[] { new Vector3(50, 0, 0) };
@@ -162,6 +167,26 @@ namespace DeferredRender
             }
         }
 
+        private void GenerateRandomLights()
+        {
+            _lights = new List<SimpleModel>();
+
+            var rand = new Random();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var light = new SimpleModel();
+
+                light.Vertices = new[] { new Vector3(rand.Next(200) - 100, 10, rand.Next(200) - 100) };
+
+                light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
+
+                // radius
+                light.Normals = new[] { new Vector3(500, 0, 0) };
+
+                _lights.Add(light);
+            }
+        }
 
         private void OnKeyPress(InputSignal signal)
         {

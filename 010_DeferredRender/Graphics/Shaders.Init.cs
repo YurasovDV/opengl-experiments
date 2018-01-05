@@ -181,7 +181,7 @@ namespace DeferredRender.Graphics
             _secondGBufferPassDescriptor.uniformTextureNormal = GL.GetUniformLocation(programId, "gNormalSampler");
             _secondGBufferPassDescriptor.uniformTextureColor = GL.GetUniformLocation(programId, "gAlbedoSpecSampler");
 
-            _secondGBufferPassDescriptor.UniformCameraPosition = GL.GetUniformLocation(programId, "uCameraPos");
+            //_secondGBufferPassDescriptor.UniformCameraPosition = GL.GetUniformLocation(programId, "uCameraPos");
 
             GL.GenBuffers(1, out _secondGBufferPassDescriptor.texCoordsBuffer);
             GL.GenBuffers(1, out _secondGBufferPassDescriptor.verticesBuffer);

@@ -46,7 +46,7 @@ namespace DeferredRender.Graphics
         {
             GL.Enable(EnableCap.DepthTest);
             FrameBuf.EnableMainFrameBuffer();
-            RenderToCurrentTarget(models, lights);
+            RenderToCurrentTarget(models);
             FrameBuf.DisableMainFrameBuffer();
             DrawUsingGBuffer(lights);
         }
@@ -56,8 +56,7 @@ namespace DeferredRender.Graphics
         /// 
         /// </summary>
         /// <param name="models"></param>
-        /// <param name="lights">is not used</param>
-        private void RenderToCurrentTarget(List<SimpleModel> models, List<SimpleModel> lights)
+        private void RenderToCurrentTarget(List<SimpleModel> models)
         {
             RebuildMatrices();
 
@@ -70,9 +69,6 @@ namespace DeferredRender.Graphics
 
                 GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
             }
-
-           // GL.Flush();
-
         }
 
 
@@ -82,19 +78,35 @@ namespace DeferredRender.Graphics
             GL.ClearColor(0, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            var modelsTemp = lights.Select(l => new SimpleModel()
-            {
-                Colors = l.Colors,
-                Normals = l.Normals,
-                Vertices = new[] { Vector3.Transform(l.Vertices[0], ModelView) },
-            })
-            .ToList();
+            List<SimpleModel> modelsTemp = ConvertLightsToViewSpace(lights);
 
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, lights);
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, modelsTemp);
 
             GL.Flush();
         }
 
+        private List<SimpleModel> ConvertLightsToViewSpace(List<SimpleModel> lights)
+        {
+            var result = new List<SimpleModel>(lights.Count * 2);
+
+            for (int i = 0; i < lights.Count; i++)
+            {
+                var l = lights[i];
+
+                var pos = new Vector4(l.Vertices[0], 1);
+                var trans = Vector4.Transform(pos, ModelView);
+
+                result.Add(new SimpleModel()
+                {
+                    Colors = l.Colors,
+                    Normals = l.Normals,
+                    Vertices = new[] { trans.Xyz },
+                });
+
+            }
+
+            return result;
+        }
 
         private void RebuildMatrices()
         {
