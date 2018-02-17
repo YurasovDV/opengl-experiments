@@ -1,30 +1,24 @@
 ﻿#version 330
 
-out vec4 outputColor;
-
+vec4 color;
+vec3 position;
 
 uniform sampler2D gPositionSampler;
 uniform sampler2D gNormalSampler;
 uniform sampler2D gAlbedoSpecSampler;
 
-uniform vec3 uCameraPos;
+out vec4 outputColor;
 
-in vec2 texCoords;
-
-struct LightPoint{
-	vec3 pos;
-	vec3 color;
-	float radius;
-};
-
-uniform LightPoint light;
 
 void main()
-{	
+{
+	vec2 xy = gl_Position;
+
+	vec2 texCoords = vec2(0);
+
 	vec3 posExtracted = texture(gPositionSampler, texCoords).rgb;
 	vec3 normalExtracted = texture(gNormalSampler, texCoords).rgb;
 	vec3 colorExtracted = texture(gAlbedoSpecSampler, texCoords).rgb;
-	colorExtracted = colorExtracted * 0.35f;
 
 	vec3 resultingColor = colorExtracted;
 	vec3 viewDir = normalize(uCameraPos - posExtracted);

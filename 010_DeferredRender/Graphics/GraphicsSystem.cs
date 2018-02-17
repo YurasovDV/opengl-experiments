@@ -18,6 +18,8 @@ namespace DeferredRender.Graphics
         public Matrix4 ModelView;
         public Matrix4 ModelViewProjection;
 
+        public SimpleModel LightVolume { get; set; }
+
         public FrameBufferManager FrameBuf { get; set; }
 
         public GraphicsSystem(int width, int height, Player player)
@@ -77,11 +79,21 @@ namespace DeferredRender.Graphics
             GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(0, 0f, 0f, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
 
             List<SimpleModel> modelsTemp = ConvertLightsToViewSpace(lights);
 
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position, modelsTemp);
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
 
+            foreach (var light in modelsTemp)
+            {
+                
+            }
+
+
+            GL.Disable(EnableCap.Blend);
+            GL.Enable(EnableCap.DepthTest);
             GL.Flush();
         }
 

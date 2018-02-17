@@ -144,6 +144,9 @@ namespace DeferredRender
              //_models.Add(tree);
 
             GenerateRandomLights();
+
+            SimpleModel lightVolume = new SimpleModel(@"Assets\simpleSphere.obj", null);
+            _graphics.LightVolume = lightVolume;
         }
 
         private void GenerateLights()
