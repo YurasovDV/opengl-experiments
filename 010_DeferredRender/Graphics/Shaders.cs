@@ -99,7 +99,7 @@ namespace DeferredRender.Graphics
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
-             DrawAuxillaryBuffers(frameBufferManager, bufferHandle, texCoords);
+             // DrawAuxillaryBuffers(frameBufferManager, bufferHandle, texCoords);
         }
 
         public static void PrepareToDrawLights(FrameBufferManager frameBufferManager, Matrix4 modelView, Matrix4 modelViewProjection)

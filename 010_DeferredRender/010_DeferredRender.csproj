@@ -102,10 +102,10 @@
     <None Include="Assets\tree.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Shaders\frameBufferFragment.glsl">
+    <None Include="Assets\Shaders\frameBufferFragment.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Shaders\frameBufferVertex.glsl">
+    <None Include="Assets\Shaders\frameBufferVertex.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

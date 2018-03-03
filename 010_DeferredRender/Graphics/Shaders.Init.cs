@@ -71,8 +71,8 @@ namespace DeferredRender.Graphics
 
         public static GBufferSecondPass InitSecondGBufferPassProgram()
         {
-            var vertexPath = @"Assets\Shaders\frameBufferVertex.glsl";
-            var fragmentPath = @"Assets\Shaders\frameBufferFragment.glsl";
+            var vertexPath = @"Assets\Shaders\frameBufferVertex.vert";
+            var fragmentPath = @"Assets\Shaders\frameBufferFragment.frag";
 
             var programId = CreateProgramFrom(vertexPath, fragmentPath);
 
@@ -99,7 +99,7 @@ namespace DeferredRender.Graphics
 
         public static OneQuadProgram InitOneQuadProgramProgram()
         {
-            var vertexPath = @"Assets\Shaders\frameBufferVertex.glsl";
+            var vertexPath = @"Assets\Shaders\frameBufferVertex.vert";
             var fragmentPath = @"Assets\Shaders\oneQuadShader.frag";
 
             var programId = GL.CreateProgram();
