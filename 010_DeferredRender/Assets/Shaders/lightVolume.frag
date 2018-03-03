@@ -5,6 +5,7 @@ vec3 position;
 uniform sampler2D gPositionSampler;
 uniform sampler2D gNormalSampler;
 uniform sampler2D gAlbedoSpecSampler;
+uniform sampler2D gDepthSampler;
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
@@ -21,14 +22,17 @@ void main()
 	vec3 normalExtracted = texture(gNormalSampler, texCoords).rgb;
 	vec3 colorExtracted = texture(gAlbedoSpecSampler, texCoords).rgb;
 
+	float depthExtracted = texture(gDepthSampler, texCoords).r;
+
 	vec3 resultingColor = vec3(0);
 
 	vec3 lightPosTranslated = vec3(uMV * vec4(lightPos, 1.0));  
 
 	float dist = length(lightPosTranslated - posExtracted);
 
+	// incident
 	vec3 lightDirection = normalize(lightPosTranslated - posExtracted);
-	vec3 diffuse = max(dot(normalExtracted, lightDirection), 0.0) * colorExtracted * lightColor;
+	vec3 diffuse = clamp(dot(normalExtracted, lightDirection), 0.0, 1.0) * colorExtracted * lightColor;
 
 	diffuse = 0.2 * diffuse * (1.0f / (1 +  0.25 * dist * dist));
 	resultingColor += diffuse;

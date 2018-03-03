@@ -13,7 +13,7 @@ namespace DeferredRender.Graphics
         private static TexturedNoLight _texturedNoLightDescriptor;
 
         // program for screen-quad render
-        private static GBufferSecondPass _secondGBufferPassDescriptor;
+        private static FullScreenQuadProgram _fullScreenQuadProgram;
 
         // special program for drawing auxillary buffers
         private static OneQuadProgram _auxillaryProgram;
@@ -69,7 +69,7 @@ namespace DeferredRender.Graphics
             return _texturedNoLightDescriptor;
         }
 
-        public static GBufferSecondPass InitSecondGBufferPassProgram()
+        public static FullScreenQuadProgram InitSecondGBufferPassProgram()
         {
             var vertexPath = @"Assets\Shaders\frameBufferVertex.vert";
             var fragmentPath = @"Assets\Shaders\frameBufferFragment.frag";
@@ -77,22 +77,25 @@ namespace DeferredRender.Graphics
             var programId = CreateProgramFrom(vertexPath, fragmentPath);
 
             GL.UseProgram(programId);
-            _secondGBufferPassDescriptor = new GBufferSecondPass();
-            _secondGBufferPassDescriptor.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
-            _secondGBufferPassDescriptor.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
+            _fullScreenQuadProgram = new FullScreenQuadProgram();
+            _fullScreenQuadProgram.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
+            _fullScreenQuadProgram.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
 
-            _secondGBufferPassDescriptor.uniformTexturePos = GL.GetUniformLocation(programId, "gPositionSampler");
-            _secondGBufferPassDescriptor.uniformTextureNormal = GL.GetUniformLocation(programId, "gNormalSampler");
-            _secondGBufferPassDescriptor.uniformTextureColor = GL.GetUniformLocation(programId, "gAlbedoSpecSampler");
-
-            //_secondGBufferPassDescriptor.UniformCameraPosition = GL.GetUniformLocation(programId, "uCameraPos");
-
-            GL.GenBuffers(1, out _secondGBufferPassDescriptor.texCoordsBuffer);
-            GL.GenBuffers(1, out _secondGBufferPassDescriptor.verticesBuffer);
+            _fullScreenQuadProgram.uniformTexturePos = GL.GetUniformLocation(programId, "gPositionSampler");
+            _fullScreenQuadProgram.uniformTextureNormal = GL.GetUniformLocation(programId, "gNormalSampler");
+            _fullScreenQuadProgram.uniformTextureColor = GL.GetUniformLocation(programId, "gAlbedoSpecSampler");
 
 
-            _secondGBufferPassDescriptor.ProgramId = programId;
-            return _secondGBufferPassDescriptor;
+            _fullScreenQuadProgram.uniformTextureDiffuse = GL.GetUniformLocation(programId, "gDiffuseSampler");
+            _fullScreenQuadProgram.uniformTextureSpecular = GL.GetUniformLocation(programId, "gSpecularSampler");
+
+
+            GL.GenBuffers(1, out _fullScreenQuadProgram.texCoordsBuffer);
+            GL.GenBuffers(1, out _fullScreenQuadProgram.verticesBuffer);
+
+
+            _fullScreenQuadProgram.ProgramId = programId;
+            return _fullScreenQuadProgram;
         }
 
 

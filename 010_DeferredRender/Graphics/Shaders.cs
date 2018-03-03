@@ -85,21 +85,31 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
         }
 
-        public static void BindOneQuadScreenAndDraw(FrameBufferManager frameBufferManager, Vector3 playerPos)
+
+        public static void BindGBufferTextures(FrameBufferDesc bufferHandle)
         {
-            GL.UseProgram(_secondGBufferPassDescriptor.ProgramId);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(_fullScreenQuadProgram.uniformTexturePos, 0);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.PositionTextureId);
 
-            var points = frameBufferManager.GetFrameBufferVertices();
-            var texCoords = frameBufferManager.GetFrameBufferTextureCoords();
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.Uniform1(_fullScreenQuadProgram.uniformTextureNormal, 1);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.NormalTextureId);
 
-            BindGBufferPart(points, texCoords);
+            GL.ActiveTexture(TextureUnit.Texture2);
+            GL.Uniform1(_fullScreenQuadProgram.uniformTextureColor, 2);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
+        }
 
-            FrameBufferDesc bufferHandle = frameBufferManager.GBufferDescriptor;
-            BindGBufferTextures(bufferHandle);
+        private static void BindLightingTextures(FrameBufferDesc lightingFBO)
+        {
+            GL.ActiveTexture(TextureUnit.Texture3);
+            GL.Uniform1(_fullScreenQuadProgram.uniformTextureDiffuse, 3);
+            GL.BindTexture(TextureTarget.Texture2D, lightingFBO.DiffuseTextureId);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-
-             // DrawAuxillaryBuffers(frameBufferManager, bufferHandle, texCoords);
+            GL.ActiveTexture(TextureUnit.Texture4);
+            GL.Uniform1(_fullScreenQuadProgram.uniformTextureSpecular, 4);
+            GL.BindTexture(TextureTarget.Texture2D, lightingFBO.SpectacularTextureId);
         }
 
         public static void PrepareToDrawLights(FrameBufferManager frameBufferManager, Matrix4 modelView, Matrix4 modelViewProjection)
@@ -111,7 +121,7 @@ namespace DeferredRender.Graphics
             GL.UniformMatrix4(descriptor.uniformMV, false, ref modelView);
             GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
 
-            FrameBufferDesc bufferHandle = frameBufferManager.GBufferDescriptor;
+            FrameBufferDesc bufferHandle = frameBufferManager.GeometryFrameBufferDescriptorDescriptor;
 
 
             GL.ActiveTexture(TextureUnit.Texture0);
@@ -125,6 +135,10 @@ namespace DeferredRender.Graphics
             GL.ActiveTexture(TextureUnit.Texture2);
             GL.Uniform1(descriptor.uniformTextureColor, 2);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
+
+            GL.ActiveTexture(TextureUnit.Texture3);
+            GL.Uniform1(descriptor.uniformTextureDepth, 3);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.DepthTextureId);
 
         }
 
@@ -144,21 +158,24 @@ namespace DeferredRender.Graphics
             GL.DrawArrays(PrimitiveType.Triangles, 0, light.Vertices.Length);
         }
 
-        public static void BindGBufferTextures(FrameBufferDesc bufferHandle)
+
+        public static void BindOneQuadScreenAndDraw(FrameBufferManager frameBufferManager, Vector3 playerPos)
         {
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.Uniform1(_secondGBufferPassDescriptor.uniformTexturePos, 0);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.PositionTextureId);
+            GL.UseProgram(_fullScreenQuadProgram.ProgramId);
 
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.Uniform1(_secondGBufferPassDescriptor.uniformTextureNormal, 1);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.NormalTextureId);
+            var points = frameBufferManager.GetFrameBufferVertices();
+            var texCoords = frameBufferManager.GetFrameBufferTextureCoords();
 
-            GL.ActiveTexture(TextureUnit.Texture2);
-            GL.Uniform1(_secondGBufferPassDescriptor.uniformTextureColor, 2);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
+            BindGBufferPart(points, texCoords);
+
+            FrameBufferDesc bufferHandle = frameBufferManager.GeometryFrameBufferDescriptorDescriptor;
+            BindGBufferTextures(bufferHandle);
+            BindLightingTextures(frameBufferManager.LightingFrameBufferDescriptorDescriptor);
+
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+
+            DrawAuxillaryBuffers(frameBufferManager, bufferHandle, texCoords);
         }
-
 
         private static void DrawAuxillaryBuffers(FrameBufferManager frameBufferManager, FrameBufferDesc bufferHandle, Vector2[] texCoords)
         {
@@ -201,15 +218,15 @@ namespace DeferredRender.Graphics
 
         private static void BindGBufferPart(Vector2[] points, Vector2[] texCoords)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _secondGBufferPassDescriptor.verticesBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _fullScreenQuadProgram.verticesBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), points, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_secondGBufferPassDescriptor.AttribVerticesLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_secondGBufferPassDescriptor.AttribVerticesLocation);
+            GL.VertexAttribPointer(_fullScreenQuadProgram.AttribVerticesLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_fullScreenQuadProgram.AttribVerticesLocation);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _secondGBufferPassDescriptor.texCoordsBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _fullScreenQuadProgram.texCoordsBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(6 * Vector2.SizeInBytes), texCoords, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(_secondGBufferPassDescriptor.TexCoordsLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(_secondGBufferPassDescriptor.TexCoordsLocation);
+            GL.VertexAttribPointer(_fullScreenQuadProgram.TexCoordsLocation, 2, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(_fullScreenQuadProgram.TexCoordsLocation);
         }
     }
 }

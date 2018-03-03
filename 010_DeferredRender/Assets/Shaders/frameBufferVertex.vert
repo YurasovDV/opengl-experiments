@@ -7,7 +7,7 @@ out vec2 texCoords;
 
 void main()
 {
+	// screw projection matrix
     gl_Position = vec4(vPosition.x, vPosition.y, 0f, 1.0f);
-
 	texCoords = vTexCoordinate;
 }

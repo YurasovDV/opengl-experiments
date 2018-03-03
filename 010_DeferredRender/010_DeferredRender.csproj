@@ -58,7 +58,6 @@
     <Compile Include="Graphics\FrameBuffer\FrameBufferDesc.cs" />
     <Compile Include="Graphics\FrameBuffer\FrameBufferInit.cs" />
     <Compile Include="Graphics\FrameBuffer\FrameBufferManager.cs" />
-    <Compile Include="Graphics\GBuffer.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
     <Compile Include="Graphics\ShaderPrograms.cs" />
     <Compile Include="Graphics\Shaders.cs" />

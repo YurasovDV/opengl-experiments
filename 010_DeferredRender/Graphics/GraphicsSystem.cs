@@ -48,22 +48,68 @@ namespace DeferredRender.Graphics
         internal void Render(List<SimpleModel> models, List<PointLight> lights)
         {
             GL.Enable(EnableCap.DepthTest);
+
             FrameBuf.EnableMainFrameBuffer();
             RenderToCurrentTarget(models);
             FrameBuf.DisableMainFrameBuffer();
-            DrawUsingGBuffer(lights);
+
+            PerformLightingDrawCall(lights);
+
+            DrawUsingGBuffer();
         }
 
+        /// <summary>
+        /// second step
+        /// </summary>
+        /// <param name="lights"></param>
+        private void PerformLightingDrawCall(List<PointLight> lights)
+        {
+            FrameBuf.EnableSecondFrameBuffer();
+            ClearColor();
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            Shaders.PrepareToDrawLights(FrameBuf, ModelView, ModelViewProjection);
+            foreach (var light in lights)
+            {
+                Shaders.DrawLight(light);
+            }
+            FrameBuf.DisableSecondFrameBuffer();
+        }
 
         /// <summary>
-        /// 
+        /// third step
+        /// </summary>
+        public void DrawUsingGBuffer()
+        {
+            GL.Disable(EnableCap.DepthTest);
+            GL.ClearColor(0, 0f, 0f, 1f);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.CullFace(CullFaceMode.Back);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
+
+            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
+
+            GL.Disable(EnableCap.Blend);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Flush();
+        }
+
+        private void ClearColor()
+        {
+            GL.ClearColor(0, 0f, 0f, 1);
+
+        }
+
+        /// <summary>
+        /// render all models using their shaders
         /// </summary>
         /// <param name="models"></param>
         private void RenderToCurrentTarget(List<SimpleModel> models)
         {
             RebuildMatrices();
 
-            GL.ClearColor(0, 0f, 0.1f, 1f);
+            ClearColor();
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             foreach (var model in models)
@@ -72,56 +118,6 @@ namespace DeferredRender.Graphics
 
                 GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
             }
-        }
-
-
-        public void DrawUsingGBuffer(List<PointLight> lights)
-        {
-            GL.Disable(EnableCap.DepthTest);
-            GL.ClearColor(0, 0f, 0f, 0);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
-
-            // List<SimpleModel> modelsTemp = ConvertLightsToViewSpace(lights);
-
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
-
-            Shaders.PrepareToDrawLights(FrameBuf, ModelView, ModelViewProjection);
-
-            foreach (var light in lights)
-            {
-                // shift model to the light position
-                Shaders.DrawLight(light);
-            }
-
-
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
-            GL.Flush();
-        }
-
-        private List<SimpleModel> ConvertLightsToViewSpace(List<SimpleModel> lights)
-        {
-            var result = new List<SimpleModel>(lights.Count * 2);
-
-            for (int i = 0; i < lights.Count; i++)
-            {
-                var l = lights[i];
-
-                var pos = new Vector4(l.Vertices[0], 1);
-                var trans = Vector4.Transform(pos, ModelView);
-
-                result.Add(new SimpleModel()
-                {
-                    Colors = l.Colors,
-                    Normals = l.Normals,
-                    Vertices = new[] { trans.Xyz },
-                });
-
-            }
-
-            return result;
         }
 
         private void RebuildMatrices()

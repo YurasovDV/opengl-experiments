@@ -35,7 +35,7 @@
     /// reads all info, colors and positions from G-Buffer, and calculate lighting accordingly
     /// draw one quad(texture) and call it a day
     /// </summary>
-    class GBufferSecondPass
+    class FullScreenQuadProgram
     {
         public int ProgramId = 0;
         public int AttribVerticesLocation = 0;
@@ -47,6 +47,9 @@
         public int uniformTexturePos = 0;
         public int uniformTextureNormal = 0;
         public int uniformTextureColor = 0;
+
+        public int uniformTextureSpecular = 0;
+        public int uniformTextureDiffuse = 0;
     }
 
     class OneQuadProgram

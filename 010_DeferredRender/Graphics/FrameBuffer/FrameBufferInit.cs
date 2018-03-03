@@ -7,14 +7,32 @@ namespace DeferredRender.Graphics.FrameBuffer
 {
     class FrameBufferInit
     {
+        /// <summary>
+        /// Main buffer for geometry, depth, normals, color
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public FrameBufferDesc CreateGBuffer(int width, int height)
         {
             var frameBufDesc = GetMainFrameBuffer(width, height);
             return frameBufDesc;
         }
 
+        /// <summary>
+        /// second buffer for diffuse light
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public FrameBufferDesc CreateSecondBuffer(int width, int height)
+        {
+            var frameBufDesc = GetMainFrameBuffer(width, height);
+            return frameBufDesc;
+        }
 
-        public FrameBufferDesc GetMainFrameBuffer(int width, int height)
+
+        private FrameBufferDesc GetMainFrameBuffer(int width, int height)
         {
             int frameBufferObject = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferObject);
@@ -52,24 +70,29 @@ namespace DeferredRender.Graphics.FrameBuffer
 
             int depthBuffer = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, depthBuffer);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent32f, width, height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, width, height, 0, PixelFormat.DepthComponent, PixelType.UnsignedByte, IntPtr.Zero);
+
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.ClampToBorder);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)All.ClampToBorder);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBorderColor, new float[] { 1, 1, 1, 1 });
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, depthBuffer, 0);
-
-            //int renderBufferObject = GL.GenRenderbuffer();
-            //GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderBufferObject);
-            //GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, width, height);
-            //GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
-
-            //GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer,
-            //    FramebufferAttachment.DepthStencilAttachment,
-            //    RenderbufferTarget.Renderbuffer, renderBufferObject);
 
 
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) == FramebufferErrorCode.FramebufferComplete)
             {
                 return new FrameBufferDesc()
                 {
-                    FramBufferObject = frameBufferObject,
+                    FrameBufferObject = frameBufferObject,
 
                     PositionTextureId = positionBuffer,
                     NormalTextureId = normalBuffer,
@@ -78,7 +101,52 @@ namespace DeferredRender.Graphics.FrameBuffer
                 };
             }
 
-            throw new Exception("frameBuffer fail");
+            throw new Exception("main frameBuffer fail " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
+        }
+
+        private FrameBufferDesc GetSecondFrameBuffer(int width, int height)
+        {
+            int frameBufferObject = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferObject);
+
+         
+            int diffuseBuffer = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, diffuseBuffer);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f,
+                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.Float, IntPtr.Zero);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, diffuseBuffer, 0);
+
+
+            int spectacularBuffer = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, spectacularBuffer);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f,
+                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.Float, IntPtr.Zero);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, TextureTarget.Texture2D, spectacularBuffer, 0);
+
+           
+            var enabledBuffers = new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 };
+
+            GL.DrawBuffers(enabledBuffers.Length, enabledBuffers);
+
+            if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) == FramebufferErrorCode.FramebufferComplete)
+            {
+                return new FrameBufferDesc()
+                {
+                    FrameBufferObject = frameBufferObject,
+                    DiffuseTextureId = diffuseBuffer,
+                    SpectacularTextureId = spectacularBuffer,
+                    PositionTextureId = -1,
+                    NormalTextureId = -1,
+                    ColorAndSpectacularTextureId = -1,
+                    DepthTextureId = -1,
+                };
+            }
+
+            throw new Exception("second frameBuffer fail " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
         }
     }
 }

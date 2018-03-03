@@ -9,7 +9,13 @@ namespace DeferredRender.Graphics.FrameBuffer
     {
         #region main framebuffer
 
-        public FrameBufferDesc GBufferDescriptor { get; set; }
+        public FrameBufferDesc GeometryFrameBufferDescriptorDescriptor { get; set; }
+
+        #endregion       
+        
+        #region second framebuffer
+
+        public FrameBufferDesc LightingFrameBufferDescriptorDescriptor { get; set; }
 
         #endregion
 
@@ -25,12 +31,15 @@ namespace DeferredRender.Graphics.FrameBuffer
             Height = height;
             var init = new FrameBufferInit();
 
-            GBufferDescriptor = init.CreateGBuffer(width, height);
+            GeometryFrameBufferDescriptorDescriptor = init.CreateGBuffer(width, height);
+
+            LightingFrameBufferDescriptorDescriptor = init.CreateSecondBuffer(width, height);
         }
         
+        // draw geometry
         public void EnableMainFrameBuffer()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, GBufferDescriptor.FramBufferObject);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, GeometryFrameBufferDescriptorDescriptor.FrameBufferObject);
             GL.Viewport(0, 0, Width, Height);
         }
 
@@ -38,6 +47,20 @@ namespace DeferredRender.Graphics.FrameBuffer
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
+
+        public void EnableSecondFrameBuffer()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, LightingFrameBufferDescriptorDescriptor.FrameBufferObject);
+            GL.Viewport(0, 0, Width, Height);
+        }
+
+        public void DisableSecondFrameBuffer()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
+
+
+
 
         public Vector2[] GetFrameBufferVertices()
         {
