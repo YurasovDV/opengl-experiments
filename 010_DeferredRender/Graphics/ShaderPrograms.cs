@@ -32,7 +32,7 @@
     }
 
     /// <summary>
-    /// reads all info, colors and positions from F-Buffer, and calculate lighting accordingly
+    /// reads all info, colors and positions from G-Buffer, and calculate lighting accordingly
     /// draw one quad(texture) and call it a day
     /// </summary>
     class GBufferSecondPass
@@ -59,6 +59,32 @@
         public int texCoordsBuffer = 0;
 
         public int uniformTexture0 = 0;
+    }
+
+    class LightVolumeProgram
+    {
+        public int ProgramId = 0;
+
+        public int uniformMVP = 0;
+        public int uniformMV = 0;
+
+        public int uniformTexturePos = 0;
+        public int uniformTextureNormal = 0;
+        public int uniformTextureColor = 0;
+
+        /// <summary>
+        /// ???
+        /// </summary>
+        public int uniformTextureDepth = 0;
+
+
+        public int uniformColor = 0;
+        public int uniformPosition = 0;
+
+
+        public int AttribVerticesLocation = 0;
+
+        public int verticesBuffer = 0;
     }
 
 

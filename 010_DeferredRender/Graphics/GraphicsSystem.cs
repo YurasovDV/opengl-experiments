@@ -40,6 +40,7 @@ namespace DeferredRender.Graphics
             Shaders.InitTexturedNoLight();
             Shaders.InitSecondGBufferPassProgram();
             Shaders.InitOneQuadProgramProgram();
+            Shaders.InitLightVolumeProgram();
 
             FrameBuf = new FrameBufferManager(_width, _height);
         }
@@ -86,9 +87,12 @@ namespace DeferredRender.Graphics
 
             Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
 
+            Shaders.PrepareToDrawLights(FrameBuf, ModelView, ModelViewProjection);
+
             foreach (var light in modelsTemp)
             {
-                
+                // shift model to the light position
+                Shaders.DrawLight(light, light.Vertices[0], light.Colors[0]);
             }
 
 

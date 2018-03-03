@@ -42,7 +42,6 @@ namespace DeferredRender.Graphics
             GL.EnableVertexAttribArray(descriptor.AttribNormalsLocation);
         }
 
-
         public static void BindTexturedNoLight(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
         {
             var descriptor = _texturedNoLightDescriptor;
@@ -86,10 +85,8 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
         }
 
-
         public static void BindOneQuadScreenAndDraw(FrameBufferManager frameBufferManager, Vector3 playerPos)
         {
-
             GL.UseProgram(_secondGBufferPassDescriptor.ProgramId);
 
             var points = frameBufferManager.GetFrameBufferVertices();
@@ -102,7 +99,49 @@ namespace DeferredRender.Graphics
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
-            // DrawAuxillaryBuffers(frameBufferManager, bufferHandle, texCoords);
+             DrawAuxillaryBuffers(frameBufferManager, bufferHandle, texCoords);
+        }
+
+        public static void PrepareToDrawLights(FrameBufferManager frameBufferManager, Matrix4 modelView, Matrix4 modelViewProjection)
+        {
+            var descriptor = _lightDescriptor;
+
+            GL.UseProgram(descriptor.ProgramId);
+
+            GL.UniformMatrix4(descriptor.uniformMV, false, ref modelView);
+            GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
+
+            FrameBufferDesc bufferHandle = frameBufferManager.GBufferDescriptor;
+
+
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(descriptor.uniformTexturePos, 0);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.PositionTextureId);
+
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.Uniform1(descriptor.uniformTextureNormal, 1);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.NormalTextureId);
+
+            GL.ActiveTexture(TextureUnit.Texture2);
+            GL.Uniform1(descriptor.uniformTextureColor, 2);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
+
+        }
+
+        public static void DrawLight(SimpleModel light, Vector3 position, Vector3 color)
+        {
+            var descriptor = _lightDescriptor;
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(light.Vertices.Length * Vector3.SizeInBytes),
+                light.Vertices, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
+
+            GL.Uniform3(descriptor.uniformColor, color);
+            GL.Uniform3(descriptor.uniformPosition, position);
+
+            GL.DrawArrays(PrimitiveType.Triangles, 0, light.Vertices.Length);
         }
 
         public static void BindGBufferTextures(FrameBufferDesc bufferHandle)

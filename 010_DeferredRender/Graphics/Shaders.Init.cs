@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Common;
 using OpenTK;
@@ -10,44 +9,20 @@ namespace DeferredRender.Graphics
     partial class Shaders
     {
         private static TexturelessNoLight _texturelessNoLightDescriptor;
+
         private static TexturedNoLight _texturedNoLightDescriptor;
+
+        // program for screen-quad render
         private static GBufferSecondPass _secondGBufferPassDescriptor;
+
+        // special program for drawing auxillary buffers
         private static OneQuadProgram _auxillaryProgram;
+
+        private static LightVolumeProgram _lightDescriptor;
 
         internal static TexturelessNoLight InitTexturelessNoLight()
         {
-            var textureLessProgId = GL.CreateProgram();
-
-            var vert = GL.CreateShader(ShaderType.VertexShader);
-            var vertText = File.ReadAllText(@"Assets\Shaders\texturelessNoLight.vert");
-            GL.ShaderSource(vert, vertText);
-            GL.CompileShader(vert);
-            GL.AttachShader(textureLessProgId, vert);
-
-            int statusCode;
-            GL.GetShader(vert, ShaderParameter.CompileStatus, out statusCode);
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetShaderInfoLog(vert, out info);
-                throw new Exception("vertex shader: " + info);
-            }
-
-            var frag = GL.CreateShader(ShaderType.FragmentShader);
-            var fragText = File.ReadAllText(@"Assets\Shaders\texturelessNoLight.frag");
-            GL.ShaderSource(frag, fragText);
-            GL.CompileShader(frag);
-            GL.AttachShader(textureLessProgId, frag);
-
-            GL.LinkProgram(textureLessProgId);
-
-            GL.GetShader(frag, ShaderParameter.CompileStatus, out statusCode);
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetShaderInfoLog(frag, out info);
-                throw new Exception("fragment shader: " + info);
-            }
+            var textureLessProgId = CreateProgramFrom(@"Assets\Shaders\texturelessNoLight.vert", @"Assets\Shaders\texturelessNoLight.frag");
 
             _texturelessNoLightDescriptor = new TexturelessNoLight();
 
@@ -70,40 +45,7 @@ namespace DeferredRender.Graphics
 
         public static TexturedNoLight InitTexturedNoLight()
         {
-            var texturedProgId = GL.CreateProgram();
-
-            var vert = GL.CreateShader(ShaderType.VertexShader);
-
-            var vertText = File.ReadAllText(@"Assets\Shaders\texturedNoLight.vert");
-            GL.ShaderSource(vert, vertText);
-            GL.CompileShader(vert);
-            GL.AttachShader(texturedProgId, vert);
-
-
-            int statusCode;
-            GL.GetShader(vert, ShaderParameter.CompileStatus, out statusCode);
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetShaderInfoLog(vert, out info);
-                throw new Exception("vertex shader: " + info);
-            }
-
-            var frag = GL.CreateShader(ShaderType.FragmentShader);
-            var fragText = File.ReadAllText(@"Assets\Shaders\texturedNoLight.frag");
-            GL.ShaderSource(frag, fragText);
-            GL.CompileShader(frag);
-            GL.AttachShader(texturedProgId, frag);
-
-            GL.LinkProgram(texturedProgId);
-
-            GL.GetShader(frag, ShaderParameter.CompileStatus, out statusCode);
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetShaderInfoLog(frag, out info);
-                throw new Exception("fragment shader: " + info);
-            }
+            int texturedProgId = CreateProgramFrom(@"Assets\Shaders\texturedNoLight.vert", @"Assets\Shaders\texturedNoLight.frag");
 
             _texturedNoLightDescriptor = new TexturedNoLight();
 
@@ -132,45 +74,7 @@ namespace DeferredRender.Graphics
             var vertexPath = @"Assets\Shaders\frameBufferVertex.glsl";
             var fragmentPath = @"Assets\Shaders\frameBufferFragment.glsl";
 
-            var programId = GL.CreateProgram();
-
-            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
-            using (var rd = new StreamReader(vertexPath))
-            {
-                string text = rd.ReadToEnd();
-                GL.ShaderSource(vertexShader, text);
-            }
-            GL.CompileShader(vertexShader);
-            GL.AttachShader(programId, vertexShader);
-
-            int statusCode;
-
-            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out statusCode);
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetShaderInfoLog(vertexShader, out info);
-                throw new Exception("vertex shader" + info);
-            }
-
-            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            using (var rd = new StreamReader(fragmentPath))
-            {
-                string text = rd.ReadToEnd();
-                GL.ShaderSource(fragmentShader, text);
-            }
-            GL.CompileShader(fragmentShader);
-            GL.AttachShader(programId, fragmentShader);
-
-            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out statusCode);
-            if (statusCode != 1)
-            {
-                string info;
-                GL.GetShaderInfoLog(fragmentShader, out info);
-                throw new Exception("fragment shader: " + info);
-            }
-
-            GL.LinkProgram(programId);
+            var programId = CreateProgramFrom(vertexPath, fragmentPath);
 
             GL.UseProgram(programId);
             _secondGBufferPassDescriptor = new GBufferSecondPass();
@@ -255,7 +159,77 @@ namespace DeferredRender.Graphics
         }
 
 
+        public static LightVolumeProgram InitLightVolumeProgram()
+        {
+            var vertexPath = @"Assets\Shaders\lightVolume.vert";
+            var fragmentPath = @"Assets\Shaders\lightVolume.frag";
+
+            int programId = CreateProgramFrom(vertexPath, fragmentPath);
+
+            GL.UseProgram(programId);
+            _lightDescriptor = new LightVolumeProgram();
+
+            _lightDescriptor.uniformMVP = GL.GetUniformLocation(programId, "uMVP");
+            _lightDescriptor.uniformMV = GL.GetUniformLocation(programId, "uMV");
 
 
+            _lightDescriptor.uniformColor = GL.GetUniformLocation(programId, "lightColor");
+            _lightDescriptor.uniformPosition = GL.GetUniformLocation(programId, "lightPos");
+
+            _lightDescriptor.uniformTexturePos = GL.GetUniformLocation(programId, "gPositionSampler");
+            _lightDescriptor.uniformTextureNormal = GL.GetUniformLocation(programId, "gNormalSampler");
+            _lightDescriptor.uniformTextureColor = GL.GetUniformLocation(programId, "gAlbedoSpecSampler");
+
+            _lightDescriptor.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
+
+            GL.GenBuffers(1, out _lightDescriptor.verticesBuffer);
+
+            _lightDescriptor.ProgramId = programId;
+            return _lightDescriptor;
+        }
+
+        private static int CreateProgramFrom(string vertexPath, string fragmentPath)
+        {
+            var programId = GL.CreateProgram();
+
+            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
+            using (var rd = new StreamReader(vertexPath))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(vertexShader, text);
+            }
+            GL.CompileShader(vertexShader);
+            GL.AttachShader(programId, vertexShader);
+
+            int statusCode;
+
+            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(vertexShader, out info);
+                throw new Exception("vertex shader" + info);
+            }
+
+            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+            using (var rd = new StreamReader(fragmentPath))
+            {
+                string text = rd.ReadToEnd();
+                GL.ShaderSource(fragmentShader, text);
+            }
+            GL.CompileShader(fragmentShader);
+            GL.AttachShader(programId, fragmentShader);
+
+            GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(fragmentShader, out info);
+                throw new Exception("fragment shader: " + info);
+            }
+
+            GL.LinkProgram(programId);
+            return programId;
+        }
     }
 }
