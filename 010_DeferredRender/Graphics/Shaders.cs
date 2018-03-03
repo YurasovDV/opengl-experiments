@@ -128,7 +128,7 @@ namespace DeferredRender.Graphics
 
         }
 
-        public static void DrawLight(SimpleModel light, Vector3 position, Vector3 color)
+        public static void DrawLight(PointLight light)
         {
             var descriptor = _lightDescriptor;
 
@@ -138,8 +138,8 @@ namespace DeferredRender.Graphics
             GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
 
-            GL.Uniform3(descriptor.uniformColor, color);
-            GL.Uniform3(descriptor.uniformPosition, position);
+            GL.Uniform3(descriptor.uniformColor, light.Color);
+            GL.Uniform3(descriptor.uniformPosition, light.Center);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, light.Vertices.Length);
         }

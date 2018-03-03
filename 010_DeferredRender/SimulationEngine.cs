@@ -13,6 +13,8 @@ namespace DeferredRender
 {
     class SimulationEngine
     {
+        public const int LightRadius = 10;
+
         private Stopwatch Watch { get; set; }
 
         private KeyHandler _keyHandler;
@@ -20,7 +22,7 @@ namespace DeferredRender
         private GraphicsSystem _graphics;
 
         private List<SimpleModel> _models;
-        private List<SimpleModel> _lights;
+        private List<PointLight> _lights;
 
         public SimulationEngine(int width, int height, Stopwatch watch)
         {
@@ -141,30 +143,37 @@ namespace DeferredRender
                 tree.Vertices[i] = Vector3.Transform(v, move);
             }
 
-             //_models.Add(tree);
-
-            GenerateRandomLights();
+            //_models.Add(tree);
 
             SimpleModel lightVolume = new SimpleModel(@"Assets\simpleSphere.obj", null);
             _graphics.LightVolume = lightVolume;
+
+            GenerateRandomLights();
+
+
         }
 
         private void GenerateLights()
         {
-            _lights = new List<SimpleModel>();
+            _lights = new List<PointLight>();
 
             var rand = new Random();
 
             for (int i = 0; i < 10; i++)
             {
-                var light = new SimpleModel();
+                var light = new PointLight();
 
-                light.Vertices = new[] { new Vector3(0, 1f, 0) };
+                light.Center = new Vector3(0, 1f, 0);
+
+                light.Radius = LightRadius;
+
+                var translate = Matrix4.CreateTranslation(light.Center);
+
+                var scale = Matrix4.CreateScale(light.Radius);
+
+                light.Vertices = _graphics.LightVolume.Vertices.Select(v => Vector3.Transform(v, scale * translate)).ToArray();
 
                 light.Colors = new[] { new Vector3(0, 100, 0) };
-
-                // radius
-                light.Normals = new[] { new Vector3(50, 0, 0) };
 
                 _lights.Add(light);
             }
@@ -172,20 +181,25 @@ namespace DeferredRender
 
         private void GenerateRandomLights()
         {
-            _lights = new List<SimpleModel>();
+            _lights = new List<PointLight>();
 
             var rand = new Random();
 
             for (int i = 0; i < 10; i++)
             {
-                var light = new SimpleModel();
+                var light = new PointLight();
 
-                light.Vertices = new[] { new Vector3(rand.Next(200) - 100, 10, rand.Next(200) - 100) };
+                light.Center = new Vector3(rand.Next(200) - 100, 10, rand.Next(200) - 100);
+
+                light.Radius = LightRadius;
+
+                var translate = Matrix4.CreateTranslation(light.Center);
+
+                var scale = Matrix4.CreateScale(light.Radius);
+
+                light.Vertices = _graphics.LightVolume.Vertices.Select(v => Vector3.Transform(v, scale * translate)).ToArray();
 
                 light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
-
-                // radius
-                light.Normals = new[] { new Vector3(500, 0, 0) };
 
                 _lights.Add(light);
             }

@@ -45,7 +45,7 @@ namespace DeferredRender.Graphics
             FrameBuf = new FrameBufferManager(_width, _height);
         }
 
-        internal void Render(List<SimpleModel> models, List<SimpleModel> lights)
+        internal void Render(List<SimpleModel> models, List<PointLight> lights)
         {
             GL.Enable(EnableCap.DepthTest);
             FrameBuf.EnableMainFrameBuffer();
@@ -75,7 +75,7 @@ namespace DeferredRender.Graphics
         }
 
 
-        public void DrawUsingGBuffer(List<SimpleModel> lights)
+        public void DrawUsingGBuffer(List<PointLight> lights)
         {
             GL.Disable(EnableCap.DepthTest);
             GL.ClearColor(0, 0f, 0f, 0);
@@ -83,16 +83,16 @@ namespace DeferredRender.Graphics
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
 
-            List<SimpleModel> modelsTemp = ConvertLightsToViewSpace(lights);
+            // List<SimpleModel> modelsTemp = ConvertLightsToViewSpace(lights);
 
             Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
 
             Shaders.PrepareToDrawLights(FrameBuf, ModelView, ModelViewProjection);
 
-            foreach (var light in modelsTemp)
+            foreach (var light in lights)
             {
                 // shift model to the light position
-                Shaders.DrawLight(light, light.Vertices[0], light.Colors[0]);
+                Shaders.DrawLight(light);
             }
 
 
