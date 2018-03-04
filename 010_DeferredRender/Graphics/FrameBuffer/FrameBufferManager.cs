@@ -22,7 +22,6 @@ namespace DeferredRender.Graphics.FrameBuffer
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public bool DebugDepth { get; set; }
         public int FrameBufferProgramId { get; private set; }
 
         public FrameBufferManager(int width, int height)

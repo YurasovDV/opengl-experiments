@@ -180,7 +180,7 @@ namespace DeferredRender.Graphics
         private static void DrawAuxillaryBuffers(FrameBufferManager frameBufferManager, FrameBufferDesc bufferHandle, Vector2[] texCoords)
         {
             GL.UseProgram(_auxillaryProgram.ProgramId);
-
+            GL.Uniform1(_auxillaryProgram.IsDepth, 0);
             var points = frameBufferManager.GetFrameBufferVertices(FramebufferAttachment.ColorAttachment0);
             BindGBufferPart(points, texCoords);
             GL.ActiveTexture(TextureUnit.Texture0);
@@ -212,6 +212,7 @@ namespace DeferredRender.Graphics
             BindGBufferPart(points, texCoords);
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(_auxillaryProgram.uniformTexture0, 0);
+            GL.Uniform1(_auxillaryProgram.IsDepth, 1);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.DepthTextureId);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
         }

@@ -22,7 +22,7 @@ namespace DeferredRender.Graphics
 
         internal static TexturelessNoLight InitTexturelessNoLight()
         {
-            var textureLessProgId = CreateProgramFrom(@"Assets\Shaders\texturelessNoLight.vert", @"Assets\Shaders\texturelessNoLight.frag");
+            var textureLessProgId = CreateProgramFrom(@"Assets\Shaders\1GeometryPass\texturelessNoLight.vert", @"Assets\Shaders\1GeometryPass\texturelessNoLight.frag");
 
             _texturelessNoLightDescriptor = new TexturelessNoLight();
 
@@ -45,7 +45,7 @@ namespace DeferredRender.Graphics
 
         public static TexturedNoLight InitTexturedNoLight()
         {
-            int texturedProgId = CreateProgramFrom(@"Assets\Shaders\texturedNoLight.vert", @"Assets\Shaders\texturedNoLight.frag");
+            int texturedProgId = CreateProgramFrom(@"Assets\Shaders\1GeometryPass\texturedNoLight.vert", @"Assets\Shaders\1GeometryPass\texturedNoLight.frag");
 
             _texturedNoLightDescriptor = new TexturedNoLight();
 
@@ -69,10 +69,10 @@ namespace DeferredRender.Graphics
             return _texturedNoLightDescriptor;
         }
 
-        public static FullScreenQuadProgram InitSecondGBufferPassProgram()
+        public static FullScreenQuadProgram InitFinalPassProgram()
         {
-            var vertexPath = @"Assets\Shaders\frameBufferVertex.vert";
-            var fragmentPath = @"Assets\Shaders\frameBufferFragment.frag";
+            var vertexPath = @"Assets\Shaders\3CombinePass\frameBuffer.vert";
+            var fragmentPath = @"Assets\Shaders\3CombinePass\frameBuffer.frag";
 
             var programId = CreateProgramFrom(vertexPath, fragmentPath);
 
@@ -102,7 +102,7 @@ namespace DeferredRender.Graphics
 
         public static OneQuadProgram InitOneQuadProgramProgram()
         {
-            var vertexPath = @"Assets\Shaders\frameBufferVertex.vert";
+            var vertexPath = @"Assets\Shaders\3CombinePass\frameBuffer.vert";
             var fragmentPath = @"Assets\Shaders\oneQuadShader.frag";
 
             var programId = GL.CreateProgram();
@@ -152,6 +152,7 @@ namespace DeferredRender.Graphics
 
             _auxillaryProgram.uniformTexture0 = GL.GetUniformLocation(programId, "uTexture");
 
+            _auxillaryProgram.IsDepth = GL.GetUniformLocation(programId, "isDepth");
 
             GL.GenBuffers(1, out _auxillaryProgram.texCoordsBuffer);
             GL.GenBuffers(1, out _auxillaryProgram.verticesBuffer);
@@ -164,8 +165,8 @@ namespace DeferredRender.Graphics
 
         public static LightVolumeProgram InitLightVolumeProgram()
         {
-            var vertexPath = @"Assets\Shaders\lightVolume.vert";
-            var fragmentPath = @"Assets\Shaders\lightVolume.frag";
+            var vertexPath = @"Assets\Shaders\2LightPass\lightVolume.vert";
+            var fragmentPath = @"Assets\Shaders\2LightPass\lightVolume.frag";
 
             int programId = CreateProgramFrom(vertexPath, fragmentPath);
 

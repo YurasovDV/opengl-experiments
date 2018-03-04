@@ -38,9 +38,9 @@ namespace DeferredRender.Graphics
 
             Shaders.InitTexturelessNoLight();
             Shaders.InitTexturedNoLight();
-            Shaders.InitSecondGBufferPassProgram();
-            Shaders.InitOneQuadProgramProgram();
             Shaders.InitLightVolumeProgram();
+            Shaders.InitFinalPassProgram();
+            Shaders.InitOneQuadProgramProgram();
 
             FrameBuf = new FrameBufferManager(_width, _height);
         }

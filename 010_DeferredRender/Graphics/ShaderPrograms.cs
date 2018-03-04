@@ -62,6 +62,11 @@
         public int texCoordsBuffer = 0;
 
         public int uniformTexture0 = 0;
+
+        /// <summary>
+        /// flag isDepth: depth buffer needs to be linearized and differs drastically from the rest
+        /// </summary>
+        public int IsDepth = 0;
     }
 
     class LightVolumeProgram
