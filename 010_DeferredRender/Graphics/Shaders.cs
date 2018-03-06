@@ -172,12 +172,13 @@ namespace DeferredRender.Graphics
             BindGBufferTextures(bufferHandle);
             BindLightingTextures(frameBufferManager.LightingFrameBufferDescriptorDescriptor);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
-            DrawAuxillaryBuffers(frameBufferManager, bufferHandle, texCoords);
+            DrawAuxillaryBuffers(frameBufferManager, bufferHandle, frameBufferManager.LightingFrameBufferDescriptorDescriptor, texCoords);
         }
 
-        private static void DrawAuxillaryBuffers(FrameBufferManager frameBufferManager, FrameBufferDesc bufferHandle, Vector2[] texCoords)
+        private static void DrawAuxillaryBuffers(FrameBufferManager frameBufferManager, FrameBufferDesc bufferHandle, FrameBufferDesc lightingbufferHandle,
+            Vector2[] texCoords)
         {
             GL.UseProgram(_auxillaryProgram.ProgramId);
             GL.Uniform1(_auxillaryProgram.IsDepth, 0);
@@ -203,7 +204,7 @@ namespace DeferredRender.Graphics
             BindGBufferPart(points, texCoords);
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(_auxillaryProgram.uniformTexture0, 0);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
+            GL.BindTexture(TextureTarget.Texture2D, lightingbufferHandle.DiffuseTextureId);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
 

@@ -27,10 +27,9 @@ namespace DeferredRender.Graphics.FrameBuffer
         /// <returns></returns>
         public FrameBufferDesc CreateSecondBuffer(int width, int height)
         {
-            var frameBufDesc = GetMainFrameBuffer(width, height);
+            var frameBufDesc = GetSecondFrameBuffer(width, height);
             return frameBufDesc;
         }
-
 
         private FrameBufferDesc GetMainFrameBuffer(int width, int height)
         {

@@ -64,6 +64,10 @@ namespace DeferredRender.Graphics
         /// <param name="lights"></param>
         private void PerformLightingDrawCall(List<PointLight> lights)
         {
+            GL.Disable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
+
             FrameBuf.EnableSecondFrameBuffer();
             ClearColor();
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -85,8 +89,6 @@ namespace DeferredRender.Graphics
             GL.ClearColor(0, 0f, 0f, 1f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.CullFace(CullFaceMode.Back);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
 
             Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
 
@@ -98,7 +100,6 @@ namespace DeferredRender.Graphics
         private void ClearColor()
         {
             GL.ClearColor(0, 0f, 0f, 1);
-
         }
 
         /// <summary>

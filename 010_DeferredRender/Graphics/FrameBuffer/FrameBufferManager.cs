@@ -153,6 +153,16 @@ namespace DeferredRender.Graphics.FrameBuffer
         new Vector2(0.5f,  -0.5f),
         };
 
+        /*private readonly Vector2[] QuadVerticesColor2 = new[] {
+         new Vector2(-1f,  1f),
+        new Vector2(-1f, -1f),
+        new Vector2(1f, -1f),
+
+        new Vector2(-1f, 1f),
+        new Vector2(1f, -1f),
+        new Vector2(1f,  1f),
+        };*/
+
         private readonly Vector2[] QuadVerticesDepth = new[] {
          new Vector2(0.51f,  -0.5f),
         new Vector2(0.51f, -0.9f),

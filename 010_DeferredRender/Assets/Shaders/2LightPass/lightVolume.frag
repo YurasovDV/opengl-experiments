@@ -12,7 +12,8 @@ uniform vec3 lightColor;
 
 uniform mat4 uMV;
 
-out vec4 outputColor;
+// write to the texture
+layout (location = 0) out vec4 outputColor;
 
 void main()
 {
@@ -37,5 +38,5 @@ void main()
 	diffuse = 0.2 * diffuse * (1.0f / (1 +  0.25 * dist * dist));
 	resultingColor += diffuse;
 
-	outputColor = vec4(resultingColor, 0.5f);
+	outputColor = vec4(resultingColor, 1f);
 }
