@@ -30,7 +30,10 @@ void main()
 	vec3 lightPosTranslated = vec3(uMV * vec4(lightPos, 1.0));  
 
 	float dist = length(lightPosTranslated - posExtracted);
-
+	if(dist > 20)
+	{
+	discard;
+	}
 	// incident
 	vec3 lightDirection = normalize(lightPosTranslated - posExtracted);
 	vec3 diffuse = clamp(dot(normalExtracted, lightDirection), 0.0, 1.0) * colorExtracted * lightColor;
