@@ -174,6 +174,8 @@ namespace DeferredRender.Graphics
 
              GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
+            GL.Disable(EnableCap.Blend);
+
             DrawAuxillaryBuffers(frameBufferManager, bufferHandle, frameBufferManager.LightingFrameBufferDescriptorDescriptor, texCoords);
         }
 
