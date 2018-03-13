@@ -12,7 +12,7 @@ namespace DeferredRender
 {
     class SimulationEngine
     {
-        public const int LightRadius = 16;
+        public const int LightRadius = 20;
 
         private Stopwatch Watch { get; set; }
 

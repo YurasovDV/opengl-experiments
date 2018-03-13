@@ -30,7 +30,7 @@ void main()
 	vec3 lightDirection = normalize(lightPosTranslated - posExtracted);
 	vec3 diffuse = clamp(dot(normalExtracted, lightDirection), 0.0, 1.0) * colorExtracted * lightColor;
 
-	diffuse = 0.008 * diffuse * (1.0f / (1 +  0.25 * dist * dist));
+	diffuse = 0.04 * diffuse * (1.0f / (1 +  0.25 * dist * dist));
 	resultingColor += diffuse;
 
 	outputColor = vec4(resultingColor, 1f);
