@@ -57,8 +57,6 @@ namespace DeferredRender.Graphics
             PerformLightingDrawCall(lights);
             FrameBufferManager.DisableSecondFrameBuffer();
 
-
-
             DrawUsingGBuffer();
         }
 

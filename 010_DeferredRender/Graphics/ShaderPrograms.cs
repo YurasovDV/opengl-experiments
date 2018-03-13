@@ -79,10 +79,7 @@
         public int uniformTexturePos = 0;
         public int uniformTextureNormal = 0;
         public int uniformTextureColor = 0;
-
-        /// <summary>
-        /// ???
-        /// </summary>
+        // mb is not needed
         public int uniformTextureDepth = 0;
 
 
