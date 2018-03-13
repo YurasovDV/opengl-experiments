@@ -20,7 +20,7 @@ namespace DeferredRender.Graphics
 
         public SimpleModel LightVolume { get; set; }
 
-        public FrameBufferManager FrameBuf { get; set; }
+        public FrameBufferManager FrameBufferManager { get; set; }
 
         public GraphicsSystem(int width, int height, Player player)
         {
@@ -42,18 +42,22 @@ namespace DeferredRender.Graphics
             Shaders.InitFinalPassProgram();
             Shaders.InitOneQuadProgramProgram();
 
-            FrameBuf = new FrameBufferManager(_width, _height);
+            FrameBufferManager = new FrameBufferManager(_width, _height);
         }
 
         internal void Render(List<SimpleModel> models, List<PointLight> lights)
         {
             GL.Enable(EnableCap.DepthTest);
 
-            FrameBuf.EnableMainFrameBuffer();
+            FrameBufferManager.EnableMainFrameBuffer();
             RenderToCurrentTarget(models);
-            FrameBuf.DisableMainFrameBuffer();
+            FrameBufferManager.DisableMainFrameBuffer();
 
+            FrameBufferManager.EnableSecondFrameBuffer();
             PerformLightingDrawCall(lights);
+            FrameBufferManager.DisableSecondFrameBuffer();
+
+
 
             DrawUsingGBuffer();
         }
@@ -68,16 +72,14 @@ namespace DeferredRender.Graphics
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
 
-            FrameBuf.EnableSecondFrameBuffer();
             ClearColor();
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            Shaders.PrepareToDrawLights(FrameBuf, ModelView, ModelViewProjection);
+            Shaders.PrepareToDrawLights(FrameBufferManager, ModelView, ModelViewProjection);
             foreach (var light in lights)
             {
                 Shaders.DrawLight(light);
             }
-            FrameBuf.DisableSecondFrameBuffer();
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace DeferredRender.Graphics
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.CullFace(CullFaceMode.Back);
 
-            Shaders.BindOneQuadScreenAndDraw(FrameBuf, _player.Position);
+            Shaders.BindOneQuadScreenAndDraw(FrameBufferManager, _player.Position);
 
             GL.Disable(EnableCap.Blend);
             GL.Enable(EnableCap.DepthTest);
