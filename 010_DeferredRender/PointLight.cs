@@ -26,5 +26,6 @@ namespace DeferredRender
             }
         }
 
+        public Matrix4 Transform;
     }
 }

@@ -73,10 +73,11 @@ namespace DeferredRender.Graphics
             ClearColor();
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            Shaders.PrepareToDrawLights(FrameBufferManager, ModelView, ModelViewProjection);
+            Shaders.PrepareToDrawLights(FrameBufferManager, ModelView, ModelViewProjection, LightVolume.Vertices);
+            int len = LightVolume.Vertices.Length;
             foreach (var light in lights)
             {
-                Shaders.DrawLight(light);
+                Shaders.DrawLight(light, len);
             }
         }
 

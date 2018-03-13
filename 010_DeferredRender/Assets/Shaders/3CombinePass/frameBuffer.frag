@@ -8,8 +8,6 @@ uniform sampler2D gAlbedoSpecSampler;
 // 2nd pass buffer(lighting)
 uniform sampler2D gDiffuseSampler;
 
-uniform vec3 uCameraPos;
-
 in vec2 texCoords;
 
 void main()

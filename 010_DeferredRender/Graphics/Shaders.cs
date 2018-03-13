@@ -100,7 +100,7 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, lightingFBO.DiffuseTextureId);
         }
 
-        public static void PrepareToDrawLights(FrameBufferManager frameBufferManager, Matrix4 modelView, Matrix4 modelViewProjection)
+        public static void PrepareToDrawLights(FrameBufferManager frameBufferManager, Matrix4 modelView, Matrix4 modelViewProjection, Vector3[] lightVolume)
         {
             var descriptor = _lightDescriptor;
 
@@ -110,7 +110,6 @@ namespace DeferredRender.Graphics
             GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
 
             FrameBufferDesc bufferHandle = frameBufferManager.GeometryFrameBufferDescriptorDescriptor;
-
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.Uniform1(descriptor.uniformTexturePos, 0);
@@ -123,22 +122,26 @@ namespace DeferredRender.Graphics
             GL.ActiveTexture(TextureUnit.Texture2);
             GL.Uniform1(descriptor.uniformTextureColor, 2);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
-        }
 
-        public static void DrawLight(PointLight light)
-        {
-            var descriptor = _lightDescriptor;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(light.Vertices.Length * Vector3.SizeInBytes),
-                light.Vertices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(lightVolume.Length * Vector3.SizeInBytes),
+                lightVolume, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
 
+        }
+
+        public static void DrawLight(PointLight light, int bufLen)
+        {
+            var descriptor = _lightDescriptor;
+
             GL.Uniform3(descriptor.uniformColor, light.Color);
             GL.Uniform3(descriptor.uniformPosition, light.Center);
+            GL.UniformMatrix4(descriptor.uniformTransform, false, ref light.Transform);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, light.Vertices.Length);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, bufLen);
+
         }
 
 

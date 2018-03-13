@@ -12,7 +12,7 @@ namespace DeferredRender
 {
     class SimulationEngine
     {
-        public const int LightRadius = 20;
+        public const int LightRadius = 16;
 
         private Stopwatch Watch { get; set; }
 
@@ -149,7 +149,6 @@ namespace DeferredRender
 
             GenerateRandomLights();
 
-
         }
 
         private void GenerateLights()
@@ -170,8 +169,7 @@ namespace DeferredRender
 
                 var scale = Matrix4.CreateScale(light.Radius);
 
-                light.Vertices = _graphics.LightVolume.Vertices.Select(v => Vector3.Transform(v, scale * translate)).ToArray();
-
+                light.Transform = scale * translate;
                 light.Colors = new[] { new Vector3(0, 100, 0) };
 
                 _lights.Add(light);
@@ -188,7 +186,7 @@ namespace DeferredRender
             {
                 var light = new PointLight();
 
-                light.Center = new Vector3(rand.Next(200) - 100, 3, rand.Next(200) - 100);
+                light.Center = new Vector3(rand.Next(200) - 100, 2, rand.Next(200) - 100);
 
                 light.Radius = LightRadius;
 
@@ -196,7 +194,8 @@ namespace DeferredRender
 
                 var scale = Matrix4.CreateScale(light.Radius);
 
-                light.Vertices = _graphics.LightVolume.Vertices.Select(v => Vector3.Transform(v, scale * translate)).ToArray();
+               // light.Vertices = _graphics.LightVolume.Vertices;//.Select(v => Vector3.Transform(v, scale * translate)).ToArray();
+                light.Transform = scale * translate;
 
                 light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
 

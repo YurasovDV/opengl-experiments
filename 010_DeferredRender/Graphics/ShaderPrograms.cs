@@ -72,6 +72,8 @@
 
         public int uniformMVP = 0;
         public int uniformMV = 0;
+        internal int uniformTransform;
+
 
         public int uniformTexturePos = 0;
         public int uniformTextureNormal = 0;
@@ -87,6 +89,7 @@
         public int AttribVerticesLocation = 0;
 
         public int verticesBuffer = 0;
+
     }
 
 

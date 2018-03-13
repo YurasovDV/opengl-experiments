@@ -167,6 +167,7 @@ namespace DeferredRender.Graphics
 
             _lightDescriptor.uniformMVP = GL.GetUniformLocation(programId, "uMVP");
             _lightDescriptor.uniformMV = GL.GetUniformLocation(programId, "uMV");
+            _lightDescriptor.uniformTransform = GL.GetUniformLocation(programId, "uTransform");
 
 
             _lightDescriptor.uniformColor = GL.GetUniformLocation(programId, "lightColor");
