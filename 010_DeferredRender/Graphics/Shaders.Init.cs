@@ -81,24 +81,16 @@ namespace DeferredRender.Graphics
             _fullScreenQuadProgram.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
             _fullScreenQuadProgram.TexCoordsLocation = GL.GetAttribLocation(programId, "vTexCoordinate");
 
-            _fullScreenQuadProgram.uniformTexturePos = GL.GetUniformLocation(programId, "gPositionSampler");
-            _fullScreenQuadProgram.uniformTextureNormal = GL.GetUniformLocation(programId, "gNormalSampler");
             _fullScreenQuadProgram.uniformTextureColor = GL.GetUniformLocation(programId, "gAlbedoSpecSampler");
 
-
             _fullScreenQuadProgram.uniformTextureDiffuse = GL.GetUniformLocation(programId, "gDiffuseSampler");
-            _fullScreenQuadProgram.uniformTextureSpecular = GL.GetUniformLocation(programId, "gSpecularSampler");
-
 
             GL.GenBuffers(1, out _fullScreenQuadProgram.texCoordsBuffer);
             GL.GenBuffers(1, out _fullScreenQuadProgram.verticesBuffer);
 
-
             _fullScreenQuadProgram.ProgramId = programId;
             return _fullScreenQuadProgram;
         }
-
-
 
         public static OneQuadProgram InitOneQuadProgramProgram()
         {

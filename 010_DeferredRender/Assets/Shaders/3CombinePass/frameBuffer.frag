@@ -2,13 +2,11 @@
 
 out vec4 outputColor;
 
-
-uniform sampler2D gPositionSampler;
-uniform sampler2D gNormalSampler;
+// material color
 uniform sampler2D gAlbedoSpecSampler;
 
+// 2nd pass buffer(lighting)
 uniform sampler2D gDiffuseSampler;
-uniform sampler2D gSpecularSampler;
 
 uniform vec3 uCameraPos;
 
@@ -16,8 +14,6 @@ in vec2 texCoords;
 
 void main()
 {	
-	vec3 posExtracted = texture(gPositionSampler, texCoords).rgb;
-	vec3 normalExtracted = texture(gNormalSampler, texCoords).rgb;
 	vec3 colorExtracted = texture(gAlbedoSpecSampler, texCoords).rgb;
 
 	vec3 diffuseExtracted = texture(gDiffuseSampler, texCoords).rgb;

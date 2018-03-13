@@ -89,15 +89,7 @@ namespace DeferredRender.Graphics
         public static void BindGBufferTextures(FrameBufferDesc bufferHandle)
         {
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.Uniform1(_fullScreenQuadProgram.uniformTexturePos, 0);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.PositionTextureId);
-
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.Uniform1(_fullScreenQuadProgram.uniformTextureNormal, 1);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.NormalTextureId);
-
-            GL.ActiveTexture(TextureUnit.Texture2);
-            GL.Uniform1(_fullScreenQuadProgram.uniformTextureColor, 2);
+            GL.Uniform1(_fullScreenQuadProgram.uniformTextureColor, 0);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
         }
 
@@ -106,10 +98,6 @@ namespace DeferredRender.Graphics
             GL.ActiveTexture(TextureUnit.Texture3);
             GL.Uniform1(_fullScreenQuadProgram.uniformTextureDiffuse, 3);
             GL.BindTexture(TextureTarget.Texture2D, lightingFBO.DiffuseTextureId);
-
-            GL.ActiveTexture(TextureUnit.Texture4);
-            GL.Uniform1(_fullScreenQuadProgram.uniformTextureSpecular, 4);
-            GL.BindTexture(TextureTarget.Texture2D, lightingFBO.SpectacularTextureId);
         }
 
         public static void PrepareToDrawLights(FrameBufferManager frameBufferManager, Matrix4 modelView, Matrix4 modelViewProjection)
@@ -135,11 +123,6 @@ namespace DeferredRender.Graphics
             GL.ActiveTexture(TextureUnit.Texture2);
             GL.Uniform1(descriptor.uniformTextureColor, 2);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
-
-            GL.ActiveTexture(TextureUnit.Texture3);
-            GL.Uniform1(descriptor.uniformTextureDepth, 3);
-            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.DepthTextureId);
-
         }
 
         public static void DrawLight(PointLight light)

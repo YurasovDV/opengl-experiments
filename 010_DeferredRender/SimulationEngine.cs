@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using Common;
 using Common.Graphics;
 using Common.Input;
@@ -13,7 +12,7 @@ namespace DeferredRender
 {
     class SimulationEngine
     {
-        public const int LightRadius = 10;
+        public const int LightRadius = 20;
 
         private Stopwatch Watch { get; set; }
 
@@ -189,7 +188,7 @@ namespace DeferredRender
             {
                 var light = new PointLight();
 
-                light.Center = new Vector3(rand.Next(200) - 100, 10, rand.Next(200) - 100);
+                light.Center = new Vector3(rand.Next(200) - 100, 3, rand.Next(200) - 100);
 
                 light.Radius = LightRadius;
 

@@ -44,11 +44,8 @@
         public int verticesBuffer = 0;
         public int texCoordsBuffer = 0;
 
-        public int uniformTexturePos = 0;
-        public int uniformTextureNormal = 0;
         public int uniformTextureColor = 0;
 
-        public int uniformTextureSpecular = 0;
         public int uniformTextureDiffuse = 0;
     }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace DeferredRender.Graphics.FrameBuffer
@@ -118,13 +116,6 @@ namespace DeferredRender.Graphics.FrameBuffer
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, diffuseBuffer, 0);
 
 
-            int spectacularBuffer = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, spectacularBuffer);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f,
-                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.Float, IntPtr.Zero);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, TextureTarget.Texture2D, spectacularBuffer, 0);
 
            
             var enabledBuffers = new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 };
@@ -137,7 +128,7 @@ namespace DeferredRender.Graphics.FrameBuffer
                 {
                     FrameBufferObject = frameBufferObject,
                     DiffuseTextureId = diffuseBuffer,
-                    SpectacularTextureId = spectacularBuffer,
+                    SpectacularTextureId = -1,
                     PositionTextureId = -1,
                     NormalTextureId = -1,
                     ColorAndSpectacularTextureId = -1,
