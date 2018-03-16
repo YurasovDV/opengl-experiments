@@ -176,6 +176,7 @@ namespace DeferredRender.Graphics
             _lightDescriptor.uniformTexturePos = GL.GetUniformLocation(programId, "gPositionSampler");
             _lightDescriptor.uniformTextureNormal = GL.GetUniformLocation(programId, "gNormalSampler");
             _lightDescriptor.uniformTextureColor = GL.GetUniformLocation(programId, "gAlbedoSpecSampler");
+            _lightDescriptor.uniformTextureDepth = GL.GetUniformLocation(programId, "gDepth");
 
             _lightDescriptor.AttribVerticesLocation = GL.GetAttribLocation(programId, "vPosition");
 

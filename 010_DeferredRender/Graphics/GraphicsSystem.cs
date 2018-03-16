@@ -48,10 +48,16 @@ namespace DeferredRender.Graphics
         internal void Render(List<SimpleModel> models, List<PointLight> lights)
         {
             GL.Enable(EnableCap.DepthTest);
-
+            GL.DepthMask(true);
             FrameBufferManager.EnableMainFrameBuffer();
             RenderToCurrentTarget(models);
             FrameBufferManager.DisableMainFrameBuffer();
+
+            //GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, FrameBufferManager.GeometryFrameBufferDescriptorDescriptor.FrameBufferObject);
+            //GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, FrameBufferManager.LightingFrameBufferDescriptorDescriptor.FrameBufferObject);
+
+            //GL.BlitFramebuffer(0, 0,_width, _height, 0, 0, _width, _height, ClearBufferMask.DepthBufferBit, BlitFramebufferFilter.Nearest);
+            // FrameBufferManager.DisableMainFrameBuffer();
 
             FrameBufferManager.EnableSecondFrameBuffer();
             PerformLightingDrawCall(lights);
@@ -66,9 +72,16 @@ namespace DeferredRender.Graphics
         /// <param name="lights"></param>
         private void PerformLightingDrawCall(List<PointLight> lights)
         {
-            GL.Disable(EnableCap.DepthTest);
+            // GL.Disable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.DepthTest);
+
+            // we don't write to depth buffer
+            GL.DepthMask(false);
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
+
+            //GL.Enable(EnableCap.StencilTest);
 
             ClearColor();
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -79,6 +92,8 @@ namespace DeferredRender.Graphics
             {
                 Shaders.DrawLight(light, len);
             }
+
+            //GL.Disable(EnableCap.StencilTest);
         }
 
         /// <summary>

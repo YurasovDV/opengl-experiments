@@ -123,6 +123,12 @@ namespace DeferredRender.Graphics
             GL.Uniform1(descriptor.uniformTextureColor, 2);
             GL.BindTexture(TextureTarget.Texture2D, bufferHandle.ColorAndSpectacularTextureId);
 
+            GL.ActiveTexture(TextureUnit.Texture3);
+            //GL.Uniform1(descriptor.uniformTextureDepth, 3);
+            GL.BindTexture(TextureTarget.Texture2D, bufferHandle.DepthTextureId);
+
+
+
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(lightVolume.Length * Vector3.SizeInBytes),

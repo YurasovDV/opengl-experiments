@@ -186,7 +186,7 @@ namespace DeferredRender
             {
                 var light = new PointLight();
 
-                light.Center = new Vector3(rand.Next(200) - 100, 2, rand.Next(200) - 100);
+                light.Center = new Vector3(rand.Next(200) - 100, 50, rand.Next(200) - 100);
 
                 light.Radius = LightRadius;
 

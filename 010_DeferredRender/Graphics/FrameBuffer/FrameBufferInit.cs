@@ -23,9 +23,9 @@ namespace DeferredRender.Graphics.FrameBuffer
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public FrameBufferDesc CreateSecondBuffer(int width, int height)
+        public FrameBufferDesc CreateSecondBuffer(int width, int height, int depth)
         {
-            var frameBufDesc = GetSecondFrameBuffer(width, height);
+            var frameBufDesc = GetSecondFrameBuffer(width, height, depth);
             return frameBufDesc;
         }
 
@@ -101,7 +101,7 @@ namespace DeferredRender.Graphics.FrameBuffer
             throw new Exception("main frameBuffer fail " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
         }
 
-        private FrameBufferDesc GetSecondFrameBuffer(int width, int height)
+        private FrameBufferDesc GetSecondFrameBuffer(int width, int height, int depthBuffer)
         {
             int frameBufferObject = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferObject);
@@ -118,9 +118,11 @@ namespace DeferredRender.Graphics.FrameBuffer
 
 
            
-            var enabledBuffers = new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 };
+            var enabledBuffers = new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0 };
 
             GL.DrawBuffers(enabledBuffers.Length, enabledBuffers);
+
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, depthBuffer, 0);
 
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) == FramebufferErrorCode.FramebufferComplete)
             {

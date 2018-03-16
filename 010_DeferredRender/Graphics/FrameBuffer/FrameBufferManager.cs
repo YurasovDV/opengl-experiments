@@ -32,7 +32,7 @@ namespace DeferredRender.Graphics.FrameBuffer
 
             GeometryFrameBufferDescriptorDescriptor = init.CreateGBuffer(width, height);
 
-            LightingFrameBufferDescriptorDescriptor = init.CreateSecondBuffer(width, height);
+            LightingFrameBufferDescriptorDescriptor = init.CreateSecondBuffer(width, height, GeometryFrameBufferDescriptorDescriptor.DepthTextureId);
         }
         
         // draw geometry
