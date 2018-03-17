@@ -45,19 +45,13 @@ namespace DeferredRender.Graphics
             FrameBufferManager = new FrameBufferManager(_width, _height);
         }
 
-        internal void Render(List<SimpleModel> models, List<PointLight> lights)
+        internal void Render(List<SimpleModel> models, List<SimpleModel> lightModels, List<PointLight> lights)
         {
             GL.Enable(EnableCap.DepthTest);
             GL.DepthMask(true);
             FrameBufferManager.EnableMainFrameBuffer();
-            RenderToCurrentTarget(models);
+            RenderToCurrentTarget(models, lightModels);
             FrameBufferManager.DisableMainFrameBuffer();
-
-            //GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, FrameBufferManager.GeometryFrameBufferDescriptorDescriptor.FrameBufferObject);
-            //GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, FrameBufferManager.LightingFrameBufferDescriptorDescriptor.FrameBufferObject);
-
-            //GL.BlitFramebuffer(0, 0,_width, _height, 0, 0, _width, _height, ClearBufferMask.DepthBufferBit, BlitFramebufferFilter.Nearest);
-            // FrameBufferManager.DisableMainFrameBuffer();
 
             FrameBufferManager.EnableSecondFrameBuffer();
             PerformLightingDrawCall(lights);
@@ -79,7 +73,7 @@ namespace DeferredRender.Graphics
             GL.DepthMask(false);
 
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
+            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
 
             //GL.Enable(EnableCap.StencilTest);
 
@@ -122,7 +116,7 @@ namespace DeferredRender.Graphics
         /// render all models using their shaders
         /// </summary>
         /// <param name="models"></param>
-        private void RenderToCurrentTarget(List<SimpleModel> models)
+        private void RenderToCurrentTarget(List<SimpleModel> models, List<SimpleModel> lightModels)
         {
             RebuildMatrices();
 
@@ -130,6 +124,13 @@ namespace DeferredRender.Graphics
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             foreach (var model in models)
+            {
+                model.Bind(ModelView, ModelViewProjection, Projection);
+
+                GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
+            }
+
+            foreach (var model in lightModels)
             {
                 model.Bind(ModelView, ModelViewProjection, Projection);
 

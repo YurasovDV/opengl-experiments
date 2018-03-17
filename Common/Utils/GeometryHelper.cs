@@ -89,5 +89,34 @@ namespace Common.Utils
                 new Vector3(size, -size, size)
             };
         }
+
+        public static Vector3[] GetNormals(this Vector3[] points)
+        {
+            var normals = new Vector3[points.Length];
+            var tempVertices = new Vector3[3];
+
+            for (int i = 0; i < points.Length; i += 6)
+            {
+                tempVertices[0] = points[i];
+                tempVertices[1] = points[i + 1];
+                tempVertices[2] = points[i + 2];
+
+                var norm = CalcNormalForTriangle(tempVertices);
+
+                for (int j = i; j < i + 6; j++)
+                {
+                    normals[j] = norm;
+                }
+            }
+
+            return normals;
+        }
+
+        public static Vector3 CalcNormalForTriangle(Vector3[] vrt)
+        {
+            var n = Vector3.Cross(vrt[0] - vrt[2], vrt[0] - vrt[1]);
+            n.Normalize();
+            return n;
+        }
     }
 }

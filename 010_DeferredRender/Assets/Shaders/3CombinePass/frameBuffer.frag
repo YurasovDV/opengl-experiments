@@ -16,7 +16,7 @@ void main()
 
 	vec3 diffuseExtracted = texture(gDiffuseSampler, texCoords).rgb;
 
-	vec3 colorExtractedWeakened = colorExtracted * 0.2f;
 	vec3 mixed = colorExtracted * diffuseExtracted;
-	outputColor = vec4(colorExtractedWeakened + mixed, 1.0);
+
+	outputColor = vec4(mixed, 1.0);
 }

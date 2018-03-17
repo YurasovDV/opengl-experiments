@@ -5,6 +5,7 @@ using System.Linq;
 using Common;
 using Common.Graphics;
 using Common.Input;
+using Common.Utils;
 using DeferredRender.Graphics;
 using OpenTK;
 
@@ -12,7 +13,8 @@ namespace DeferredRender
 {
     class SimulationEngine
     {
-        public const int LightRadius = 20;
+        public const int LightRadius = 18;
+        public const int LightNumber = 100;
 
         private Stopwatch Watch { get; set; }
 
@@ -21,6 +23,7 @@ namespace DeferredRender
         private GraphicsSystem _graphics;
 
         private List<SimpleModel> _models;
+        private List<SimpleModel> _lightModels;
         private List<PointLight> _lights;
 
         public SimulationEngine(int width, int height, Stopwatch watch)
@@ -36,6 +39,7 @@ namespace DeferredRender
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += OnKeyPress;
             _models = new List<SimpleModel>();
+            _lightModels = new List<SimpleModel>();
             InitObjects();
 
         }
@@ -116,7 +120,7 @@ namespace DeferredRender
             var textManager = new TextureManager();
             int textureId = textManager.LoadTexture(@"Assets\Textures\Chess.png");
 
-            var model = new SimpleModel()
+            var chessPlane = new SimpleModel()
             {
                 Vertices = verticesCombined.ToArray(),
                 Colors = colorsCombined,
@@ -124,30 +128,31 @@ namespace DeferredRender
                 TextureId = textureId,
             };
 
-            model.TextureCoordinates = textManager.GetTextureCoordinates(model.Vertices);
+            chessPlane.TextureCoordinates = textManager.GetTextureCoordinates(chessPlane.Vertices);
             if (_models == null)
             {
                 _models = new List<SimpleModel>();
             }
-            _models.Add(model);
-
-            SimpleModel tree = new SimpleModel(@"Assets\tree.obj", null);
-            Vector3 green = Vector3.UnitY;
-            var colors = Enumerable.Repeat<Vector3>(green, tree.Vertices.Length).ToArray();
-            tree.Colors = colors;
-            Matrix4 move = Matrix4.CreateScale(4) * Matrix4.CreateTranslation(15, 0, 0);
-            for (int i = 0; i < tree.Vertices.Length; i++)
-            {
-                var v = tree.Vertices[i];
-                tree.Vertices[i] = Vector3.Transform(v, move);
-            }
-
-            //_models.Add(tree);
+            _models.Add(chessPlane);
 
             SimpleModel lightVolume = new SimpleModel(@"Assets\simpleSphere.obj", null);
             _graphics.LightVolume = lightVolume;
 
             GenerateRandomLights();
+
+            var cubeVerts = GeometryHelper.GetVerticesForCube(0.01f);
+            var white = Enumerable.Repeat(Vector3.One, cubeVerts.Length).ToArray();
+            var normals = cubeVerts.GetNormals();
+
+            foreach (var light in _lights)
+            {
+                var lightModel = new SimpleModel();
+                lightModel.Vertices = cubeVerts.Select(v => Vector3.Transform(v, Matrix4.CreateTranslation(0, -0.05f, 0) * light.Transform)).ToArray();
+
+                lightModel.Colors = white;
+                lightModel.Normals = normals;//  GetNormals(lightModel.Vertices);
+                _lightModels.Add(lightModel);
+            }
 
         }
 
@@ -157,7 +162,7 @@ namespace DeferredRender
 
             var rand = new Random();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < LightNumber; i++)
             {
                 var light = new PointLight();
 
@@ -182,11 +187,11 @@ namespace DeferredRender
 
             var rand = new Random();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < LightNumber; i++)
             {
                 var light = new PointLight();
 
-                light.Center = new Vector3(rand.Next(200) - 100, 50, rand.Next(200) - 100);
+                light.Center = new Vector3(rand.Next(200) - 100, 3, rand.Next(200) - 100);
 
                 light.Radius = LightRadius;
 
@@ -217,7 +222,7 @@ namespace DeferredRender
 
         private void FullRender()
         {
-            _graphics.Render(_models, _lights);
+            _graphics.Render(_models, _lightModels, _lights);
         }
     }
 }

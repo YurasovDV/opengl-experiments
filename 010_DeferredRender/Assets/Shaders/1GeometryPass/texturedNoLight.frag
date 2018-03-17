@@ -16,7 +16,7 @@ void main()
 {
 	gPosition = position;
 	gNormal = normal;
-	gAlbedoSpec.rgb = vec3(texture(u_Texture, v_TexCoordinate));
+	gAlbedoSpec.rgb = vec3(texture(u_Texture, v_TexCoordinate)) + vec3(0.3f);
 	gAlbedoSpec.a = 1;   
 }
 

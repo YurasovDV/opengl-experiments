@@ -9,13 +9,13 @@ namespace Common.Graphics
     {
 
         /// <summary>
-        /// Основная программа
+        /// main program
         /// </summary>
         public int ProgramId { get; set; }
 
 
         /// <summary>
-        /// Скайбокс
+        /// skybox
         /// </summary>
         public int ProgramIdForSky { get; set; }
 
