@@ -13,8 +13,10 @@ namespace DeferredRender
 {
     class SimulationEngine
     {
-        public const int LightRadius = 18;
+        public const int LightRadius = 24;
         public const int LightNumber = 100;
+
+        public static readonly Vector3[] CubeVerts = GeometryHelper.GetVerticesForCube(0.01f);
 
         private Stopwatch Watch { get; set; }
 
@@ -23,7 +25,6 @@ namespace DeferredRender
         private GraphicsSystem _graphics;
 
         private List<SimpleModel> _models;
-        private List<SimpleModel> _lightModels;
         private List<PointLight> _lights;
 
         public SimulationEngine(int width, int height, Stopwatch watch)
@@ -39,7 +40,6 @@ namespace DeferredRender
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += OnKeyPress;
             _models = new List<SimpleModel>();
-            _lightModels = new List<SimpleModel>();
             InitObjects();
 
         }
@@ -140,46 +140,23 @@ namespace DeferredRender
 
             GenerateRandomLights();
 
-            var cubeVerts = GeometryHelper.GetVerticesForCube(0.01f);
-            var white = Enumerable.Repeat(Vector3.One, cubeVerts.Length).ToArray();
-            var normals = cubeVerts.GetNormals();
+            var white = Enumerable.Repeat(Vector3.One, CubeVerts.Length).ToArray();
+            var normals = CubeVerts.GetNormals();
 
             foreach (var light in _lights)
             {
+                light.Tick(0);
                 var lightModel = new SimpleModel();
-                lightModel.Vertices = cubeVerts.Select(v => Vector3.Transform(v, Matrix4.CreateTranslation(0, -0.05f, 0) * light.Transform)).ToArray();
+                lightModel.Vertices = CubeVerts;
 
                 lightModel.Colors = white;
-                lightModel.Normals = normals;//  GetNormals(lightModel.Vertices);
-                _lightModels.Add(lightModel);
-            }
+                lightModel.Normals = normals;
 
-        }
-
-        private void GenerateLights()
-        {
-            _lights = new List<PointLight>();
-
-            var rand = new Random();
-
-            for (int i = 0; i < LightNumber; i++)
-            {
-                var light = new PointLight();
-
-                light.Center = new Vector3(0, 1f, 0);
-
-                light.Radius = LightRadius;
-
-                var translate = Matrix4.CreateTranslation(light.Center);
-
-                var scale = Matrix4.CreateScale(light.Radius);
-
-                light.Transform = scale * translate;
-                light.Colors = new[] { new Vector3(0, 100, 0) };
-
-                _lights.Add(light);
+                light.DenotationCube = lightModel;
             }
         }
+
+       
 
         private void GenerateRandomLights()
         {
@@ -189,20 +166,19 @@ namespace DeferredRender
 
             for (int i = 0; i < LightNumber; i++)
             {
-                var light = new PointLight();
+                var pos = new Vector3(rand.Next(-75, 75), 3 + (float)rand.NextDouble(), rand.Next(-75, 75));
 
-                light.Center = new Vector3(rand.Next(200) - 100, 3, rand.Next(200) - 100);
+                var light = new PointLight(0.15f * (50.0f / pos.Length))
+                {
+                    Radius = LightRadius
+                };
 
-                light.Radius = LightRadius;
+                light.CurrentPosition = pos;
 
-                var translate = Matrix4.CreateTranslation(light.Center);
+                var top = 250;
+                var minLevel = 70;
 
-                var scale = Matrix4.CreateScale(light.Radius);
-
-               // light.Vertices = _graphics.LightVolume.Vertices;//.Select(v => Vector3.Transform(v, scale * translate)).ToArray();
-                light.Transform = scale * translate;
-
-                light.Colors = new[] { new Vector3(rand.Next(250), rand.Next(250), rand.Next(250)) };
+                light.Colors = new[] { new Vector3(rand.Next(minLevel, top), rand.Next(minLevel, top), rand.Next(minLevel, top)) };
 
                 _lights.Add(light);
             }
@@ -217,12 +193,23 @@ namespace DeferredRender
         {
             _keyHandler.CheckKeys();
             _player.HandleMouseMove(dxdy);
+
+            ObjectsTick(timeSlice);
+
             FullRender();
+        }
+
+        private void ObjectsTick(long timeSlice)
+        {
+            foreach (var light in _lights)
+            {
+                light.Tick(timeSlice);
+            }
         }
 
         private void FullRender()
         {
-            _graphics.Render(_models, _lightModels, _lights);
+            _graphics.Render(_models, _lights);
         }
     }
 }

@@ -85,6 +85,39 @@ namespace DeferredRender.Graphics
             GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
         }
 
+        internal static void BindTexturelessNoLightWithSharedBuffer(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection, bool isFirstCall)
+        {
+            var descriptor = _texturelessNoLightDescriptor;
+
+            GL.UseProgram(descriptor.ProgramId);
+
+            GL.UniformMatrix4(descriptor.uniformMV, false, ref modelView);
+            GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
+            GL.UniformMatrix4(descriptor.uniformProjection, false, ref projection);
+
+            if (isFirstCall)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes),
+                    model.Vertices, BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
+
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.colorsBuffer);
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Colors.Length * Vector3.SizeInBytes),
+                    model.Colors, BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
+
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.normalsBuffer);
+                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Normals.Length * Vector3.SizeInBytes),
+                    model.Colors, BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(descriptor.AttribNormalsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(descriptor.AttribNormalsLocation);
+            }
+        }
 
         public static void BindGBufferTextures(FrameBufferDesc bufferHandle)
         {
@@ -143,7 +176,7 @@ namespace DeferredRender.Graphics
             var descriptor = _lightDescriptor;
 
             GL.Uniform3(descriptor.uniformColor, light.Color);
-            GL.Uniform3(descriptor.uniformPosition, light.Center);
+            GL.Uniform3(descriptor.uniformPosition, light.CurrentPosition);
             GL.UniformMatrix4(descriptor.uniformTransform, false, ref light.Transform);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, bufLen);

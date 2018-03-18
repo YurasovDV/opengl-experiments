@@ -45,12 +45,12 @@ namespace DeferredRender.Graphics
             FrameBufferManager = new FrameBufferManager(_width, _height);
         }
 
-        internal void Render(List<SimpleModel> models, List<SimpleModel> lightModels, List<PointLight> lights)
+        internal void Render(List<SimpleModel> models, List<PointLight> lights)
         {
             GL.Enable(EnableCap.DepthTest);
             GL.DepthMask(true);
             FrameBufferManager.EnableMainFrameBuffer();
-            RenderToCurrentTarget(models, lightModels);
+            RenderToCurrentTarget(models, lights);
             FrameBufferManager.DisableMainFrameBuffer();
 
             FrameBufferManager.EnableSecondFrameBuffer();
@@ -116,7 +116,7 @@ namespace DeferredRender.Graphics
         /// render all models using their shaders
         /// </summary>
         /// <param name="models"></param>
-        private void RenderToCurrentTarget(List<SimpleModel> models, List<SimpleModel> lightModels)
+        private void RenderToCurrentTarget(List<SimpleModel> models, List<PointLight> lights)
         {
             RebuildMatrices();
 
@@ -129,12 +129,15 @@ namespace DeferredRender.Graphics
 
                 GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
             }
-
-            foreach (var model in lightModels)
+            bool isFirst = true;
+            foreach (var light in lights)
             {
-                model.Bind(ModelView, ModelViewProjection, Projection);
+                var mv = Matrix4.CreateTranslation(0, -0.05f, 0) * light.Transform;
 
-                GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
+                Shaders.BindTexturelessNoLightWithSharedBuffer(light.DenotationCube, mv * ModelView, mv * ModelViewProjection, Projection, isFirst);
+
+                GL.DrawArrays(PrimitiveType.Triangles, 0, light.DenotationCube.Vertices.Length);
+                isFirst = false;
             }
         }
 
