@@ -13,7 +13,7 @@ namespace DeferredRender
 {
     class SimulationEngine
     {
-        public const int LightRadius = 24;
+        public const int LightRadius = 30;
         public const int LightNumber = 100;
 
         public static readonly Vector3[] CubeVerts = GeometryHelper.GetVerticesForCube(0.01f);
@@ -166,7 +166,7 @@ namespace DeferredRender
 
             for (int i = 0; i < LightNumber; i++)
             {
-                var pos = new Vector3(rand.Next(-75, 75), 3 + (float)rand.NextDouble(), rand.Next(-75, 75));
+                var pos = new Vector3(rand.Next(-75, 75), 3 + (float)rand.NextDouble() * 3, rand.Next(-75, 75));
 
                 var light = new PointLight(0.15f * (50.0f / pos.Length))
                 {
