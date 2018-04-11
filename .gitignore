@@ -9,7 +9,6 @@
 /SimpleTerrain/obj
 /SimpleTerrain/bin
 
-/.vs/GL_Examples/v14/.suo
 /.idea
 *.iml
 *.user
@@ -38,3 +37,6 @@
 /010_DeferredRender/bin
 /011_BootstrapProj/obj
 /011_BootstrapProj/bin
+/012_Glass/obj
+/012_Glass/bin
+/.vs/*
