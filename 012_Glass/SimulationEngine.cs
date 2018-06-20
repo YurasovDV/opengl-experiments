@@ -18,7 +18,7 @@ namespace Glass
         private Player _player;
         private GraphicsSystem _graphics;
 
-        private SimpleModel _model;
+        private List<SimpleModel> _models;
 
         public SimulationEngine(int width, int height, Stopwatch watch)
         {
@@ -118,7 +118,10 @@ namespace Glass
             };
 
 
-            _model = model;
+            _models = new List<SimpleModel>() { model };
+
+            SimpleModel sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
+            _models.Add(sphere);
         }
 
 
@@ -136,7 +139,7 @@ namespace Glass
 
         private void FullRender()
         {
-            _graphics.Render(_model);
+                _graphics.Render(_models);
         }
     }
 }

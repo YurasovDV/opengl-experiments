@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -15,6 +16,8 @@ namespace Glass.Graphics
         public Matrix4 ModelView;
         public Matrix4 ModelViewProjection;
 
+        public FrameBufferManager FrameBufferManager { get; set; }
+
         public GraphicsSystem(int width, int height, Player player)
         {
             _width = width;
@@ -30,21 +33,36 @@ namespace Glass.Graphics
             Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 200);
 
             Shaders.InitTexturelessNoLight();
+
+
+            FrameBufferManager = new FrameBufferManager(_width, _height);
         }
 
-        internal void Render(SimpleModel model)
+        public void Render(List<SimpleModel> models)
         {
+            FrameBufferManager.EnableMainFrameBuffer();
+
+            FrameBufferManager.DisableMainFrameBuffer();
+
             RebuildMatrices();
 
             GL.ClearColor(0, 0, 0.0f, 1);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            foreach (var model in models)
+            {
+                Render(model);
+            }
+
+            GL.Flush();
+        }
+
+        private void Render(SimpleModel model)
+        {
             Shaders.BindTexturelessNoLight(model, ModelView, ModelViewProjection, Projection);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
-
-            GL.Flush();
         }
 
         private void RebuildMatrices()
