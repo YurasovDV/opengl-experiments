@@ -11,11 +11,6 @@
 
         public int DiffuseTextureId { get; set; }
 
-        /// <summary>
-        /// is not needed for now
-        /// </summary>
-        public int SpectacularTextureId { get; set; }
-
         public int FrameBufferObject { get; set; }
     }
 }

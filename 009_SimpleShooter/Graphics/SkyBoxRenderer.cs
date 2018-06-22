@@ -59,6 +59,9 @@ namespace SimpleShooter.Graphics
             GL.ActiveTexture(TextureUnit.Texture0);
             textureId = GL.GenTexture();
 
+            GL.BindTexture(TextureTarget.TextureCubeMap, textureId);
+
+
             for (int i = 0; i < 6; i++)
             {
                 var png = new Bitmap(@"Content\Textures\Skybox\" + skyboxPaths[i]);
@@ -69,7 +72,6 @@ namespace SimpleShooter.Graphics
                     ImageLockMode.ReadOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                GL.BindTexture(TextureTarget.TextureCubeMap, textureId);
 
                 GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i,
                     0,

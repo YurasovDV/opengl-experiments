@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Common;
 using Common.Input;
+using Common.Utils;
 using Glass.Graphics;
 using OpenTK;
 
@@ -117,10 +118,12 @@ namespace Glass
                 Normals = Enumerable.Repeat(Vector3.UnitY, verticesCombined.Count).ToArray()
             };
 
-
             _models = new List<SimpleModel>() { model };
 
             SimpleModel sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
+
+            sphere.Vertices.TranslateAll(new Vector3(0, 2, 0));
+
             _models.Add(sphere);
         }
 
@@ -139,7 +142,7 @@ namespace Glass
 
         private void FullRender()
         {
-                _graphics.Render(_models);
+            _graphics.Render(_models);
         }
     }
 }

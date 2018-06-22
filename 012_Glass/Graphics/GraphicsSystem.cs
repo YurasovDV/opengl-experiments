@@ -34,16 +34,42 @@ namespace Glass.Graphics
 
             Shaders.InitTexturelessNoLight();
 
-
             FrameBufferManager = new FrameBufferManager(_width, _height);
         }
 
         public void Render(List<SimpleModel> models)
         {
-            FrameBufferManager.EnableMainFrameBuffer();
+            FrameBufferManager.EnableReflectionsFrameBuffer();
 
-            FrameBufferManager.DisableMainFrameBuffer();
+            for (int i = 0; i < 6; i++)
+            {
+                var cubeMap = FrameBufferManager.ReflectionsMapFrameBufferDescriptor.DiffuseTextureId;
 
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, 
+                    TextureTarget.TextureCubeMapPositiveX + i, cubeMap, 0);
+
+                RebuildMatrices();
+
+                GL.ClearColor(0, 0, 0.0f, 1);
+
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+                foreach (var model in models)
+                {
+                    Render(model);
+                }
+            }
+
+
+            FrameBufferManager.DisableReflectionsFrameBuffer();
+
+            DrawUsingFrameBuffer(models);
+
+            GL.Flush();
+        }
+
+        private void DrawUsingFrameBuffer(List<SimpleModel> models)
+        {
             RebuildMatrices();
 
             GL.ClearColor(0, 0, 0.0f, 1);
@@ -54,8 +80,6 @@ namespace Glass.Graphics
             {
                 Render(model);
             }
-
-            GL.Flush();
         }
 
         private void Render(SimpleModel model)
