@@ -34,7 +34,7 @@ namespace DeferredRender.Graphics
         {
             float aspect = (float)_width / _height;
             GL.Viewport(0, 0, _width, _height);
-            Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 400);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 600);
 
             Shaders.InitTexturelessNoLight();
             Shaders.InitTexturedNoLight();

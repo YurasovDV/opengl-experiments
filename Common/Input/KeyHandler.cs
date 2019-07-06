@@ -62,7 +62,9 @@ namespace Common.Input
             foreach (var key in KeysToWatch)
             {
                 var state = GetKeyState((int)key);
-                if (state == 127 || state == 128 || state == -127 || state == -128)
+                // if (state == 127 || state == 128 || state == -127 || state == -128)
+                // what the fuck this ^ has been working four years both in win8 and win 10 
+                if (state == 65409 || state == 65408)
                 {
                     if (KeyPress != null)
                     {

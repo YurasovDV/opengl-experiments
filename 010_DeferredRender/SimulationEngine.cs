@@ -15,6 +15,7 @@ namespace DeferredRender
     {
         public const int LightRadius = 30;
         public const int LightNumber = 100;
+        public const int WaferSize = 200;
 
         public static readonly Vector3[] CubeVerts = GeometryHelper.GetVerticesForCube(0.01f);
 
@@ -46,40 +47,39 @@ namespace DeferredRender
 
         private void InitObjects()
         {
-            int waferSize = 100;
             float axisWidth = 0.15f;
 
             var verticesPlane = new[]
             {
-                new Vector3(waferSize, 0, -waferSize),
-                new Vector3(-waferSize, 0, -waferSize),
-                new Vector3(-waferSize, 0, waferSize),
+                new Vector3(WaferSize, 0, -WaferSize),
+                new Vector3(-WaferSize, 0, -WaferSize),
+                new Vector3(-WaferSize, 0, WaferSize),
 
-                new Vector3(waferSize, 0, -waferSize),
-                new Vector3(waferSize, 0, waferSize),
-                new Vector3(-waferSize, 0, waferSize),
+                new Vector3(WaferSize, 0, -WaferSize),
+                new Vector3(WaferSize, 0, WaferSize),
+                new Vector3(-WaferSize, 0, WaferSize),
             };
 
             var verticesOx = new[]
             {
-                new Vector3(waferSize, 0.2f, -axisWidth),
-                new Vector3(-waferSize, 0.2f, axisWidth),
-                new Vector3(-waferSize, 0.2f, -axisWidth),
+                new Vector3(WaferSize, 0.2f, -axisWidth),
+                new Vector3(-WaferSize, 0.2f, axisWidth),
+                new Vector3(-WaferSize, 0.2f, -axisWidth),
 
-                new Vector3(waferSize, 0.2f, -axisWidth),
-                new Vector3(waferSize, 0.2f, axisWidth),
-                new Vector3(-waferSize, 0.2f, axisWidth),
+                new Vector3(WaferSize, 0.2f, -axisWidth),
+                new Vector3(WaferSize, 0.2f, axisWidth),
+                new Vector3(-WaferSize, 0.2f, axisWidth),
             };
 
             var verticesOZ = new[]
             {
-                new Vector3(axisWidth, 0.2f, -waferSize),
-                new Vector3(-axisWidth, 0.2f, waferSize),
-                new Vector3(-axisWidth, 0.2f, -waferSize),
+                new Vector3(axisWidth, 0.2f, -WaferSize),
+                new Vector3(-axisWidth, 0.2f, WaferSize),
+                new Vector3(-axisWidth, 0.2f, -WaferSize),
 
-                new Vector3(axisWidth, 0.2f, -waferSize),
-                new Vector3(axisWidth, 0.2f, waferSize),
-                new Vector3(-axisWidth, 0.2f, waferSize),
+                new Vector3(axisWidth, 0.2f, -WaferSize),
+                new Vector3(axisWidth, 0.2f, WaferSize),
+                new Vector3(-axisWidth, 0.2f, WaferSize),
             };
 
             var colorsCombined = new[]
@@ -114,8 +114,6 @@ namespace DeferredRender
 
             var verticesCombined = new List<Vector3>();
             verticesCombined.AddRange(verticesPlane);
-            //verticesCombined.AddRange(verticesOx);
-            //verticesCombined.AddRange(verticesOZ);
 
             var textManager = new TextureManager();
             int textureId = textManager.LoadTexture(@"Assets\Textures\Chess.png");
@@ -166,7 +164,10 @@ namespace DeferredRender
 
             for (int i = 0; i < LightNumber; i++)
             {
-                var pos = new Vector3(rand.Next(-75, 75), 3 + (float)rand.NextDouble() * 3, rand.Next(-75, 75));
+                var pos = new Vector3(
+                    rand.Next((int)(-0.75 * WaferSize), (int)(0.75 * WaferSize)),
+                    3 + (float)rand.NextDouble() * 3, 
+                    rand.Next((int)(-0.75 * WaferSize), (int)(0.75 * WaferSize)));
 
                 var light = new PointLight(0.15f * (50.0f / pos.Length))
                 {
