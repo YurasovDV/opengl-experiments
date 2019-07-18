@@ -26,7 +26,7 @@ namespace SimpleShooter.Core.Enemies
 
             Weapon.Tick(delta);
 
-            OnShot(new ShotEventArgs(BoundingBox.Centre));
+            // OnShot(new ShotEventArgs(BoundingBox.Centre));
 
             return b;
         }

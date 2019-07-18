@@ -11,7 +11,7 @@ namespace ModelLoading
 
         public Player()
         {
-            DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(-50, -1f, 50);
+            DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(0, -1f, 50);
             DEFAULT_POSITION = new Vector3(20f, 5f, -2f);
             Position = new Vector3(DEFAULT_POSITION);
             Target = new Vector3(DEFAULT_POSITION + DELTA_BETWEEN_POSITION_AND_TARGET);
@@ -55,8 +55,6 @@ namespace ModelLoading
 
             var rotation = Matrix4.CreateRotationY(AngleHorizontalRad);
             var deltaFlash = Vector3.Transform(FLASHLIGHT_DIST, rotation);
-
-            rotation = Matrix4.CreateRotationX(AngleVerticalRad);
 
             FlashlightPosition = new Vector3(Position) + deltaFlash;
         }

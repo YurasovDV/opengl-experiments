@@ -71,9 +71,9 @@ namespace SimpleShooter.LevelLoaders
 
             Matrix4 translate1 = Matrix4.CreateTranslation(farX + 10, 10, 10);
 
-            obj.Vertices = obj.Vertices.Select(v => Vector3.Transform(v, translate1)).ToArray();
+            obj.Vertices = obj.Vertices.Select(v => Vector3.Transform(v, Matrix4.CreateScale(3) * translate1 )).ToArray();
 
-            var enemy = new Enemy(obj, 1, 10);
+            var enemy = new Enemy(obj, 0, 10);
             enemy.Weapon = new Core.Weapons.BaseWeapon();
             objectList.Add(enemy);
         }
