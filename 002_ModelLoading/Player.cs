@@ -1,29 +1,22 @@
-﻿using System;
-using Common;
+﻿using Common;
 using OpenTK;
 
 namespace ModelLoading
 {
     class Player : AbstractPlayer
     {
-       // public Predicate<Vector3> intersectionTest { get; set; }
-
-
         private Vector3 position;
         private Vector3 target;
         private Vector3 flashlightPosition;
 
-        public Player(Predicate<Vector3> intersectionTest = null)
+        public Player()
         {
             DELTA_BETWEEN_POSITION_AND_TARGET = new Vector3(0, -1f, 50);
-            DEFAULT_POSITION = new Vector3(2f, 5f, -2f);
-            //this.intersectionTest = intersectionTest;
+            DEFAULT_POSITION = new Vector3(-2f, 5f, -2f);
             Position = new Vector3(DEFAULT_POSITION);
             Target = new Vector3(DEFAULT_POSITION + DELTA_BETWEEN_POSITION_AND_TARGET);
             MIN_CAMERA_MOVE = 1;
         }
-
-       
 
         public override Vector3 Position
         {
@@ -64,7 +57,6 @@ namespace ModelLoading
             var deltaFlash = Vector3.Transform(FLASHLIGHT_DIST, rotation);
 
             rotation = Matrix4.CreateRotationX(AngleVerticalRad);
-            //deltaFlash = Vector3.Transform(deltaFlash, rotation);
 
             FlashlightPosition = new Vector3(Position) + deltaFlash;
         }

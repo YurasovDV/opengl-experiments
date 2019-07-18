@@ -11,8 +11,8 @@ attribute vec3 vColor;
 
 
 // textures
-attribute vec2 a_TexCoordinate; // Per-vertex texture coordinate information we will pass in.
-varying vec2 v_TexCoordinate;   // This will be passed into the fragment shader.
+attribute vec2 a_TexCoordinate;
+varying vec2 v_TexCoordinate;  
 
 out vec4 color;
 out vec3 normal;
@@ -29,5 +29,4 @@ main()
     normal = vec3(u_modelview * vec4(vNormal, 0.0));
 
     v_TexCoordinate = a_TexCoordinate;
-
 }

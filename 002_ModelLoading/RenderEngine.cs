@@ -10,11 +10,9 @@ namespace ModelLoading
 {
     class RenderEngine : AbstractRenderEngine
     {
-
         private ShaderManager ShaderManager { get; set; }
 
         public SkyboxRenderer Skybox { get; set; }
-
 
         public RenderEngine(int Width, int Height, Player Player) : base(Width, Height, Player)
         {
@@ -28,9 +26,6 @@ namespace ModelLoading
 
             Skybox = new SkyboxRenderer(ShaderManager, this);
         }
-
-       
-
 
         public override void Render(IEnumerable<SimpleModel> models)
         {
@@ -46,14 +41,12 @@ namespace ModelLoading
                 Draw(model);
             }
 
-            // DrawLight();
-
             GL.Flush();
         }
 
         private new void BindBuffers(SimpleModel model)
         {
-            ShaderManager.BindBuffers(model, Player.FlashlightPosition, refreshVertices: true, refreshColors: true);
+            ShaderManager.BindBuffers(model, Player.FlashlightPosition, refreshVertices: true);
         }
 
         private new void Draw(SimpleModel model)
@@ -67,12 +60,9 @@ namespace ModelLoading
 
                 GL.EnableVertexAttribArray(ShaderManager.AttributeTexcoord_Parameter_Address);
 
-
-                // активная текстура - т0
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.Uniform1(ShaderManager.UniformTexture_Parameter_Address, 0);
                 GL.BindTexture(TextureTarget.Texture2D, model.TextureId);
-
             }
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);

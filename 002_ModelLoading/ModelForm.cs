@@ -15,7 +15,7 @@ namespace ModelLoading
 
 
         public ModelForm()
-            : base(1920, 900, GraphicsMode.Default, "Model Loading", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
+            : base(1920, 1080, GraphicsMode.Default, "Model Loading", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
         {
             engine = new Engine(Width, Height);
             watch = new Stopwatch();
@@ -40,7 +40,7 @@ namespace ModelLoading
                 case OpenTK.Input.Key.F4:
                     if (e.Alt)
                     {
-                        this.Exit();
+                        Exit();
                     }
                     break;
                 default:

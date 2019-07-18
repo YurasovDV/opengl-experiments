@@ -10,49 +10,48 @@ namespace ModelLoading
     {
         public int SkyboxTextureId { get; set; }
 
-        public ShaderManager shader { get; set; }
-        public RenderEngine render { get; set; }
+        public ShaderManager ShaderManager { get; set; }
+        public RenderEngine RenderEngine { get; set; }
 
         public SkyboxRenderer(ShaderManager mgr, RenderEngine eng)
         {
-            this.shader = mgr;
-            this.render = eng;
+            this.ShaderManager = mgr;
+            this.RenderEngine = eng;
             SkyboxTextureId = LoadCubeMapForSkybox(skyboxPaths);
         }
 
 
         public void Render()
         {
-            GL.UseProgram(shader.ProgramIdForSky);
+            GL.UseProgram(ShaderManager.ProgramIdForSky);
 
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.Uniform1(shader.UniformSkySampler, 0);
+            GL.Uniform1(ShaderManager.UniformSkySampler, 0);
             GL.BindTexture(TextureTarget.TextureCubeMap, SkyboxTextureId);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, shader.sky_texcoord_buffer_address);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, ShaderManager.sky_texcoord_buffer_address);
             GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(VERTICES.Length * Vector3.SizeInBytes),
               VERTICES, BufferUsageHint.StaticDraw);
 
-            GL.VertexAttribPointer(shader.AttribPositionSkybox, 
+            GL.VertexAttribPointer(ShaderManager.AttribPositionSkybox, 
                 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.BindVertexArray(shader.AttribPositionSkybox);
-            GL.EnableVertexAttribArray(shader.AttribPositionSkybox);
+            GL.BindVertexArray(ShaderManager.AttribPositionSkybox);
+            GL.EnableVertexAttribArray(ShaderManager.AttribPositionSkybox);
 
-            var translation = Matrix4.CreateTranslation(render.Player.Position.X, 0, render.Player.Position.Z);
-            var view = translation * render.ModelView;
+            var translation = Matrix4.CreateTranslation(RenderEngine.Player.Position.X, 0, RenderEngine.Player.Position.Z);
+            var view = translation * RenderEngine.ModelView;
 
-            GL.UniformMatrix4(shader.UniformViewSkybox, false, ref view);
-            GL.UniformMatrix4(shader.UniformProjectionSkybox, false, ref render.Projection);
+            GL.UniformMatrix4(ShaderManager.UniformViewSkybox, false, ref view);
+            GL.UniformMatrix4(ShaderManager.UniformProjectionSkybox, false, ref RenderEngine.Projection);
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, SkyboxRenderer.VERTICES.Length);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, VERTICES.Length);
         }
 
         public int LoadCubeMapForSkybox(string[] paths)
         {
-            int texureId;
 
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.GenTextures(1, out texureId);
+            GL.GenTextures(1, out int texureId);
 
             for (int i = 0; i < paths.Length; i++)
             {
@@ -93,8 +92,6 @@ namespace ModelLoading
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
                 GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
-
-
             }
 
             GL.BindTexture(TextureTarget.TextureCubeMap, 0);

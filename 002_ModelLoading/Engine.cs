@@ -2,6 +2,7 @@
 
 using Common;
 using Common.Input;
+using OpenTK;
 
 namespace ModelLoading
 {
@@ -24,25 +25,30 @@ namespace ModelLoading
             this.Width = Width;
             this.Height = Height;
 
-            //World = GetWorld();
-
             Player = new Player();
 
             renderEngine = new RenderEngine(Width, Height, Player);
             KeyHandler = new KeyHandler();
             KeyHandler.KeyPress += Player.OnSignal;
 
-            Models = new List<SimpleModel>();
+
 
             var tower = new SimpleModel(@"Assets\Tower\watchtower.obj", @"Assets\Tower\Wachturm_tex_x.png");
-            Models.Add(tower);
 
+            var verticesTransformed = tower.Vertices;
+            var scale = Matrix4.CreateScale(5);
 
+            for (int i = 0; i < verticesTransformed.Length; i++)
+            {
+                verticesTransformed[i] = Vector3.Transform(verticesTransformed[i], scale);
+            }
+            tower.Vertices = verticesTransformed;
+
+            Models = new List<SimpleModel>() { tower };
         }
 
         internal void Click()
         {
-            
         }
 
         internal void Tick(long delta, OpenTK.Vector2 mouseDxDy)

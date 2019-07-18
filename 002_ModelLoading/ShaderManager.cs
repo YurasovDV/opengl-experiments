@@ -12,7 +12,6 @@ namespace ModelLoading
         private RenderEngine renderEngine;
 
         public int VertexAttribLocation { get; set; }
-        public int ColorAttribLocation { get; set; }
         public int NormalAttribLocation { get; set; }
 
         public int AttributeTexcoord_Parameter_Address { get; set; }
@@ -40,17 +39,17 @@ namespace ModelLoading
         public int sky_texcoord_buffer_address;
 
         /// <summary>
-        /// Основная программа
+        /// Main program
         /// </summary>
         public int ProgramId { get; set; }
 
         /// <summary>
-        /// облегченные шейдеры
+        /// shaders for light source
         /// </summary>
         public int ProgramIdForLight { get; set; }
 
         /// <summary>
-        /// Скайбокс
+        /// skybox
         /// </summary>
         public int ProgramIdForSky { get; set; }
 
@@ -61,10 +60,7 @@ namespace ModelLoading
             this.renderEngine = renderEngine;
 
             CreateMainProgram();
-            CreatePointProgram();
             CreateSkyboxProgram();
-
-
 
             GL.GenBuffers(1, out vertex_buffer_address);
             GL.GenBuffers(1, out color_buffer_address);
@@ -73,52 +69,13 @@ namespace ModelLoading
             GL.GenBuffers(1, out texcoord_buffer_address);
 
             GL.GenBuffers(1, out sky_texcoord_buffer_address);
-
-
         }
-
-        private void CreatePointProgram()
-        {
-            ProgramIdForLight = GL.CreateProgram();
-
-            var vertexShader = GL.CreateShader(ShaderType.VertexShader);
-
-            // Define a simple shader program for our point.
-            String pointVertexShader = null;
-
-            using (StreamReader rd = new StreamReader(@"Assets\Shaders\lightVertex.glsl"))
-            {
-                pointVertexShader = rd.ReadToEnd();
-            }
-
-
-            GL.ShaderSource(vertexShader, pointVertexShader);
-            GL.CompileShader(vertexShader);
-            GL.AttachShader(ProgramIdForLight, vertexShader);
-
-            String pointFragmentShader = null;
-            using (StreamReader rd = new StreamReader(@"Assets\Shaders\lightFragment.glsl"))
-            {
-                pointFragmentShader = rd.ReadToEnd();
-            }
-
-            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fragmentShader, pointFragmentShader);
-            GL.CompileShader(fragmentShader);
-            GL.AttachShader(ProgramIdForLight, fragmentShader);
-            GL.LinkProgram(ProgramIdForLight);
-
-        }
-
-
 
         private void CreateSkyboxProgram()
         {
             ProgramIdForSky = GL.CreateProgram();
 
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
-
-            // Define a simple shader program for our point.
             String pointVertexShader = null;
 
             using (StreamReader rd = new StreamReader(@"Assets\Shaders\skyboxVertex.glsl"))
@@ -169,14 +126,11 @@ namespace ModelLoading
 
             GL.AttachShader(ProgramId, vertexShader);
 
-            int status_code;
-
-            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out status_code);
+            GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out int status_code);
 
             if (status_code != 1)
             {
-                string info;
-                GL.GetShaderInfoLog(vertexShader, out info);
+                GL.GetShaderInfoLog(vertexShader, out string info);
                 throw new Exception("vertex shader: " + info);
             }
 
@@ -196,8 +150,7 @@ namespace ModelLoading
             GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out status_code);
             if (status_code != 1)
             {
-                string info;
-                GL.GetShaderInfoLog(fragmentShader, out info);
+                GL.GetShaderInfoLog(fragmentShader, out string info);
                 throw new Exception("fragment shader: " + info);
             }
 
@@ -207,11 +160,9 @@ namespace ModelLoading
             GL.UseProgram(ProgramId);
 
             VertexAttribLocation = GL.GetAttribLocation(ProgramId, "vPosition");
-            ColorAttribLocation = GL.GetAttribLocation(ProgramId, "vColor");
             NormalAttribLocation = GL.GetAttribLocation(ProgramId, "vNormal");
 
             Uniform_ModelViewProjection = GL.GetUniformLocation(ProgramId, "u_modelViewprojection");
-            Uniform_Projection = GL.GetUniformLocation(ProgramId, "u_projection");
             Uniform_ModelView = GL.GetUniformLocation(ProgramId, "u_modelview");
 
             Uniform_LightPos = GL.GetUniformLocation(ProgramId, "vLightPosition");
@@ -221,7 +172,7 @@ namespace ModelLoading
 
         }
 
-        internal void BindBuffers(SimpleModel model, Vector3 light, bool refreshVertices = false, bool refreshColors = false)
+        internal void BindBuffers(SimpleModel model, Vector3 light, bool refreshVertices = false)
         {
             GL.UseProgram(ProgramId);
 
@@ -231,24 +182,12 @@ namespace ModelLoading
 
             GL.Uniform3(Uniform_LightPos, ref light);
 
-            if (firstDraw || refreshVertices || refreshColors)
+            if (firstDraw || refreshVertices)
             {
-                if (firstDraw || refreshVertices)
-                {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, vertex_buffer_address);
-                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes),
-                        model.Vertices, BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(VertexAttribLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-                }
-
-
-                if (firstDraw || refreshColors)
-                {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, color_buffer_address);
-                    GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(model.Colors.Length * Vector3.SizeInBytes),
-                        model.Colors, BufferUsageHint.StaticDraw);
-                    GL.VertexAttribPointer(ColorAttribLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-                }
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vertex_buffer_address);
+                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes),
+                    model.Vertices, BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(VertexAttribLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
 
                 firstDraw = false;
             }
@@ -259,7 +198,6 @@ namespace ModelLoading
             GL.VertexAttribPointer(NormalAttribLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
 
             GL.EnableVertexAttribArray(VertexAttribLocation);
-            GL.EnableVertexAttribArray(ColorAttribLocation);
             GL.EnableVertexAttribArray(NormalAttribLocation);
         }
     }
