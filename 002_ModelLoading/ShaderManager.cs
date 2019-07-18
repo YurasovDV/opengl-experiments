@@ -76,28 +76,25 @@ namespace ModelLoading
             ProgramIdForSky = GL.CreateProgram();
 
             var vertexShader = GL.CreateShader(ShaderType.VertexShader);
-            String pointVertexShader = null;
 
             using (StreamReader rd = new StreamReader(@"Assets\Shaders\skyboxVertex.glsl"))
             {
-                pointVertexShader = rd.ReadToEnd();
+                string pointVertexShader = rd.ReadToEnd();
+
+                GL.ShaderSource(vertexShader, pointVertexShader);
+                GL.CompileShader(vertexShader);
+                GL.AttachShader(ProgramIdForSky, vertexShader);
             }
 
-
-            GL.ShaderSource(vertexShader, pointVertexShader);
-            GL.CompileShader(vertexShader);
-            GL.AttachShader(ProgramIdForSky, vertexShader);
-
-            String pointFragmentShader = null;
             using (StreamReader rd = new StreamReader(@"Assets\Shaders\skyboxFragment.glsl"))
             {
-                pointFragmentShader = rd.ReadToEnd();
+                string pointFragmentShader = rd.ReadToEnd();
+                var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+                GL.ShaderSource(fragmentShader, pointFragmentShader);
+                GL.CompileShader(fragmentShader);
+                GL.AttachShader(ProgramIdForSky, fragmentShader);
             }
 
-            var fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fragmentShader, pointFragmentShader);
-            GL.CompileShader(fragmentShader);
-            GL.AttachShader(ProgramIdForSky, fragmentShader);
             GL.LinkProgram(ProgramIdForSky);
 
             GL.UseProgram(ProgramIdForSky);
@@ -107,8 +104,6 @@ namespace ModelLoading
             UniformViewSkybox = GL.GetUniformLocation(ProgramIdForSky, "view");
 
             UniformSkySampler = GL.GetUniformLocation(ProgramIdForSky, "cubemap");
-
-
         }
 
         private void CreateMainProgram()

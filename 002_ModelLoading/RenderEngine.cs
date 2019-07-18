@@ -5,6 +5,7 @@ using Common;
 using Common.Graphics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
+using GL4 = OpenTK.Graphics.OpenGL4.GL;
 
 namespace ModelLoading
 {
@@ -29,6 +30,9 @@ namespace ModelLoading
 
         public override void Render(IEnumerable<SimpleModel> models)
         {
+            GL4.ClearColor(0, 0, 0.0f, 0);
+            GL4.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
             SetupVieport();
 
             GL.Disable(EnableCap.DepthTest);
