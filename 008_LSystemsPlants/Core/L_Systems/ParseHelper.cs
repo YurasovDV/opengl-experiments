@@ -6,7 +6,7 @@ namespace LSystemsPlants.Core.L_Systems
 {
     public static class ParseHelper
     {
-        private static Dictionary<char, Symbol> _charToSymbol = new Dictionary<char, Symbol>()
+        private static readonly Dictionary<char, Symbol> _charToSymbol = new Dictionary<char, Symbol>()
         {
             {'F', Symbol.FORWARD_DRAW },
             {'f', Symbol.FORWARD_NO_DRAW },
@@ -25,11 +25,11 @@ namespace LSystemsPlants.Core.L_Systems
 
             var rulesParsed = new List<Rule>();
 
-            foreach (var ruleString in rules.Where(r => !string.IsNullOrWhiteSpace(r)).Select(Clean))
+            foreach (var ruleString in rules.Where(r => r.HasValue()).Select(RemoveSpaces))
             {
-                var parts = ruleString.Split(new string[] {"->" }, StringSplitOptions.RemoveEmptyEntries);
+                var parts = ruleString.Split(new string[] { "->" }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
+                if (parts.Length != 2 || !parts[0].HasValue() || !parts[1].HasValue())
                 {
                     continue;
                 }
@@ -42,31 +42,17 @@ namespace LSystemsPlants.Core.L_Systems
             }
 
             return new SimplestGrammar(rulesParsed, axParsed);
-
         }
 
         private static IEnumerable<Symbol> Parse(string axiom)
         {
-            var result = new List<Symbol>();
-
-            foreach (char c in axiom.Clean())
-            {
-                result.Add(c.GetReplacement());
-            }
-
-            return result;
+            return axiom.RemoveSpaces().Select(c => c.GetReplacement()).ToList();
         }
 
+        public static Symbol GetReplacement(this char c) => _charToSymbol[c];
 
-        public static Symbol GetReplacement(this char c)
-        {
-            return _charToSymbol[c];
-        }
+        public static string RemoveSpaces(this string str) => str.Trim().Replace(" ", "");
 
-
-        public static string Clean(this string str)
-        {
-            return str.Trim().Replace(" ", "");
-        }
+        public static bool HasValue(this string str) => !string.IsNullOrWhiteSpace(str);
     }
 }

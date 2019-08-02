@@ -12,6 +12,7 @@ namespace LSystemsPlants.Core.L_Systems
         }
 
         public Symbol Predecessor { get; private set; }
+
         public Symbol[] Successor { get; private set; }
     }
 }

@@ -65,38 +65,28 @@ namespace LSystemsPlants.Core.Graphics
             GL.ShaderSource(vertex, vert);
             GL.CompileShader(vertex);
             GL.AttachShader(MainProgramId, vertex);
-
-            string info;
-
-            int statusCode;
-            GL.GetShader(vertex, ShaderParameter.CompileStatus, out statusCode);
+            GL.GetShader(vertex, ShaderParameter.CompileStatus, out int statusCode);
             if (statusCode != 1)
             {
-                GL.GetShaderInfoLog(vertex, out info);
+                GL.GetShaderInfoLog(vertex, out string info);
                 throw new Exception("vertex shader: " + info);
             }
 
 
-
             var fragment = GL.CreateShader(ShaderType.FragmentShader);
-            string frag = File.ReadAllText(@"Assets\main.frag");
-            GL.ShaderSource(fragment, frag);
+            GL.ShaderSource(fragment, File.ReadAllText(@"Assets\main.frag"));
             GL.CompileShader(fragment);
             GL.AttachShader(MainProgramId, fragment);
-
-
             GL.GetShader(fragment, ShaderParameter.CompileStatus, out statusCode);
             if (statusCode != 1)
             {
-                GL.GetShaderInfoLog(fragment, out info);
+                GL.GetShaderInfoLog(fragment, out string info);
                 throw new Exception("fragment shader: " + info);
             }
 
 
             GL.LinkProgram(MainProgramId);
-
             GL.UseProgram(MainProgramId);
-
             AttrColorLocation = GL.GetAttribLocation(MainProgramId, "vColor");
             AttrVertexLocation = GL.GetAttribLocation(MainProgramId, "vPos");
             AttrNormalLocation = GL.GetAttribLocation(MainProgramId, "vNormal");

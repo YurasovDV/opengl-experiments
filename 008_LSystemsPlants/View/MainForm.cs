@@ -49,11 +49,19 @@ namespace LSystemsPlants
         private void SetFormState(IGrammar grammar, GeneratorSettings settings)
         {
             tbAxiom.Text = grammar.GetAxiom();
-            tbRule0.Text = grammar.GetRule(0);
-            tbRule1.Text = grammar.GetRule(1);
-            tbRule2.Text = grammar.GetRule(2);
-            tbRule3.Text = grammar.GetRule(3);
-            tbRule4.Text = grammar.GetRule(4);
+
+            var textBoxes = new[] {
+                tbRule0 ,
+                tbRule1 ,
+                tbRule2 ,
+                tbRule3 ,
+                tbRule4 ,
+            };
+
+            for (int i = 0; i < Math.Min(textBoxes.Length, grammar.RulesCount); i++)
+            {
+                textBoxes[i].Text = grammar.GetRule(i);
+            }
 
             tbDefaultDelta.Text = settings.InitialDelta.ToString();
             tbDefaultStep.Text = settings.InitialStep.ToString();

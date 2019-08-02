@@ -6,7 +6,6 @@ namespace LSystemsPlants.Core.Graphics
 {
     class RenderEngine
     {
-
         private ShaderManager _shaders;
 
         public Matrix4 ModelView = Matrix4.Identity;
@@ -33,8 +32,6 @@ namespace LSystemsPlants.Core.Graphics
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
 
             _shaders = new ShaderManager();
-
-
         }
 
         public void Begin()
@@ -48,15 +45,15 @@ namespace LSystemsPlants.Core.Graphics
             GL.Flush();
         }
 
-        public void Render(SimpleModel tree, double delta)
+        public void Render(SimpleModel model, double delta)
         {
-            _shaders.BindBuffers(tree, new[] { ModelViewProjection });
+            _shaders.BindBuffers(model, new[] { ModelViewProjection });
 
             GL.EnableVertexAttribArray(_shaders.AttrVertexLocation);
             GL.EnableVertexAttribArray(_shaders.AttrColorLocation);
             GL.EnableVertexAttribArray(_shaders.AttrNormalLocation);
 
-            GL.DrawArrays(PrimitiveType.Lines, 0, tree.Vertices.Length);
+            GL.DrawArrays(PrimitiveType.Lines, 0, model.Vertices.Length);
         }
     }
 }

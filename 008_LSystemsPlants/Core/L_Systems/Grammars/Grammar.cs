@@ -46,9 +46,5 @@ namespace LSystemsPlants.Core.L_Systems
             RuleSet = ruleSet;
             Axiom = new[] { Symbol.FORWARD_DRAW };
         }
-
-
-
-       
     }
 }

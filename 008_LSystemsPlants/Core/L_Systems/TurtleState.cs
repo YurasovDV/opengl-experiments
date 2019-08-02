@@ -10,10 +10,10 @@ namespace LSystemsPlants.Core.L_Systems
 
         public float Angle { get; set; }
 
-        public TurtleState()
+        public TurtleState(float x = 0, float y = 0)
         {
             Angle = 0;
-            Coordinates = new float[] { 0, 0, Constants.DefaultZ };
+            Coordinates = new float[] { x, y, Constants.DefaultZ };
             RotationMatrix = Matrix4.Identity;
         }
     }

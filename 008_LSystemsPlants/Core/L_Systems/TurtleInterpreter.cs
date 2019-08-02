@@ -32,7 +32,6 @@ namespace LSystemsPlants.Core.L_Systems
             }
 
             model.Vertices = Vertices.ToArray();
-            var red = new Vector3(Vector3.UnitX);
             model.Colors = Colors.ToArray();
             model.Normals = new Vector3[] { new Vector3() };
             Vertices = null;
@@ -92,7 +91,7 @@ namespace LSystemsPlants.Core.L_Systems
 
             return new TurtleState()
             {
-                Coordinates = new[] 
+                Coordinates = new[]
                 {
                     transformed.X,
                     transformed.Y,
