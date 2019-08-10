@@ -11,7 +11,7 @@ namespace LSystemsPlants.Core.L_Systems
             {  typeof(SquareGrammar),new TurtleState(-400, -400)},
             {  typeof(TriangleGrammar),new TurtleState(-400, -400)},
             {  typeof(KochGrammar),new TurtleState(0, -400)},
-            {  typeof(SimplestGrammar),new TurtleState(0, -400)},
+            {  typeof(SimplestGrammar),new TurtleState(0, -500)},
             {  typeof(DragoGrammar),new TurtleState(0, 100)},
         };
 
