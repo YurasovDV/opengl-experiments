@@ -58,6 +58,11 @@ namespace LSystemsPlants
                 tbRule4 ,
             };
 
+            foreach (var tb in textBoxes)
+            {
+                tb.Text = string.Empty;
+            }
+
             for (int i = 0; i < Math.Min(textBoxes.Length, grammar.RulesCount); i++)
             {
                 textBoxes[i].Text = grammar.GetRule(i);
