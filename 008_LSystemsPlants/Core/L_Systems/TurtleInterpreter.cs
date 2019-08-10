@@ -57,11 +57,11 @@ namespace LSystemsPlants.Core.L_Systems
                     break;
 
                 case Symbol.TURN_LEFT:
-                    UpdateAngle(symbol.Delta);
+                    State = UpdateAngle(symbol.Delta);
                     break;
 
                 case Symbol.TURN_RIGHT:
-                    UpdateAngle(-symbol.Delta);
+                    State = UpdateAngle(-symbol.Delta);
                     break;
 
                 case Symbol.FORWARD_NO_DRAW:
@@ -102,17 +102,23 @@ namespace LSystemsPlants.Core.L_Systems
             };
         }
 
-        private void UpdateAngle(float delta)
+        private TurtleState UpdateAngle(float delta)
         {
-            State.Angle += delta;
+            var updatedState = new TurtleState()
+            {
+                Coordinates = State.Coordinates.ToArray(),
+                Angle = State.Angle + delta,
+            };
+
 
             // prevent accuracy loss
-            if (Math.Abs(State.Angle) > 10)
+            if (Math.Abs(updatedState.Angle) > 10)
             {
-                State.Angle = State.Angle % MathHelper.TwoPi;
+                updatedState.Angle %= MathHelper.TwoPi;
             }
 
-            State.RotationMatrix = Matrix4.CreateRotationZ(State.Angle);
+            updatedState.RotationMatrix = Matrix4.CreateRotationZ(updatedState.Angle);
+            return updatedState;
         }
 
     }
