@@ -28,59 +28,43 @@ namespace Glass.Graphics
 
         private FrameBufferDesc CreateFrameBufferWithCubeMap(int width, int height)
         {
+            GL.ActiveTexture(TextureUnit.Texture0);
             var cubeMapTextureForReflections = GL.GenTexture();
             GL.BindTexture(TextureTarget.TextureCubeMap, cubeMapTextureForReflections);
-
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)All.Linear);
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)All.Linear);
-
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
-
-            // GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureBorderColor, new float[] { 1, 1, 1, 1 });
 
             // FBO can't hold all of the textures so we will swap color attachment 0 at render stage
             for (int i = 0; i < 6; i++)
             {
                 GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.Rgba,
-                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
-
-
-               /* GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f,
-               width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.Float, IntPtr.Zero);*/
+                1024, 1024, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
             }
 
             int frameBufferObject = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferObject);
 
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, 
-                TextureTarget.TextureCubeMapPositiveX, cubeMapTextureForReflections, 0);
+            GL.FramebufferTextureLayer(FramebufferTarget.Framebuffer, 
+                FramebufferAttachment.ColorAttachment0,
+                cubeMapTextureForReflections, 
+                0,
+                0);
 
             var enabledBuffers = new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0 };
 
             GL.DrawBuffers(enabledBuffers.Length, enabledBuffers);
 
+
+            //var depthBuffer = GL.GenRenderbuffer();
+            //GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthBuffer);
+            //GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, width, height);
+            //GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
+            //GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, depthBuffer);
             GL.BindTexture(TextureTarget.TextureCubeMap, 0);
-
-            int depthBuffer = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, depthBuffer);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, width, height, 0, PixelFormat.DepthComponent, PixelType.UnsignedByte, IntPtr.Zero);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.ClampToBorder);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)All.ClampToBorder);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.ClampToBorder);
-
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, depthBuffer, 0);
-
-            //GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, depthBuffer, 0);
-
-
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) == FramebufferErrorCode.FramebufferComplete)
             {
                 return new FrameBufferDesc()
@@ -91,7 +75,7 @@ namespace Glass.Graphics
                 };
             }
 
-            throw new Exception("main frameBuffer fail " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
+            throw new Exception("main frameBuffer fail: " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
         }
 
         public void EnableReflectionsFrameBuffer()

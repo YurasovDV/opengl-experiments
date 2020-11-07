@@ -49,20 +49,13 @@ namespace ModelLoading
 
         public int LoadCubeMapForSkybox(string[] paths)
         {
-
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.GenTextures(1, out int texureId);
 
             for (int i = 0; i < paths.Length; i++)
             {
-                var path = paths[i];
-
-                var png = new Bitmap(path);
-
-                var width = png.Width;
-
-                var height = png.Height;
-
+                var png = new Bitmap(paths[i]);
+                int width = png.Width, height = png.Height;
                 var rect = new Rectangle(0, 0, width, height);
 
                 var bitmap_data = png.LockBits(rect,

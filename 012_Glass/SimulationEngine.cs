@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using Common;
 using Common.Input;
 using Common.Utils;
@@ -118,13 +116,11 @@ namespace Glass
                 Normals = Enumerable.Repeat(Vector3.UnitY, verticesCombined.Count).ToArray()
             };
 
-            _models = new List<SimpleModel>() { model };
-
-            SimpleModel sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
+            var sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
 
             sphere.Vertices.TranslateAll(new Vector3(0, 2, 0));
 
-            _models.Add(sphere);
+            _models = new List<SimpleModel>() { model, sphere };
         }
 
 
