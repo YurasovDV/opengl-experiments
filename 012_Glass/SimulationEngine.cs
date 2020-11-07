@@ -18,6 +18,7 @@ namespace Glass
         private GraphicsSystem _graphics;
 
         private List<SimpleModel> _models;
+        private List<SimpleModel> _reflectiveModels;
 
         public SimulationEngine(int width, int height, Stopwatch watch)
         {
@@ -109,18 +110,20 @@ namespace Glass
             verticesCombined.AddRange(verticesOx);
             verticesCombined.AddRange(verticesOZ);
 
-            var model = new SimpleModel()
+            var wafer = new SimpleModel()
             {
                 Vertices = verticesCombined.ToArray(),
                 Colors = colorsCombined,
                 Normals = Enumerable.Repeat(Vector3.UnitY, verticesCombined.Count).ToArray()
             };
 
+            _models = new List<SimpleModel>() { wafer };
+
             var sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
 
             sphere.Vertices.TranslateAll(new Vector3(0, 2, 0));
 
-            _models = new List<SimpleModel>() { model, sphere };
+            _reflectiveModels = new List<SimpleModel>() { sphere };
         }
 
 
@@ -138,7 +141,7 @@ namespace Glass
 
         private void FullRender()
         {
-            _graphics.Render(_models);
+            _graphics.Render(_models, _reflectiveModels);
         }
     }
 }

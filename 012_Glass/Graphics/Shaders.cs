@@ -36,7 +36,6 @@ namespace Glass.Graphics
             GL.CompileShader(vert);
             GL.AttachShader(textureLessProgId, vert);
 
-
             int statusCode;
             GL.GetShader(vert, ShaderParameter.CompileStatus, out statusCode);
             if (statusCode != 1)
@@ -77,8 +76,16 @@ namespace Glass.Graphics
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.verticesBuffer);
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.colorsBuffer);
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.normalsBuffer);
+        }
 
+        internal static void InitRenderWithEnvironmentMap()
+        {
+            
+        }
 
+        internal static void BindWithEnvironmentMap(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
+        {
+            BindTexturelessNoLight(model, modelView, modelViewProjection, projection);
         }
 
         internal static void BindTexturelessNoLight(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
@@ -104,8 +111,6 @@ namespace Glass.Graphics
                 model.Colors, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
-
-
         }
     }
 }

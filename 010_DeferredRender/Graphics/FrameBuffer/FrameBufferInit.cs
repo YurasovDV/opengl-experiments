@@ -98,7 +98,7 @@ namespace DeferredRender.Graphics.FrameBuffer
                 };
             }
 
-            throw new Exception("main frameBuffer fail " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
+            throw new Exception($"main frameBuffer fail: {GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer)}");
         }
 
         private FrameBufferDesc GetSecondFrameBuffer(int width, int height, int depthBuffer)
@@ -138,7 +138,7 @@ namespace DeferredRender.Graphics.FrameBuffer
                 };
             }
 
-            throw new Exception("second frameBuffer fail " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
+            throw new Exception("second frameBuffer fail: " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
         }
     }
 }

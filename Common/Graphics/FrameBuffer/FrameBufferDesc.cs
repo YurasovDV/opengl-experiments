@@ -54,7 +54,7 @@ namespace Common.Graphics.FrameBuffer
                 };
             }
 
-            throw new Exception("frameBuffer fail");
+            throw new Exception($"main frameBuffer fail: {GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer)}");
         }
 
         public static FrameBufferDesc GetFrameBuffer(int width, int height)

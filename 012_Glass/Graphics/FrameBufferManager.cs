@@ -23,7 +23,7 @@ namespace Glass.Graphics
             Width = width;
             Height = height;
 
-            ReflectionsMapFrameBufferDescriptor = CreateFrameBufferWithCubeMap(width, height);
+            ReflectionsMapFrameBufferDescriptor = CreateFrameBufferWithCubeMap(1024, 1024);
         }
 
         private FrameBufferDesc CreateFrameBufferWithCubeMap(int width, int height)
@@ -36,33 +36,37 @@ namespace Glass.Graphics
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)All.ClampToEdge);
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)All.ClampToEdge);
             GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)All.ClampToEdge);
-
-            // FBO can't hold all of the textures so we will swap color attachment 0 at render stage
-            for (int i = 0; i < 6; i++)
-            {
-                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.Rgba,
-                1024, 1024, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
-            }
-
             int frameBufferObject = GL.GenFramebuffer();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferObject);
 
-            GL.FramebufferTextureLayer(FramebufferTarget.Framebuffer, 
+            for (int i = 0; i < 6; i++)
+            {
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.Rgba,
+                width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
+
+                //GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i,
+                //                        TextureTarget.TextureCubeMapPositiveX + i, cubeMapTextureForReflections, 0);
+            }
+
+
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
                 FramebufferAttachment.ColorAttachment0,
-                cubeMapTextureForReflections, 
-                0,
+                TextureTarget.TextureCubeMapPositiveX,
+                cubeMapTextureForReflections,
                 0);
 
-            var enabledBuffers = new DrawBuffersEnum[] { DrawBuffersEnum.ColorAttachment0 };
+            var enabledBuffers = new DrawBuffersEnum[] 
+            { 
+                DrawBuffersEnum.ColorAttachment0,
+                //DrawBuffersEnum.ColorAttachment1,
+                //DrawBuffersEnum.ColorAttachment2,
+                //DrawBuffersEnum.ColorAttachment3,
+                //DrawBuffersEnum.ColorAttachment4,
+                //DrawBuffersEnum.ColorAttachment5,
+            };
 
             GL.DrawBuffers(enabledBuffers.Length, enabledBuffers);
 
-
-            //var depthBuffer = GL.GenRenderbuffer();
-            //GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthBuffer);
-            //GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent16, width, height);
-            //GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
-            //GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, depthBuffer);
             GL.BindTexture(TextureTarget.TextureCubeMap, 0);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) == FramebufferErrorCode.FramebufferComplete)
@@ -71,11 +75,10 @@ namespace Glass.Graphics
                 {
                     FrameBufferObject = frameBufferObject,
                     DiffuseTextureId = cubeMapTextureForReflections,
-                    // PositionTextureId = positionBuffer,
                 };
             }
 
-            throw new Exception("main frameBuffer fail: " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer));
+            throw new Exception($"main frameBuffer fail: {GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer)}");
         }
 
         public void EnableReflectionsFrameBuffer()

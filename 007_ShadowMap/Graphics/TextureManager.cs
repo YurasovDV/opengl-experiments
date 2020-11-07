@@ -65,7 +65,7 @@ namespace ShadowMap
                 };
             }
 
-            throw new Exception("frameBuffer fail");           
+            throw new Exception($"main frameBuffer fail: {GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer)}");
         }
 
         public FrameBufferDesc GetFrameBuffer(int width, int height)
