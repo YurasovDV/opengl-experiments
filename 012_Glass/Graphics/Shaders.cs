@@ -10,6 +10,7 @@ namespace Glass.Graphics
     class Shaders
     {
         private static TexturelessNoLight _texturelessNoLightDescriptor;
+        private static EnvironmentMapNoLight _environmentMapNoLightDescriptor;
 
         class TexturelessNoLight
         {
@@ -23,6 +24,22 @@ namespace Glass.Graphics
             public int verticesBuffer = 0;
             public int colorsBuffer = 0;
             public int normalsBuffer = 0;
+        }
+
+        class EnvironmentMapNoLight
+        {
+            public int cube_texture = 0;
+            public int uniformMVP = 0;
+            public int uniformMV = 0;
+            public int uniformProjection = 0;
+            public int ProgramId = 0;
+            public int AttribVerticesLocation = 0;
+            public int AttribNormalsLocation = 0;
+            public int AttribColorsLocation = 0;
+            public int verticesBuffer = 0;
+            public int colorsBuffer = 0;
+            public int normalsBuffer = 0;
+  
         }
 
         public static void InitTexturelessNoLight()
@@ -80,12 +97,83 @@ namespace Glass.Graphics
 
         internal static void InitRenderWithEnvironmentMap()
         {
-            
+           
+            var environmentMapProgramId = GL.CreateProgram();
+
+            var vert = GL.CreateShader(ShaderType.VertexShader);
+            var vertText = File.ReadAllText(@"Assets\Shaders\reflectiveNoLight.vert");
+            GL.ShaderSource(vert, vertText);
+            GL.CompileShader(vert);
+            GL.AttachShader(environmentMapProgramId, vert);
+
+            int statusCode;
+            GL.GetShader(vert, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(vert, out info);
+                throw new Exception("vertex shader: " + info);
+            }
+
+            var frag = GL.CreateShader(ShaderType.FragmentShader);
+            var fragText = File.ReadAllText(@"Assets\Shaders\reflectiveNoLight.frag");
+            GL.ShaderSource(frag, fragText);
+            GL.CompileShader(frag);
+            GL.AttachShader(environmentMapProgramId, frag);
+
+            GL.LinkProgram(environmentMapProgramId);
+
+            GL.GetShader(frag, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(frag, out info);
+                throw new Exception("fragment shader: " + info);
+            }
+
+            _environmentMapNoLightDescriptor = new EnvironmentMapNoLight();
+
+            _environmentMapNoLightDescriptor.cube_texture = GL.GetUniformLocation(environmentMapProgramId, "cube_texture");
+
+            _environmentMapNoLightDescriptor.uniformMVP = GL.GetUniformLocation(environmentMapProgramId, "uMVP");
+            _environmentMapNoLightDescriptor.uniformMV = GL.GetUniformLocation(environmentMapProgramId, "uMV");
+            _environmentMapNoLightDescriptor.uniformProjection = GL.GetUniformLocation(environmentMapProgramId, "uP");
+
+            _environmentMapNoLightDescriptor.ProgramId = environmentMapProgramId;
+
+            _environmentMapNoLightDescriptor.AttribVerticesLocation = GL.GetAttribLocation(environmentMapProgramId, "vPosition");
+            _environmentMapNoLightDescriptor.AttribNormalsLocation = GL.GetAttribLocation(environmentMapProgramId, "vNormal");
+            _environmentMapNoLightDescriptor.AttribColorsLocation = GL.GetAttribLocation(environmentMapProgramId, "vColor");
+
+            GL.GenBuffers(1, out _environmentMapNoLightDescriptor.verticesBuffer);
+            GL.GenBuffers(1, out _environmentMapNoLightDescriptor.colorsBuffer);
+            GL.GenBuffers(1, out _environmentMapNoLightDescriptor.normalsBuffer);
         }
 
-        internal static void BindWithEnvironmentMap(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
+        internal static void BindWithEnvironmentMap(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection, int cubeMapTextureId)
         {
-            BindTexturelessNoLight(model, modelView, modelViewProjection, projection);
+            var descriptor = _environmentMapNoLightDescriptor;
+
+            GL.UseProgram(descriptor.ProgramId);
+
+            GL.UniformMatrix4(descriptor.uniformMV, false, ref modelView);
+            GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
+            GL.UniformMatrix4(descriptor.uniformProjection, false, ref projection);
+            GL.Uniform1(descriptor.cube_texture, 0);
+
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes),
+                model.Vertices, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
+
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.colorsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Colors.Length * Vector3.SizeInBytes),
+                model.Colors, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
         }
 
         internal static void BindTexturelessNoLight(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)

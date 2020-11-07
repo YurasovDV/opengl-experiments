@@ -119,11 +119,16 @@ namespace Glass
 
             _models = new List<SimpleModel>() { wafer };
 
-            var sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
+            //var sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
+            //sphere.Vertices.TranslateAll(new Vector3(0, 2, 0));
+            //_reflectiveModels = new List<SimpleModel>() { sphere };
 
-            sphere.Vertices.TranslateAll(new Vector3(0, 2, 0));
-
-            _reflectiveModels = new List<SimpleModel>() { sphere };
+            var cube = new SimpleModel();
+            cube.Vertices = GeometryHelper.GetVerticesForCube(1);
+            cube.Vertices.TranslateAll(new Vector3(0, 3, 0));
+            cube.Colors = Enumerable.Repeat(Vector3.UnitX, cube.Vertices.Length).ToArray();
+            cube.Normals = GeometryHelper.GetNormals(cube.Vertices);
+            _reflectiveModels = new List<SimpleModel>() { cube };
         }
 
 

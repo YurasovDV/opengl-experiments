@@ -17,7 +17,11 @@ namespace Glass.Graphics
         public Matrix4 ModelView;
         public Matrix4 ModelViewProjection;
 
+
+         private OpenTK.Graphics.Color4 ClearColor = new OpenTK.Graphics.Color4(255, 165, 0, 1);
+
         public FrameBufferManager FrameBufferManager { get; set; }
+        public float Aspect { get; private set; }
 
         public GraphicsSystem(int width, int height, Player player)
         {
@@ -29,9 +33,8 @@ namespace Glass.Graphics
 
         private void InitGraphics()
         {
-            float aspect = (float)_width / _height;
+            Aspect = (float)_width / _height;
             GL.Viewport(0, 0, _width, _height);
-            Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, aspect, 0.1f, 200);
 
             Shaders.InitTexturelessNoLight();
             Shaders.InitRenderWithEnvironmentMap();
@@ -43,27 +46,74 @@ namespace Glass.Graphics
         {
             FrameBufferManager.EnableReflectionsFrameBuffer();
             var cubeMap = FrameBufferManager.ReflectionsMapFrameBufferDescriptor.DiffuseTextureId;
+            var reflective = reflectiveModels.Single();
+            var center = new Vector3(0, 3, 0);
 
-            for (int i = 0; i < 6; i++)
-            {
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
+                FramebufferAttachment.ColorAttachment0,
+                TextureTarget.TextureCubeMapPositiveX,
+                cubeMap,
+                0);
+            RebuildMatrices(center, center + Vector3.UnitX);
+            GL.ClearColor(ClearColor);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Render(models);
 
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, 
-                    TextureTarget.TextureCubeMapPositiveX + i, cubeMap, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
+                FramebufferAttachment.ColorAttachment0,
+                TextureTarget.TextureCubeMapNegativeX,
+                cubeMap,
+                0);
+            RebuildMatrices(center, center - Vector3.UnitX);
+            GL.ClearColor(ClearColor);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Render(models);
 
-                // камера на 90 градусов и выбрать сторону
-                RebuildMatrices();
 
-                GL.ClearColor(0, 0, 0.0f, 1);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
+                        FramebufferAttachment.ColorAttachment0,
+                        TextureTarget.TextureCubeMapPositiveY,
+                        cubeMap,
+                        0);
+            RebuildMatrices(center, center + Vector3.UnitY);
+            GL.ClearColor(ClearColor);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Render(models);
 
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
+                        FramebufferAttachment.ColorAttachment0,
+                        TextureTarget.TextureCubeMapNegativeY,
+                        cubeMap,
+                        0);
+            RebuildMatrices(center, center - Vector3.UnitY);
+            GL.ClearColor(ClearColor);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Render(models);
 
-                Render(models);
-            }
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
+                FramebufferAttachment.ColorAttachment0,
+                TextureTarget.TextureCubeMapPositiveZ,
+                cubeMap,
+                0);
+            RebuildMatrices(center, center + Vector3.UnitZ);
+            GL.ClearColor(ClearColor);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Render(models);
 
+
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
+                    FramebufferAttachment.ColorAttachment0,
+                    TextureTarget.TextureCubeMapNegativeZ,
+                    cubeMap,
+                    0);
+            RebuildMatrices(center, center - Vector3.UnitZ);
+            GL.ClearColor(ClearColor);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Render(models);
 
             FrameBufferManager.DisableReflectionsFrameBuffer();
 
-            DrawUsingFrameBuffer(models, reflectiveModels);
+            DrawUsingFrameBuffer(models, reflectiveModels, cubeMap);
 
             GL.Flush();
         }
@@ -87,34 +137,44 @@ namespace Glass.Graphics
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
         }
 
-        private void DrawUsingFrameBuffer(List<SimpleModel> models, List<SimpleModel> reflectiveModels)
+        private void DrawUsingFrameBuffer(List<SimpleModel> models, List<SimpleModel> reflectiveModels, int cubeMapTextureId)
         {
             RebuildMatrices();
 
-            GL.ClearColor(0, 0, 0.0f, 1);
+            GL.ClearColor(ClearColor);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             foreach (var model in models)
             {
                 Render(model);
-            }            
-            
+            }
+
             foreach (var model in reflectiveModels)
             {
-                RenderWithEnvMap(model);
+                RenderWithEnvMap(model, cubeMapTextureId);
             }
         }
 
-        private void RenderWithEnvMap(SimpleModel model)
+        private void RenderWithEnvMap(SimpleModel model, int cubeMapTextureId)
         {
-            Shaders.BindWithEnvironmentMap(model, ModelView, ModelViewProjection, Projection);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.TextureCubeMap, cubeMapTextureId);
+            Shaders.BindWithEnvironmentMap(model, ModelView, ModelViewProjection, Projection, cubeMapTextureId);
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
         }
 
         private void RebuildMatrices()
         {
             ModelView = Matrix4.LookAt(_player.Position, _player.Target, Vector3.UnitY);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(0.5f, Aspect, 0.1f, 200);
+            ModelViewProjection = Matrix4.Mult(ModelView, Projection);
+        }
+
+        private void RebuildMatrices(Vector3 pos, Vector3 target)
+        {
+            ModelView = Matrix4.LookAt(pos, target, Vector3.UnitY);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2, Aspect, 0.1f, 200);
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
         }
     }

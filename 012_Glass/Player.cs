@@ -53,6 +53,12 @@ namespace Glass
                 case InputSignal.LEFT:
                     StepXZ(StepLeft);
                     break;
+                case InputSignal.UP_PARALLEL:
+                    StepYZ(StepUp);
+                    break;
+                case InputSignal.DOWN_PARALLEL:
+                    StepYZ(StepDown);
+                    break;
                 default:
                     break;
             }
