@@ -4,6 +4,7 @@ using System.Linq;
 using Common;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
+// using GL4 = OpenTK.Graphics.OpenGL4.GL;
 
 namespace Glass.Graphics
 {
@@ -35,7 +36,7 @@ namespace Glass.Graphics
         {
             Aspect = (float)_width / _height;
             GL.Viewport(0, 0, _width, _height);
-
+            GL.Enable(EnableCap.DepthTest);
             Shaders.InitTexturelessNoLight();
             Shaders.InitRenderWithEnvironmentMap();
 
@@ -99,7 +100,6 @@ namespace Glass.Graphics
             GL.ClearColor(ClearColor);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Render(models);
-
 
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
                     FramebufferAttachment.ColorAttachment0,

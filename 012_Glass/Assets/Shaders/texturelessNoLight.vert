@@ -1,4 +1,4 @@
-#version 330
+#version 400
 
 uniform mat4 uMVP;
 uniform mat4 uMV;

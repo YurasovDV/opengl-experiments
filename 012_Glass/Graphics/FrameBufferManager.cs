@@ -84,12 +84,13 @@ namespace Glass.Graphics
         public void EnableReflectionsFrameBuffer()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, ReflectionsMapFrameBufferDescriptor.FrameBufferObject);
-            GL.Viewport(0, 0, Width, Height);
+            GL.Viewport(0, 0, 1024, 1024);
         }
 
         public void DisableReflectionsFrameBuffer()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            GL.Viewport(0, 0, Width, Height);
         }
     }
 }
