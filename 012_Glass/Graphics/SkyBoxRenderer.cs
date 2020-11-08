@@ -29,6 +29,7 @@ namespace Glass.Graphics
         {
             Shaders.BindSkybox(_verticesForCube, playerPos, modelView, projection, SkyBoxTextureId);
             GL.DrawArrays(PrimitiveType.Triangles, 0, _verticesForCube.Length);
+            GL.BindTexture(TextureTarget.TextureCubeMap, 0);
         }
 
 

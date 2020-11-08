@@ -52,28 +52,48 @@ namespace Glass.Graphics
             var reflective = reflectiveModels.Single();
             var center = new Vector3(0, 3, 0);
 
-            
-            Vector3[] deltas = new[] { Vector3.UnitX, Vector3.UnitX * -1, Vector3.UnitY, Vector3.UnitY * -1, Vector3.UnitZ, Vector3.UnitZ * -1 };
+
+            Vector3[] deltas = new[]
+            {
+                Vector3.UnitX,
+                Vector3.UnitX * -1,
+                Vector3.UnitY,
+                Vector3.UnitY * -1,
+                Vector3.UnitZ,
+                Vector3.UnitZ * -1
+            };
+
+            Vector3[] normals = new[]
+            {
+                Vector3.UnitY,
+                 Vector3.UnitY,
+                Vector3.UnitX,
+                Vector3.UnitX,
+             Vector3.UnitY,
+                Vector3.UnitY,
+            };
             for (int i = 0; i < 6; i++)
             {
-                GL.ClearColor(ClearColor);
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-                RebuildMatrices(center, center + deltas[i]);
-
-                GL.Disable(EnableCap.DepthTest);
-                _skybox.Render(center, ModelView, Projection);
-                GL.Enable(EnableCap.DepthTest);
-
-                GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.TextureCubeMap, cubeMap);
+                //GL.ActiveTexture(TextureUnit.Texture0);
+                //GL.BindTexture(TextureTarget.TextureCubeMap, cubeMap);
 
                 GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
                         FramebufferAttachment.ColorAttachment0,
                         TextureTarget.TextureCubeMapPositiveX + i,
                         cubeMap,
                         0);
-                
+
+                GL.ClearColor(ClearColor);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+                RebuildMatrices(center, center + deltas[i], normals[i]);
+
+                GL.Disable(EnableCap.DepthTest);
+                _skybox.Render(center, ModelView, Projection);
+                GL.Enable(EnableCap.DepthTest);
+
+
+
                 Render(models);
             }
 
@@ -128,9 +148,7 @@ namespace Glass.Graphics
 
         private void RenderWithEnvMap(SimpleModel model, int cubeMapTextureId)
         {
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.TextureCubeMap, cubeMapTextureId);
-            Shaders.BindWithEnvironmentMap(model, _player.Position, ModelView, ModelViewProjection, Projection);
+            Shaders.BindWithEnvironmentMap(model, _player.Position, cubeMapTextureId, ModelView, ModelViewProjection, Projection);
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
         }
 
@@ -141,10 +159,10 @@ namespace Glass.Graphics
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
         }
 
-        private void RebuildMatrices(Vector3 pos, Vector3 target)
+        private void RebuildMatrices(Vector3 pos, Vector3 target, Vector3 up)
         {
-            ModelView = Matrix4.LookAt(pos, target, Vector3.UnitY);
-            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2, Aspect, 0.1f, 200);
+            ModelView = Matrix4.LookAt(pos, target, up);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2, Aspect, 0.1f, 100);
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
         }
     }

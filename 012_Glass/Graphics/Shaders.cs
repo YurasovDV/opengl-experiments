@@ -192,11 +192,14 @@ namespace Glass.Graphics
             GL.GenBuffers(1, out _environmentMapNoLightDescriptor.normalsBuffer);
         }
 
-        internal static void BindWithEnvironmentMap(SimpleModel model, Vector3 pos, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
+        internal static void BindWithEnvironmentMap(SimpleModel model, Vector3 pos, int cubeMapTextureId, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
         {
             var descriptor = _environmentMapNoLightDescriptor;
 
             GL.UseProgram(descriptor.ProgramId);
+
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.TextureCubeMap, cubeMapTextureId);
 
             GL.UniformMatrix4(descriptor.uniformMV, false, ref modelView);
             GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);

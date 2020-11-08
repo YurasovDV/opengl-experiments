@@ -8,12 +8,11 @@ uniform samplerCube cube_texture;
 uniform mat4 uMV;
 
 out vec4 outputColor;
-varying vec4 color;
+in vec4 color;
 
 void main()
 {
     vec3 I = normalize(pos_eye - cameraPos);
     vec3 reflected = reflect(I, normalize(n_eye));
     outputColor = vec4(texture(cube_texture, normalize(reflected)).rgb, 1.0);
-    //outputColor = color;
 }

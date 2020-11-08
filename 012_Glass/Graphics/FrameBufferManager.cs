@@ -44,9 +44,6 @@ namespace Glass.Graphics
             {
                 GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i, 0, PixelInternalFormat.Rgba,
                 width, height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
-
-                //GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i,
-                //                        TextureTarget.TextureCubeMapPositiveX + i, cubeMapTextureForReflections, 0);
             }
 
 
@@ -59,11 +56,6 @@ namespace Glass.Graphics
             var enabledBuffers = new DrawBuffersEnum[] 
             { 
                 DrawBuffersEnum.ColorAttachment0,
-                //DrawBuffersEnum.ColorAttachment1,
-                //DrawBuffersEnum.ColorAttachment2,
-                //DrawBuffersEnum.ColorAttachment3,
-                //DrawBuffersEnum.ColorAttachment4,
-                //DrawBuffersEnum.ColorAttachment5,
             };
 
             GL.DrawBuffers(enabledBuffers.Length, enabledBuffers);
