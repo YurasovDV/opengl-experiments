@@ -16,8 +16,8 @@ namespace Glass.Graphics
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public const int FrameBufWidth = 2048;
-        public const int FrameBufHeight = 2048;
+        public const int FrameBufWidth = 1024;
+        public const int FrameBufHeight = 1024;
 
         public FrameBufferManager(int width, int height)
         {
