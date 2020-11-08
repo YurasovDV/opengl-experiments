@@ -16,14 +16,15 @@ namespace Glass.Graphics
         public int Width { get; set; }
         public int Height { get; set; }
 
-        // public int FrameBufferProgramId { get; private set; }
+        public const int FrameBufWidth = 2048;
+        public const int FrameBufHeight = 2048;
 
         public FrameBufferManager(int width, int height)
         {
             Width = width;
             Height = height;
 
-            ReflectionsMapFrameBufferDescriptor = CreateFrameBufferWithCubeMap(1024, 1024);
+            ReflectionsMapFrameBufferDescriptor = CreateFrameBufferWithCubeMap(FrameBufWidth, FrameBufHeight);
         }
 
         private FrameBufferDesc CreateFrameBufferWithCubeMap(int width, int height)
@@ -84,7 +85,7 @@ namespace Glass.Graphics
         public void EnableReflectionsFrameBuffer()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, ReflectionsMapFrameBufferDescriptor.FrameBufferObject);
-            GL.Viewport(0, 0, 1024, 1024);
+            GL.Viewport(0, 0, FrameBufWidth, FrameBufHeight);
         }
 
         public void DisableReflectionsFrameBuffer()
