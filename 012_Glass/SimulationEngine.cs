@@ -20,6 +20,14 @@ namespace Glass
         private List<SimpleModel> _models;
         private List<SimpleModel> _reflectiveModels;
 
+        float angle1 = 0;
+        float angle2 = 0;
+        float angle3 = 0;
+
+        Vector3 defaultVec1 = new Vector3(-30, 10, 0);
+        Vector3 defaultVec2 = new Vector3(-30, 10, 30);
+        Vector3 defaultVec3 = new Vector3(30, 10, 30);
+
         public SimulationEngine(int width, int height, Stopwatch watch)
         {
             Watch = watch;
@@ -34,7 +42,6 @@ namespace Glass
             _keyHandler.KeyPress += OnKeyPress;
 
             InitObjects();
-
         }
 
         private void InitObjects()
@@ -119,7 +126,75 @@ namespace Glass
                 Normals = Enumerable.Repeat(Vector3.UnitY, verticesCombined.Count).ToArray()
             };
 
-            _models = new List<SimpleModel>() { wafer };
+
+            var cubeNormals = new[]
+            {
+                 Enumerable.Repeat(Vector3.UnitX, 6),
+                 Enumerable.Repeat(Vector3.UnitX, 6),
+                 Enumerable.Repeat(Vector3.UnitX, 6),
+                 Enumerable.Repeat(Vector3.UnitX, 6),
+                 Enumerable.Repeat(Vector3.UnitX, 6),
+                 Enumerable.Repeat(Vector3.UnitX, 6)
+            }
+            .SelectMany(a => a.ToArray())
+            .ToArray();
+
+
+            var nonReflectiveCube = new SimpleModel();
+            var nonReflectiveCube2 = new SimpleModel();
+            var nonReflectiveCube3 = new SimpleModel();
+
+            nonReflectiveCube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
+            nonReflectiveCube2.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
+            nonReflectiveCube3.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
+            nonReflectiveCube.Vertices.TranslateAll(defaultVec1);
+            nonReflectiveCube2.Vertices.TranslateAll(defaultVec2);
+            nonReflectiveCube3.Vertices.TranslateAll(defaultVec3);
+
+            nonReflectiveCube.Normals = cubeNormals;
+            nonReflectiveCube2.Normals = cubeNormals;
+            nonReflectiveCube3.Normals = cubeNormals;
+
+            nonReflectiveCube.Colors =
+               new[]
+               {
+                    Enumerable.Repeat(Vector3.UnitX, 6),
+                    Enumerable.Repeat(Vector3.UnitX* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitY, 6),
+                    Enumerable.Repeat(Vector3.UnitY* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitZ, 6),
+                    Enumerable.Repeat(Vector3.UnitZ * 0.5f, 6)
+               }
+               .SelectMany(a => a.ToArray())
+               .ToArray();            
+            
+            nonReflectiveCube2.Colors =
+               new[]
+               {
+                    Enumerable.Repeat(Vector3.UnitX, 6),
+                    Enumerable.Repeat(Vector3.UnitX* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitY, 6),
+                    Enumerable.Repeat(Vector3.UnitY* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitZ, 6),
+                    Enumerable.Repeat(Vector3.UnitZ * 0.5f, 6)
+               }
+               .SelectMany(a => a.ToArray())
+               .ToArray();            
+            
+            nonReflectiveCube3.Colors =
+               new[]
+               {
+                    Enumerable.Repeat(Vector3.UnitX, 6),
+                    Enumerable.Repeat(Vector3.UnitX* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitY, 6),
+                    Enumerable.Repeat(Vector3.UnitY* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitZ, 6),
+                    Enumerable.Repeat(Vector3.UnitZ * 0.5f, 6)
+               }
+               .SelectMany(a => a.ToArray())
+               .ToArray();
+
+            _models = new List<SimpleModel>() { nonReflectiveCube,/* nonReflectiveCube2, nonReflectiveCube3,  /*, wafer*/ };
 
             //var sphere = new SimpleModel(@"Assets\simpleSphere.obj", null);
             //sphere.Vertices.TranslateAll(new Vector3(0, 2, 0));
@@ -128,7 +203,6 @@ namespace Glass
             var cube = new SimpleModel();
             cube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(5);
             cube.Vertices.TranslateAll(new Vector3(0, 10, 0));
-            // cube.Colors = Enumerable.Repeat(Vector3.UnitX, cube.Vertices.Length).ToArray();
             cube.Colors =
                new[]
                {
@@ -141,18 +215,7 @@ namespace Glass
                }
                .SelectMany(a => a.ToArray())
                .ToArray();
-            cube.Normals =
-                new[]
-               {
-                    Enumerable.Repeat(Vector3.UnitX, 6),
-                    Enumerable.Repeat(-Vector3.UnitX, 6),
-                    Enumerable.Repeat(Vector3.UnitY, 6),
-                    Enumerable.Repeat(-Vector3.UnitY, 6),
-                    Enumerable.Repeat(Vector3.UnitZ, 6),
-                    Enumerable.Repeat(-Vector3.UnitZ, 6)
-               }
-               .SelectMany(a => a.ToArray())
-               .ToArray();
+            cube.Normals = cubeNormals;
 
             _reflectiveModels = new List<SimpleModel>() { cube };
         }
@@ -167,7 +230,28 @@ namespace Glass
         {
             _keyHandler.CheckKeys();
             _player.HandleMouseMove(dxdy);
+            UpdatePositions();
             FullRender();
+        }
+
+        private void UpdatePositions()
+        {
+            angle1 += MathHelper.TwoPi / 270.0f;
+            //angle2 += MathHelper.TwoPi / 270.0f;
+            //angle3 += MathHelper.TwoPi / 270.0f;
+
+            _models[0].Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
+            var rot = Matrix4.CreateRotationY(angle1);
+            _models[0].Vertices.TranslateAll(Vector3.TransformVector(defaultVec1, rot));            
+            
+            
+            //_models[1].Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
+            //rot = Matrix4.CreateRotationY(angle2);
+            //_models[1].Vertices.TranslateAll(Vector3.TransformVector(defaultVec2, rot));            
+            
+            //_models[2].Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
+            //rot = Matrix4.CreateRotationY(angle3);
+            //_models[2].Vertices.TranslateAll(Vector3.TransformVector(defaultVec3, rot));
         }
 
         private void FullRender()
