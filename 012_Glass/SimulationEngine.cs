@@ -27,8 +27,8 @@ namespace Glass
 
             _player.Position = new Vector3(0, 0.5f, 0);
             _player.Target = new Vector3(100, 0.5f, 0);
-
-            _graphics = new GraphicsSystem(width, height, _player);
+            var mirrorCenter = new Vector3(0, 10, 0);
+            _graphics = new GraphicsSystem(width, height, _player, mirrorCenter);
 
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += OnKeyPress;
@@ -127,7 +127,7 @@ namespace Glass
 
             var cube = new SimpleModel();
             cube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
-            cube.Vertices.TranslateAll(new Vector3(0, 3, 0));
+            cube.Vertices.TranslateAll(new Vector3(0, 10, 0));
             // cube.Colors = Enumerable.Repeat(Vector3.UnitX, cube.Vertices.Length).ToArray();
             cube.Colors =
                new[]

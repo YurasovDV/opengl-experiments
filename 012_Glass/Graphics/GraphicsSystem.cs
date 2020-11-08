@@ -18,17 +18,19 @@ namespace Glass.Graphics
         public Matrix4 ModelView;
         public Matrix4 ModelViewProjection;
 
+        Vector3 _center;
 
         private OpenTK.Graphics.Color4 ClearColor = new OpenTK.Graphics.Color4(255, 165, 0, 1);
 
         public FrameBufferManager FrameBufferManager { get; set; }
         public float Aspect { get; private set; }
         SkyBoxRenderer _skybox;
-        public GraphicsSystem(int width, int height, Player player)
+        public GraphicsSystem(int width, int height, Player player, Vector3 mirrorCenter)
         {
             _width = width;
             _height = height;
             _player = player;
+            _center = mirrorCenter;
             InitGraphics();
         }
 
@@ -50,7 +52,6 @@ namespace Glass.Graphics
             FrameBufferManager.EnableReflectionsFrameBuffer();
             var cubeMap = FrameBufferManager.ReflectionsMapFrameBufferDescriptor.DiffuseTextureId;
             var reflective = reflectiveModels.Single();
-            var center = new Vector3(0, 3, 0);
 
 
             Vector3[] deltas = new[]
@@ -74,9 +75,6 @@ namespace Glass.Graphics
             };
             for (int i = 0; i < 6; i++)
             {
-                //GL.ActiveTexture(TextureUnit.Texture0);
-                //GL.BindTexture(TextureTarget.TextureCubeMap, cubeMap);
-
                 GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
                         FramebufferAttachment.ColorAttachment0,
                         TextureTarget.TextureCubeMapPositiveX + i,
@@ -86,13 +84,11 @@ namespace Glass.Graphics
                 GL.ClearColor(ClearColor);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                RebuildMatrices(center, center + deltas[i], normals[i]);
+                RebuildMatrices(_center, _center + deltas[i], normals[i]);
 
                 GL.Disable(EnableCap.DepthTest);
-                _skybox.Render(center, ModelView, Projection);
+                _skybox.Render(_center, ModelView, Projection);
                 GL.Enable(EnableCap.DepthTest);
-
-
 
                 Render(models);
             }

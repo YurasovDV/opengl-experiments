@@ -14,5 +14,5 @@ void main()
 {
     vec3 I = normalize(pos_eye - cameraPos);
     vec3 reflected = reflect(I, normalize(n_eye));
-    outputColor = vec4(texture(cube_texture, normalize(reflected)).rgb, 1.0);
+    outputColor = vec4(texture(cube_texture, reflected).rgb, 1.0);
 }
