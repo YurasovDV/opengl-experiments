@@ -67,10 +67,10 @@ namespace Glass.Graphics
             Vector3[] normals = new[]
             {
                 Vector3.UnitY,
-                 Vector3.UnitY,
+                Vector3.UnitY,
                 Vector3.UnitX,
                 Vector3.UnitX,
-             Vector3.UnitY,
+                Vector3.UnitY,
                 Vector3.UnitY,
             };
             for (int i = 0; i < 6; i++)
@@ -158,7 +158,7 @@ namespace Glass.Graphics
         private void RebuildMatrices(Vector3 pos, Vector3 target, Vector3 up)
         {
             ModelView = Matrix4.LookAt(pos, target, up);
-            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2, Aspect, 0.1f, 100);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2, Aspect, 0.1f, 200);
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
         }
     }

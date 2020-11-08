@@ -126,7 +126,7 @@ namespace Glass
             //_reflectiveModels = new List<SimpleModel>() { sphere };
 
             var cube = new SimpleModel();
-            cube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
+            cube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(5);
             cube.Vertices.TranslateAll(new Vector3(0, 10, 0));
             // cube.Colors = Enumerable.Repeat(Vector3.UnitX, cube.Vertices.Length).ToArray();
             cube.Colors =
