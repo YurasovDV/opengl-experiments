@@ -64,15 +64,17 @@ namespace Glass
                 new Vector3(-waferSize, 0.2f, axisWidth),
             };
 
+            const float ozLift = 0.25f;
+
             var verticesOZ = new[]
             {
-                new Vector3(axisWidth, 0.2f, -waferSize),
-                new Vector3(-axisWidth, 0.2f, waferSize),
-                new Vector3(-axisWidth, 0.2f, -waferSize),
+                new Vector3(axisWidth, ozLift, -waferSize),
+                new Vector3(-axisWidth, ozLift, waferSize),
+                new Vector3(-axisWidth, ozLift, -waferSize),
 
-                new Vector3(axisWidth, 0.2f, -waferSize),
-                new Vector3(axisWidth, 0.2f, waferSize),
-                new Vector3(-axisWidth, 0.2f, waferSize),
+                new Vector3(axisWidth, ozLift, -waferSize),
+                new Vector3(axisWidth, ozLift, waferSize),
+                new Vector3(-axisWidth, ozLift, waferSize),
             };
 
             var colorsCombined = new[]

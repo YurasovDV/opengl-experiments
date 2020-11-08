@@ -58,6 +58,7 @@
     <Compile Include="Graphics\FrameBufferManager.cs" />
     <Compile Include="Graphics\GraphicsSystem.cs" />
     <Compile Include="Graphics\Shaders.cs" />
+    <Compile Include="Graphics\SkyBoxRenderer.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
@@ -76,6 +77,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Shaders\reflectiveNoLight.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Shaders\skybox.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Shaders\skybox.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\simpleSphere.obj">

@@ -13,7 +13,7 @@ namespace Glass
         public Stopwatch Watch { get; private set; }
         public long Start { get; private set; }
 
-        public MainForm() : base(1920, 900, GraphicsMode.Default, "Fresnel", GameWindowFlags.Default,
+        public MainForm() : base(1920, 900, GraphicsMode.Default, "Dynamic environment mapping", GameWindowFlags.Default,
             DisplayDevice.Default, major: 4, minor: 0, flags: GraphicsContextFlags.ForwardCompatible)
         {
             CursorVisible = false;

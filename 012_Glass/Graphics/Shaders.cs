@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using Common;
 using OpenTK;
@@ -11,6 +11,7 @@ namespace Glass.Graphics
     {
         private static TexturelessNoLight _texturelessNoLightDescriptor;
         private static EnvironmentMapNoLight _environmentMapNoLightDescriptor;
+        private static Skybox _skybox;
 
         class TexturelessNoLight
         {
@@ -40,6 +41,18 @@ namespace Glass.Graphics
             public int colorsBuffer = 0;
             public int normalsBuffer = 0;
   
+        }
+
+        class Skybox
+        {
+            public int verticesBuffer;
+
+            public int uniformMV;
+            public int uniformProjection;
+
+            public int ProgramId { get; set; }
+            public int TextureSampler { get; set; }
+            public int AttribVerticesLocation { get; set; }
         }
 
         public static void InitTexturelessNoLight()
@@ -94,6 +107,32 @@ namespace Glass.Graphics
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.colorsBuffer);
             GL.GenBuffers(1, out _texturelessNoLightDescriptor.normalsBuffer);
         }
+
+        internal static void BindTexturelessNoLight(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
+        {
+            var descriptor = _texturelessNoLightDescriptor;
+
+            GL.UseProgram(descriptor.ProgramId);
+
+            GL.UniformMatrix4(descriptor.uniformMV, false, ref modelView);
+            GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
+            GL.UniformMatrix4(descriptor.uniformProjection, false, ref projection);
+
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes),
+                model.Vertices, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
+
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.colorsBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Colors.Length * Vector3.SizeInBytes),
+                model.Colors, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
+        }
+
 
         internal static void InitRenderWithEnvironmentMap()
         {
@@ -176,29 +215,77 @@ namespace Glass.Graphics
             GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
         }
 
-        internal static void BindTexturelessNoLight(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
+
+        public static void InitSkybox()
         {
-            var descriptor = _texturelessNoLightDescriptor;
+            var result = new Skybox();
 
+            var ProgramIdForSky = GL.CreateProgram();
+
+            var vert = GL.CreateShader(ShaderType.VertexShader);
+            var vertText = File.ReadAllText(@"Assets\Shaders\skybox.vert");
+            GL.ShaderSource(vert, vertText);
+            GL.CompileShader(vert);
+            GL.AttachShader(ProgramIdForSky, vert);
+
+            int statusCode;
+            GL.GetShader(vert, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(vert, out info);
+                throw new Exception("vertex shader: " + info);
+            }
+
+            var frag = GL.CreateShader(ShaderType.FragmentShader);
+            var fragText = File.ReadAllText(@"Assets\Shaders\skybox.frag");
+            GL.ShaderSource(frag, fragText);
+            GL.CompileShader(frag);
+            GL.AttachShader(ProgramIdForSky, frag);
+
+            GL.GetShader(frag, ShaderParameter.CompileStatus, out statusCode);
+            if (statusCode != 1)
+            {
+                string info;
+                GL.GetShaderInfoLog(frag, out info);
+                throw new Exception("fragment shader: " + info);
+            }
+
+            GL.LinkProgram(ProgramIdForSky);
+            result.ProgramId = ProgramIdForSky;
+
+            GL.GenBuffers(1, out result.verticesBuffer);
+
+            result.TextureSampler = GL.GetUniformLocation(ProgramIdForSky, "cubemap");
+            result.AttribVerticesLocation = GL.GetAttribLocation(ProgramIdForSky, "position");
+            result.uniformMV = GL.GetUniformLocation(ProgramIdForSky, "view");
+            result.uniformProjection = GL.GetUniformLocation(ProgramIdForSky, "projection");
+
+            _skybox = result;
+        }
+
+        internal static void BindSkybox(Vector3[] verticesForCube, Vector3 playerPos, Matrix4 modelView, Matrix4 projection, int skyBoxTextureId)
+        {
+            var descriptor = _skybox;
             GL.UseProgram(descriptor.ProgramId);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.Uniform1(descriptor.TextureSampler, 0);
 
-            GL.UniformMatrix4(descriptor.uniformMV, false, ref modelView);
-            GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
-            GL.UniformMatrix4(descriptor.uniformProjection, false, ref projection);
-
+            GL.BindTexture(TextureTarget.TextureCubeMap, skyBoxTextureId);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes),
-                model.Vertices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(verticesForCube.Length * Vector3.SizeInBytes), verticesForCube, BufferUsageHint.DynamicDraw);
             GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
+
+            GL.BindVertexArray(descriptor.AttribVerticesLocation);
             GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
 
+            var translation = Matrix4.CreateTranslation(playerPos.X, playerPos.Y, playerPos.Z);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.colorsBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Colors.Length * Vector3.SizeInBytes),
-                model.Colors, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(descriptor.AttribColorsLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(descriptor.AttribColorsLocation);
+            var view = translation * modelView;
+
+            GL.UniformMatrix4(descriptor.uniformMV, false, ref view);
+            GL.UniformMatrix4(descriptor.uniformProjection, false, ref projection);
         }
     }
 }

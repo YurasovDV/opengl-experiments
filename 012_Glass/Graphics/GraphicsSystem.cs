@@ -19,11 +19,11 @@ namespace Glass.Graphics
         public Matrix4 ModelViewProjection;
 
 
-         private OpenTK.Graphics.Color4 ClearColor = new OpenTK.Graphics.Color4(255, 165, 0, 1);
+        private OpenTK.Graphics.Color4 ClearColor = new OpenTK.Graphics.Color4(255, 165, 0, 1);
 
         public FrameBufferManager FrameBufferManager { get; set; }
         public float Aspect { get; private set; }
-
+        SkyBoxRenderer _skybox;
         public GraphicsSystem(int width, int height, Player player)
         {
             _width = width;
@@ -39,8 +39,10 @@ namespace Glass.Graphics
             GL.Enable(EnableCap.DepthTest);
             Shaders.InitTexturelessNoLight();
             Shaders.InitRenderWithEnvironmentMap();
+            Shaders.InitSkybox();
 
             FrameBufferManager = new FrameBufferManager(_width, _height);
+            _skybox = new SkyBoxRenderer(50);
         }
 
         public void Render(List<SimpleModel> models, List<SimpleModel> reflectiveModels)
@@ -50,66 +52,25 @@ namespace Glass.Graphics
             var reflective = reflectiveModels.Single();
             var center = new Vector3(0, 3, 0);
 
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
-                FramebufferAttachment.ColorAttachment0,
-                TextureTarget.TextureCubeMapPositiveX,
-                cubeMap,
-                0);
-            RebuildMatrices(center, center + Vector3.UnitX);
-            GL.ClearColor(ClearColor);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Render(models);
-
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
-                FramebufferAttachment.ColorAttachment0,
-                TextureTarget.TextureCubeMapNegativeX,
-                cubeMap,
-                0);
-            RebuildMatrices(center, center - Vector3.UnitX);
-            GL.ClearColor(ClearColor);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Render(models);
+            
+            Vector3[] deltas = new[] { Vector3.UnitX, -Vector3.UnitX, Vector3.UnitY, -Vector3.UnitY, Vector3.UnitZ, -Vector3.UnitZ };
+            for (int i = 0; i < 6; i++)
+            {
+                GL.Disable(EnableCap.DepthTest);
+                _skybox.Render(_player.Position, ModelView, Projection);
+                GL.Enable(EnableCap.DepthTest);
 
 
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
                         FramebufferAttachment.ColorAttachment0,
-                        TextureTarget.TextureCubeMapPositiveY,
+                        TextureTarget.TextureCubeMapPositiveX + i,
                         cubeMap,
                         0);
-            RebuildMatrices(center, center + Vector3.UnitY);
-            GL.ClearColor(ClearColor);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Render(models);
-
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
-                        FramebufferAttachment.ColorAttachment0,
-                        TextureTarget.TextureCubeMapNegativeY,
-                        cubeMap,
-                        0);
-            RebuildMatrices(center, center - Vector3.UnitY);
-            GL.ClearColor(ClearColor);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Render(models);
-
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
-                FramebufferAttachment.ColorAttachment0,
-                TextureTarget.TextureCubeMapPositiveZ,
-                cubeMap,
-                0);
-            RebuildMatrices(center, center + Vector3.UnitZ);
-            GL.ClearColor(ClearColor);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Render(models);
-
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
-                    FramebufferAttachment.ColorAttachment0,
-                    TextureTarget.TextureCubeMapNegativeZ,
-                    cubeMap,
-                    0);
-            RebuildMatrices(center, center - Vector3.UnitZ);
-            GL.ClearColor(ClearColor);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Render(models);
+                RebuildMatrices(center, center + deltas[i]);
+                GL.ClearColor(ClearColor);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                Render(models);
+            }
 
             FrameBufferManager.DisableReflectionsFrameBuffer();
 
@@ -144,6 +105,10 @@ namespace Glass.Graphics
             GL.ClearColor(ClearColor);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.Disable(EnableCap.DepthTest);
+            _skybox.Render(_player.Position, ModelView, Projection);
+            GL.Enable(EnableCap.DepthTest);
 
             foreach (var model in models)
             {

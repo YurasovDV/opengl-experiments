@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
+using Common;
 using Common.Utils;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using SimpleShooter.Graphics.ShaderLoad;
-using SimpleShooter.PlayerControl;
 
-namespace SimpleShooter.Graphics
+namespace Glass.Graphics
 {
     class SkyBoxRenderer
     {
@@ -24,47 +25,23 @@ namespace SimpleShooter.Graphics
         }
 
 
-        public void Render(IShooterPlayer player, Camera camera)
+        public void Render(Vector3 playerPos, Matrix4 modelView, Matrix4 projection)
         {
-            ShaderProgramDescriptor descriptor;
-            ShaderLoader.TryGet(ShadersNeeded.SkyBox, out descriptor);
-
-            GL.UseProgram(descriptor.ProgramId);
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.Uniform1(descriptor.TextureSampler, 0);
-
-            GL.BindTexture(TextureTarget.TextureCubeMap, SkyBoxTextureId);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(_verticesForCube.Length * Vector3.SizeInBytes), _verticesForCube, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(descriptor.AttribVerticesLocation, 3, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.BindVertexArray(descriptor.AttribVerticesLocation);
-            GL.EnableVertexAttribArray(descriptor.AttribVerticesLocation);
-
-            var translation = Matrix4.CreateTranslation(player.Position.X, player.Position.Y, player.Position.Z);
-
-            var view = translation * camera.ModelView;
-
-            GL.UniformMatrix4(descriptor.uniformMV, false, ref view);
-            GL.UniformMatrix4(descriptor.uniformProjection, false, ref camera.Projection);
-
+            Shaders.BindSkybox(_verticesForCube, playerPos, modelView, projection, SkyBoxTextureId);
             GL.DrawArrays(PrimitiveType.Triangles, 0, _verticesForCube.Length);
         }
 
 
         private int LoadTextures(float size)
         {
-            var textureId = 0;
             GL.ActiveTexture(TextureUnit.Texture0);
-            textureId = GL.GenTexture();
+            var textureId = GL.GenTexture();
 
             GL.BindTexture(TextureTarget.TextureCubeMap, textureId);
 
-
             for (int i = 0; i < 6; i++)
             {
-                var png = new Bitmap(@"Content\Textures\Skybox\" + skyboxPaths[i]);
+                var png = new Bitmap(@"Assets\Textures\Skybox\" + skyboxPaths[i]);
                 var width = png.Width;
                 var height = png.Height;
 
