@@ -39,7 +39,10 @@ namespace Common.Utils
             }
         }
 
-        public static Vector3[] GetVerticesForCube(float size)
+        /// <summary>
+        /// Skybox vertices, order is not suitable for all cubes
+        /// </summary>
+        public static Vector3[] GetVerticesForSkyBoxCube(float size)
         {
             return new[]
             {
@@ -90,7 +93,7 @@ namespace Common.Utils
             };
         }
 
-        public static Vector3[] GetNormals(this Vector3[] points)
+        public static Vector3[] GetNormalsForSkybox(this Vector3[] points)
         {
             var normals = new Vector3[points.Length];
             var tempVertices = new Vector3[3];
@@ -112,11 +115,74 @@ namespace Common.Utils
             return normals;
         }
 
-        public static Vector3 CalcNormalForTriangle(Vector3[] vrt)
+        private static Vector3 CalcNormalForTriangle(Vector3[] vrt)
         {
             var n = Vector3.Cross(vrt[0] - vrt[2], vrt[0] - vrt[1]);
             n.Normalize();
             return n;
+        }
+
+        /// <summary>
+        ///  TextureCubeMapPositiveX
+        ///  TextureCubeMapNegativeX
+        ///  TextureCubeMapPositiveY
+        ///  TextureCubeMapNegativeY
+        ///  TextureCubeMapPositiveZ
+        ///  TextureCubeMapNegativeZ
+        /// </summary>
+
+        public static Vector3[] GetVerticesForOrdinaryCube(float size)
+        {
+            return new[]
+            {
+                // TextureCubeMapPositiveX
+                new Vector3(size, -size, -size),
+                new Vector3(size, -size, size),
+                new Vector3(size, size, size),
+                new Vector3(size, size, size),
+                new Vector3(size, -size, -size),
+                new Vector3(size, size, -size),
+
+                // TextureCubeMapNegativeX
+                new Vector3(-size, -size, -size),
+                new Vector3(-size, -size, size),
+                new Vector3(-size, size, size),
+                new Vector3(-size, size, size),
+                new Vector3(-size, -size, -size),
+                new Vector3(-size, size, -size),
+
+                // TextureCubeMapPositiveY
+                new Vector3(-size, size, -size),
+                new Vector3(size, size, -size),
+                new Vector3(size, size, size),
+                new Vector3(size, size, size),
+                new Vector3(-size, size, size),
+                new Vector3(-size, size, -size),
+
+                // TextureCubeMapNegativeY
+                new Vector3(-size, -size, -size),
+                new Vector3(size, -size, -size),
+                new Vector3(size, -size, size),
+                new Vector3(size, -size, size),
+                new Vector3(-size, -size, size),
+                new Vector3(-size, -size, -size),
+
+                // TextureCubeMapPositiveZ
+                new Vector3(size, size, size),
+                new Vector3(-size, size, size),
+                new Vector3(-size, -size, size),
+                new Vector3(-size, -size, size),
+                new Vector3(size, -size, size),
+                new Vector3(size, size, size),
+
+                // TextureCubeMapNegativeZ
+                new Vector3(size, size, -size),
+                new Vector3(-size, size, -size),
+                new Vector3(-size, -size, -size),
+                new Vector3(-size, -size, -size),
+                new Vector3(size, -size, -size),
+                new Vector3(size, size, -size),
+            };
         }
     }
 }

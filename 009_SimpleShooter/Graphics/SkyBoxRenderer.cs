@@ -19,7 +19,7 @@ namespace SimpleShooter.Graphics
         public SkyBoxRenderer(float size)
         {
             _size = size;
-            _verticesForCube = GeometryHelper.GetVerticesForCube(size);
+            _verticesForCube = GeometryHelper.GetVerticesForSkyBoxCube(size);
             SkyBoxTextureId = LoadTextures(size);
         }
 

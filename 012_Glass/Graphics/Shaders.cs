@@ -33,6 +33,8 @@ namespace Glass.Graphics
             public int uniformMVP = 0;
             public int uniformMV = 0;
             public int uniformProjection = 0;
+            public int uniformCameraPos = 0;
+
             public int ProgramId = 0;
             public int AttribVerticesLocation = 0;
             public int AttribNormalsLocation = 0;
@@ -177,6 +179,7 @@ namespace Glass.Graphics
             _environmentMapNoLightDescriptor.uniformMVP = GL.GetUniformLocation(environmentMapProgramId, "uMVP");
             _environmentMapNoLightDescriptor.uniformMV = GL.GetUniformLocation(environmentMapProgramId, "uMV");
             _environmentMapNoLightDescriptor.uniformProjection = GL.GetUniformLocation(environmentMapProgramId, "uP");
+            _environmentMapNoLightDescriptor.uniformCameraPos = GL.GetUniformLocation(environmentMapProgramId, "cameraPos");
 
             _environmentMapNoLightDescriptor.ProgramId = environmentMapProgramId;
 
@@ -189,7 +192,7 @@ namespace Glass.Graphics
             GL.GenBuffers(1, out _environmentMapNoLightDescriptor.normalsBuffer);
         }
 
-        internal static void BindWithEnvironmentMap(SimpleModel model, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection, int cubeMapTextureId)
+        internal static void BindWithEnvironmentMap(SimpleModel model, Vector3 pos, Matrix4 modelView, Matrix4 modelViewProjection, Matrix4 projection)
         {
             var descriptor = _environmentMapNoLightDescriptor;
 
@@ -199,7 +202,7 @@ namespace Glass.Graphics
             GL.UniformMatrix4(descriptor.uniformMVP, false, ref modelViewProjection);
             GL.UniformMatrix4(descriptor.uniformProjection, false, ref projection);
             GL.Uniform1(descriptor.cube_texture, 0);
-
+            GL.Uniform3(descriptor.uniformCameraPos, pos);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, descriptor.verticesBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(model.Vertices.Length * Vector3.SizeInBytes),

@@ -83,7 +83,7 @@ namespace SimpleShooter.LevelLoaders
             var position = new Vector3(0, 1f, 0);
             Matrix4 translate = Matrix4.CreateTranslation(position);
 
-            var vertices = GeometryHelper.GetVerticesForCube(1);
+            var vertices = GeometryHelper.GetVerticesForSkyBoxCube(1);
             for (int i = 0; i < vertices.Length; i++)
             {
                 vertices[i] = Vector3.Transform(vertices[i], translate);
@@ -199,7 +199,7 @@ namespace SimpleShooter.LevelLoaders
         public static GameObject CreateCube(Matrix4 translate, Vector3 color, float size, ShadersNeeded shadersKind)
         {
             var model = new SimpleModel();
-            var vertices = GeometryHelper.GetVerticesForCube(size);
+            var vertices = GeometryHelper.GetVerticesForSkyBoxCube(size);
 
             for (int i = 0; i < vertices.Length; i++)
             {

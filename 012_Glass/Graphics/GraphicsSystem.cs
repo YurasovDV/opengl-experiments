@@ -53,22 +53,27 @@ namespace Glass.Graphics
             var center = new Vector3(0, 3, 0);
 
             
-            Vector3[] deltas = new[] { Vector3.UnitX, -Vector3.UnitX, Vector3.UnitY, -Vector3.UnitY, Vector3.UnitZ, -Vector3.UnitZ };
+            Vector3[] deltas = new[] { Vector3.UnitX, Vector3.UnitX * -1, Vector3.UnitY, Vector3.UnitY * -1, Vector3.UnitZ, Vector3.UnitZ * -1 };
             for (int i = 0; i < 6; i++)
             {
+                GL.ClearColor(ClearColor);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+                RebuildMatrices(center, center + deltas[i]);
+
                 GL.Disable(EnableCap.DepthTest);
-                _skybox.Render(_player.Position, ModelView, Projection);
+                _skybox.Render(center, ModelView, Projection);
                 GL.Enable(EnableCap.DepthTest);
 
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.TextureCubeMap, cubeMap);
 
                 GL.FramebufferTexture2D(FramebufferTarget.Framebuffer,
                         FramebufferAttachment.ColorAttachment0,
                         TextureTarget.TextureCubeMapPositiveX + i,
                         cubeMap,
                         0);
-                RebuildMatrices(center, center + deltas[i]);
-                GL.ClearColor(ClearColor);
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                
                 Render(models);
             }
 
@@ -125,7 +130,7 @@ namespace Glass.Graphics
         {
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.TextureCubeMap, cubeMapTextureId);
-            Shaders.BindWithEnvironmentMap(model, ModelView, ModelViewProjection, Projection, cubeMapTextureId);
+            Shaders.BindWithEnvironmentMap(model, _player.Position, ModelView, ModelViewProjection, Projection);
             GL.DrawArrays(PrimitiveType.Triangles, 0, model.Vertices.Length);
         }
 

@@ -17,7 +17,7 @@ namespace DeferredRender
         public const int LightNumber = 100;
         public const int WaferSize = 200;
 
-        public static readonly Vector3[] CubeVerts = GeometryHelper.GetVerticesForCube(0.01f);
+        public static readonly Vector3[] CubeVerts = GeometryHelper.GetVerticesForSkyBoxCube(0.01f);
 
         private Stopwatch Watch { get; set; }
 
@@ -139,7 +139,7 @@ namespace DeferredRender
             GenerateRandomLights();
 
             var white = Enumerable.Repeat(Vector3.One, CubeVerts.Length).ToArray();
-            var normals = CubeVerts.GetNormals();
+            var normals = CubeVerts.GetNormalsForSkybox();
 
             foreach (var light in _lights)
             {

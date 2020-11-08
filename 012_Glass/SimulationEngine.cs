@@ -126,10 +126,34 @@ namespace Glass
             //_reflectiveModels = new List<SimpleModel>() { sphere };
 
             var cube = new SimpleModel();
-            cube.Vertices = GeometryHelper.GetVerticesForCube(1);
+            cube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(1);
             cube.Vertices.TranslateAll(new Vector3(0, 3, 0));
-            cube.Colors = Enumerable.Repeat(Vector3.UnitX, cube.Vertices.Length).ToArray();
-            cube.Normals = GeometryHelper.GetNormals(cube.Vertices);
+            // cube.Colors = Enumerable.Repeat(Vector3.UnitX, cube.Vertices.Length).ToArray();
+            cube.Colors =
+               new[]
+               {
+                    Enumerable.Repeat(Vector3.UnitX, 6),
+                    Enumerable.Repeat(Vector3.UnitX* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitY, 6),
+                    Enumerable.Repeat(Vector3.UnitY* 0.5f, 6),
+                    Enumerable.Repeat(Vector3.UnitZ, 6),
+                    Enumerable.Repeat(Vector3.UnitZ * 0.5f, 6)
+               }
+               .SelectMany(a => a.ToArray())
+               .ToArray();
+            cube.Normals =
+                new[]
+               {
+                    Enumerable.Repeat(Vector3.UnitX, 6),
+                    Enumerable.Repeat(-Vector3.UnitX, 6),
+                    Enumerable.Repeat(Vector3.UnitY, 6),
+                    Enumerable.Repeat(-Vector3.UnitY, 6),
+                    Enumerable.Repeat(Vector3.UnitZ, 6),
+                    Enumerable.Repeat(-Vector3.UnitZ, 6)
+               }
+               .SelectMany(a => a.ToArray())
+               .ToArray();
+
             _reflectiveModels = new List<SimpleModel>() { cube };
         }
 

@@ -3,6 +3,7 @@
 in vec3 pos_eye;
 in vec3 n_eye;
 
+uniform vec3 cameraPos;
 uniform samplerCube cube_texture;
 uniform mat4 uMV;
 
@@ -11,7 +12,8 @@ varying vec4 color;
 
 void main()
 {
-  vec3 reflected = reflect(normalize(pos_eye), normalize(n_eye));
-  reflected = vec3(inverse(uMV) * vec4(reflected, 0.0));
-  outputColor = texture(cube_texture, reflected); // color;
+    vec3 I = normalize(pos_eye - cameraPos);
+    vec3 reflected = reflect(I, normalize(n_eye));
+    outputColor = vec4(texture(cube_texture, normalize(reflected)).rgb, 1.0);
+    //outputColor = color;
 }

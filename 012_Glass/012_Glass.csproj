@@ -66,6 +66,24 @@
     <Compile Include="SimulationEngine.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Textures_p\Skybox\back.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures_p\Skybox\bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures_p\Skybox\front.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures_p\Skybox\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures_p\Skybox\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures_p\Skybox\top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <Content Include="Assets\Shaders\texturelessNoLight.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

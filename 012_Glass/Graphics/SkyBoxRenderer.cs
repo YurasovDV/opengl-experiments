@@ -20,7 +20,7 @@ namespace Glass.Graphics
         public SkyBoxRenderer(float size)
         {
             _size = size;
-            _verticesForCube = GeometryHelper.GetVerticesForCube(size);
+            _verticesForCube = GeometryHelper.GetVerticesForSkyBoxCube(size);
             SkyBoxTextureId = LoadTextures(size);
         }
 
@@ -41,7 +41,7 @@ namespace Glass.Graphics
 
             for (int i = 0; i < 6; i++)
             {
-                var png = new Bitmap(@"Assets\Textures\Skybox\" + skyboxPaths[i]);
+                var png = new Bitmap(@"Assets\Textures_p\Skybox\" + skyboxPaths[i]);
                 var width = png.Width;
                 var height = png.Height;
 
@@ -93,8 +93,8 @@ namespace Glass.Graphics
              "left.png",
              "top.png",
              "bottom.png",
+             "front.png",
              "back.png",
-             "front.png"
         };
 
     }
