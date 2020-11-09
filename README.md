@@ -1,5 +1,4 @@
-# terrain-fst-try
-First steps in OpenGL 4:<br>
+# First steps in OpenGL 4
 Particle system with dynamic colors example<br>
 Skybox<br>
 OBJ model loading<br>
