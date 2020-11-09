@@ -84,7 +84,7 @@ namespace Glass.Graphics
                 GL.ClearColor(ClearColor);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                RebuildMatrices(_center, _center + deltas[i], normals[i]);
+                RebuildMatrices(_center, _center + deltas[i], -normals[i]);
 
                 GL.Disable(EnableCap.DepthTest);
                 _skybox.Render(_center, ModelView, Projection);

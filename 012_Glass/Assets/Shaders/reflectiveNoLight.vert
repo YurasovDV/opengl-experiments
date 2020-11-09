@@ -5,9 +5,9 @@ uniform mat4 uMV;
 uniform mat4 uP;
 uniform vec3 cameraPos;
 
-attribute vec3 vPosition;
-attribute vec3 vColor;
-attribute vec3 vNormal;
+in vec3 vPosition;
+in vec3 vColor;
+in vec3 vNormal;
 
 out vec4 color;
 out vec3 pos_eye;

@@ -15,6 +15,7 @@ namespace Glass
 
         private KeyHandler _keyHandler;
         private Player _player;
+        private Vector3 _mirrorCenter;
         private GraphicsSystem _graphics;
 
         private List<SimpleModel> _models;
@@ -24,9 +25,9 @@ namespace Glass
         float angle2 = 0;
         float angle3 = 0;
 
-        Vector3 defaultVec1 = new Vector3(-30, 10, 0);
-        Vector3 defaultVec2 = new Vector3(-30, 10, 30);
-        Vector3 defaultVec3 = new Vector3(30, 10, 30);
+        Vector3 defaultVec1 = new Vector3(-30, 0, 0);
+        Vector3 defaultVec2 = new Vector3(-30, 0, 30);
+        Vector3 defaultVec3 = new Vector3(30, 0, 30);
 
         public SimulationEngine(int width, int height, Stopwatch watch)
         {
@@ -35,8 +36,8 @@ namespace Glass
 
             _player.Position = new Vector3(0, 0.5f, 0);
             _player.Target = new Vector3(100, 0.5f, 0);
-            var mirrorCenter = new Vector3(0, 10, 0);
-            _graphics = new GraphicsSystem(width, height, _player, mirrorCenter);
+            _mirrorCenter = new Vector3(0, 0, 0);
+            _graphics = new GraphicsSystem(width, height, _player, _mirrorCenter);
 
             _keyHandler = new KeyHandler();
             _keyHandler.KeyPress += OnKeyPress;
@@ -130,11 +131,11 @@ namespace Glass
             var cubeNormals = new[]
             {
                  Enumerable.Repeat(Vector3.UnitX, 6),
-                 Enumerable.Repeat(Vector3.UnitX, 6),
-                 Enumerable.Repeat(Vector3.UnitX, 6),
-                 Enumerable.Repeat(Vector3.UnitX, 6),
-                 Enumerable.Repeat(Vector3.UnitX, 6),
-                 Enumerable.Repeat(Vector3.UnitX, 6)
+                 Enumerable.Repeat(-Vector3.UnitX, 6),
+                 Enumerable.Repeat(Vector3.UnitY, 6),
+                 Enumerable.Repeat(-Vector3.UnitY, 6),
+                 Enumerable.Repeat(Vector3.UnitZ, 6),
+                 Enumerable.Repeat(-Vector3.UnitZ, 6)
             }
             .SelectMany(a => a.ToArray())
             .ToArray();
@@ -202,7 +203,7 @@ namespace Glass
 
             var cube = new SimpleModel();
             cube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(5);
-            cube.Vertices.TranslateAll(new Vector3(0, 10, 0));
+            cube.Vertices.TranslateAll(_mirrorCenter);
             cube.Colors =
                new[]
                {
