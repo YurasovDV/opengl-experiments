@@ -1,6 +1,8 @@
 # terrain-fst-try
 First steps in OpenGL 4:<br>
 Particle system with dynamic colors example<br>
+Skybox<br>
+OBJ model loading<br>
 Cloth(Verlet) simulation<br>
 L-systems and fractals<br>
 Shadow Mapping<br>
