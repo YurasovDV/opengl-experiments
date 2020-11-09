@@ -151,7 +151,7 @@ namespace Glass.Graphics
         private void RebuildMatrices()
         {
             ModelView = Matrix4.LookAt(_player.Position, _player.Target, Vector3.UnitY);
-            Projection = Matrix4.CreatePerspectiveFieldOfView(1f, Aspect, 0.1f, 200);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2 / 1.2f, Aspect, 0.1f, 200);
             ModelViewProjection = Matrix4.Mult(ModelView, Projection);
         }
 

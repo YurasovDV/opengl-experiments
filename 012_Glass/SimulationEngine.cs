@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Common;
 using Common.Input;
@@ -153,10 +152,7 @@ namespace Glass
             nonReflectiveCube3.Normals = cubeNormals;
 
             nonReflectiveCube.Colors = Enumerable.Repeat(Vector3.UnitX, 36).ToArray();            
-            
             nonReflectiveCube2.Colors = Enumerable.Repeat(Vector3.UnitY, 36).ToArray();
-
-
             nonReflectiveCube3.Colors = Enumerable.Repeat(Vector3.UnitZ, 36).ToArray();
             
             _models = new List<SimpleModel>() { nonReflectiveCube, nonReflectiveCube2, nonReflectiveCube3,  /*, wafer*/ };
@@ -165,10 +161,10 @@ namespace Glass
             //sphere.Vertices.TranslateAll(new Vector3(0, 2, 0));
             //_reflectiveModels = new List<SimpleModel>() { sphere };
 
-            var cube = new SimpleModel();
-            cube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(5);
-            cube.Vertices.TranslateAll(_mirrorCenter);
-            cube.Colors =
+            var reflectiveCube = new SimpleModel();
+            reflectiveCube.Vertices = GeometryHelper.GetVerticesForOrdinaryCube(8);
+            reflectiveCube.Vertices.TranslateAll(_mirrorCenter);
+            reflectiveCube.Colors =
                new[]
                {
                     Enumerable.Repeat(Vector3.UnitX, 6),
@@ -180,9 +176,9 @@ namespace Glass
                }
                .SelectMany(a => a.ToArray())
                .ToArray();
-            cube.Normals = cubeNormals;
+            reflectiveCube.Normals = cubeNormals;
 
-            _reflectiveModels = new List<SimpleModel>() { cube };
+            _reflectiveModels = new List<SimpleModel>() { reflectiveCube };
         }
 
 
