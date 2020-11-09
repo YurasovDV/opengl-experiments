@@ -23,7 +23,7 @@ namespace Glass
                 Y = 0
             };
             Watch = new Stopwatch();
-            Engine = new SimulationEngine(Width, Height, Watch);
+            Engine = new SimulationEngine(Width, Height);
             ResetMouse();
             Watch.Start();
         }
