@@ -39,4 +39,7 @@
 /011_BootstrapProj/bin
 /012_Glass/obj
 /012_Glass/bin
+/013_Raymarching/obj
+/013_Raymarching/bin
 /.vs/*
+
